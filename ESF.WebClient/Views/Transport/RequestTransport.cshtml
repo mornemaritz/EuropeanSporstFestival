@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Request Transport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Request Transport</h2>
+<p>
+    @ViewBag.Message
+</p>
+<p>
+    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+</p>

@@ -1,0 +1,53 @@
+﻿@model ESF.Core.Services.ParticipantDetailsModel
+
+@{
+    ViewBag.Title = "EditParticipant";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EditParticipant</h2>
+
+@using (Html.BeginForm("UpdateParticipant", "Participant"))
+{
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>PersonalDetailsModel</legend>
+
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.ParticipantId)
+        </div>
+
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.UserId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+        <p>
+            @Html.ActionLink("Cancel", "ViewParticipant", new { id = Model.ParticipantId })
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

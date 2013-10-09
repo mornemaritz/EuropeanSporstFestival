@@ -1,0 +1,41 @@
+﻿@model ESF.Core.Services.ParticipantDetailsModel
+
+@{
+    ViewBag.Title = "Personal Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Personal Details</h2>
+
+<fieldset>
+    <legend>Personal Details</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.FirstName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FirstName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.LastName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LastName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit Details", "EditParticipant", new { id = Model.ParticipantId })
+</p>
+<p>
+    @Html.ActionLink("Sign Up for a Sports Event", "SignUp", "SportsEvent", new { id = Model.ParticipantId }, null)
+</p>
+<p>
+    @Html.ActionLink("Sign Up for Entertainment", "SignUp", "Entertainment", new { id = Model.ParticipantId }, null)
+</p>
+<p>
+    @Html.ActionLink("Request Accommodation", "RequestAccommodation", "Accommodation", new { id = Model.ParticipantId }, null)
+</p>
+<p>
+    @Html.ActionLink("Request Transport", "RequestTransport", "Transport", new { id = Model.ParticipantId }, null)
+</p>

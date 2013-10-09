@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{02F076CE-3A64-4810-B4C0-3F43CCAA578C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ESF.Services</RootNamespace>
+    <AssemblyName>ESF.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.1.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutofacServiceConfigurationModule.cs" />
+    <Compile Include="ParticipantService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SportsEventService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
+      <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
+      <Name>ESF.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESF.Core\ESF.Core.csproj">
+      <Project>{3ED9BEA6-E5FA-482C-A48E-4A218A2C0B70}</Project>
+      <Name>ESF.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESF.Domain\ESF.Domain.csproj">
+      <Project>{F00A964D-B95E-42B6-A995-89077A12B1B7}</Project>
+      <Name>ESF.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESF.Repositories\ESF.Repositories.csproj">
+      <Project>{3824316C-B655-4EE4-AB60-0D93922603FA}</Project>
+      <Name>ESF.Repositories</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

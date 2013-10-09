@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Sign Up for Entertainment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sign Up for Entertainment</h2>
+<p>
+    @ViewBag.Message
+</p>
+<p>
+    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+</p>

@@ -1,0 +1,42 @@
+﻿@model ESF.Core.Services.SportsEventSignUpModel
+
+@{
+    ViewBag.Title = "Sign Up";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sign Up</h2>
+<p>
+    @ViewBag.Message
+</p>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>SportsEventSignUpModel</legend>
+
+        <div class="editor-label">
+            @Html.HiddenFor(model => model.ParticipantId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SportsEventId, "Sports Event")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("SportsEventId", (IEnumerable<SelectListItem>)ViewBag.SportsEvents)
+        </div>
+
+        <p>
+            <input type="submit" value="Next" />
+        </p>
+    </fieldset>
+}
+
+<p>
+    @Html.ActionLink("Cancel", "ViewParticipant", "Participant", new { id = Model.ParticipantId }, null)
+</p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
