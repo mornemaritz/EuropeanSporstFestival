@@ -22,14 +22,21 @@ namespace ESF.Services
 
         public void SaveParticipant(ParticipantDetailsModel model)
         {
-            participantRepository.Save(new Participant { UserId = model.UserId, FirstName = model.FirstName, LastName = model.LastName });
+            participantRepository.Save(new Participant 
+            { 
+                UserId = model.UserId, 
+                FirstName = model.FirstName, 
+                LastName = model.LastName, 
+                DateOfBirth = new DateTime(model.BirthYear,(int)model.BirthMonth,model.BirthDay),
+                Gender = model.Gender
+            });
         }
 
         public ParticipantDetailsModel RetrieveParticipant(Guid id)
         {
             var participant = participantRepository.RetrieveParticipant(id);
 
-            return new ParticipantDetailsModel { ParticipantId = participant.Id, UserId = participant.UserId, FirstName = participant.FirstName, LastName = participant.LastName };
+            return new ParticipantDetailsModel { ParticipantId = participant.Id, UserId = participant.UserId, FirstName = participant.FirstName, LastName = participant.LastName, Gender = participant.Gender };
         }
 
         public ParticipantDetailsModel RetrieveParticipantByUserId(int userId)
@@ -38,7 +45,7 @@ namespace ESF.Services
 
             if (participant == null) return null;
 
-            return new ParticipantDetailsModel { ParticipantId = participant.Id, UserId = participant.UserId, FirstName = participant.FirstName, LastName = participant.LastName };
+            return new ParticipantDetailsModel { ParticipantId = participant.Id, UserId = participant.UserId, FirstName = participant.FirstName, LastName = participant.LastName, Gender = participant.Gender };
         }
 
         public void UpdateParticipant(ParticipantDetailsModel model)
@@ -47,6 +54,7 @@ namespace ESF.Services
 
             participant.FirstName = model.FirstName;
             participant.LastName = model.LastName;
+            participant.Gender = model.Gender;
 
             participantRepository.Update(participant);
         }

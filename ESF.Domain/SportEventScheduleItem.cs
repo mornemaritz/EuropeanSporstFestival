@@ -15,9 +15,7 @@ namespace ESF.Domain
         private TimeSpan startTime;
         private TimeSpan endTime;
 
-        private SportEventScheduleItem()
-        { 
-        }
+        protected SportEventScheduleItem(){ }
 
         public SportEventScheduleItem(Festival festival, int dayOffSetFromFestivalStartDate, SportEvent sportEvent, TimeSpan startTime, TimeSpan endTime)
         {
@@ -28,44 +26,44 @@ namespace ESF.Domain
             this.endTime = endTime;
         }
 
-        public Guid Id
+        public virtual Guid Id
         {
             get { return id; }
         }
 
-        public Festival Festival
+        public virtual Festival Festival
         {
             get { return festival; }
         }
 
-        public SportEvent SportEvent
+        public virtual SportEvent SportEvent
         {
             get { return sportEvent; }
         }
 
-        public DateTime Date
+        public virtual DateTime Date
         {
             get { return date; }
         }
 
-        public string DayOfWeek
+        public virtual string DayOfWeek
         {
             get { return date.DayOfWeek.ToString(); }
         }
 
-        public TimeSpan StartTime
+        public virtual TimeSpan StartTime
         {
             get { return startTime; }
             set { startTime = value; }
         }
 
-        public TimeSpan EndTime
+        public virtual TimeSpan EndTime
         {
             get { return endTime; }
             set { endTime = value; }
         }
 
-        public DateTime MoveDate(int dayOffSetFromFestivalStartDate)
+        public virtual DateTime MoveDate(int dayOffSetFromFestivalStartDate)
         {
             date = festival.StartDate.AddDays(Convert.ToDouble(dayOffSetFromFestivalStartDate));
             return date;

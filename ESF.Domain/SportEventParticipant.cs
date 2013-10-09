@@ -11,6 +11,14 @@ namespace ESF.Domain
         private SportEvent sportEvent;
         private Participant participant;
 
+        protected SportEventParticipant() { }
+
+        public SportEventParticipant(SportEvent sportEvent, Participant participant)
+        {
+            this.sportEvent = sportEvent;
+            this.participant = participant;
+        }
+
         public virtual Guid Id 
         {
             get { return id; }
@@ -19,13 +27,11 @@ namespace ESF.Domain
         public virtual SportEvent SportEvent 
         {
             get { return sportEvent; }
-            set { sportEvent = value; }
         }
 
         public virtual Participant Participant
         {
-            get { return Participant; }
-            set { Participant = value; }
+            get { return participant; }
         }
     }
 }

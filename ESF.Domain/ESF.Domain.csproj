@@ -48,6 +48,12 @@
     <Compile Include="SportEventScheduleItem.cs" />
     <Compile Include="SportEventTeam.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
+      <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
+      <Name>ESF.Commons</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -14,8 +14,8 @@ namespace ESF.Domain.Mappings
             References(x => x.Festival);
             References(x => x.SportEvent);
             Map(x => x.Date);
-            Map(x => x.StartTime);
-            Map(x => x.EndTime);
+            Map(x => x.StartTime).CustomSqlType("TIME");
+            Map(x => x.EndTime).CustomSqlType("TIME");
         }
     }
 }

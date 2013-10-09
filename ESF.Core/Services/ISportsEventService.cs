@@ -10,5 +10,7 @@ namespace ESF.Core.Services
         ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId);
 
         SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model);
+
+        IList<SportEventParticipantModel> RetrieveSignedUpSportsEvents(Guid participantId);
     }
 }

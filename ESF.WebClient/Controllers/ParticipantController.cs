@@ -59,6 +59,14 @@ namespace ESF.WebClient.Controllers
             if (TempData["createparticipantmessage"] != null)
                 ModelState.AddModelError("", TempData["createparticipantmessage"].ToString());
 
+            ViewBag.Months = Enum.GetNames(typeof(Month))
+                .AsEnumerable()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+
+            ViewBag.Genders = Enum.GetNames(typeof(Gender))
+                .AsEnumerable()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+
             return View();
         }
 
@@ -76,6 +84,10 @@ namespace ESF.WebClient.Controllers
         public ActionResult EditParticipant(Guid id)
         {
             ViewData.Model = participantService.RetrieveParticipant(id);
+
+            ViewBag.Genders = Enum.GetNames(typeof(Gender))
+                .AsEnumerable()
+                .Select(x => new SelectListItem { Value = x, Text = x });
 
             return View();
         }

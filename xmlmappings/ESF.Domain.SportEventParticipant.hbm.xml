@@ -1,0 +1,14 @@
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" default-access="field.camelcase">
+  <class xmlns="urn:nhibernate-mapping-2.2" name="ESF.Domain.SportEventParticipant, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" table="TSportEventParticipant">
+    <id access="nosetter.lowercase" name="Id" type="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="SportEventParticipantId" />
+      <generator class="guid.comb" />
+    </id>
+    <many-to-one access="nosetter.camelcase" class="ESF.Domain.SportEvent, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SportEvent">
+      <column name="SportEventId" />
+    </many-to-one>
+    <many-to-one access="nosetter.lowercase" class="ESF.Domain.Participant, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Participant">
+      <column name="ParticipantId" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>

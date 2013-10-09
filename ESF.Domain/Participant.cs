@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ESF.Commons.Utilities;
 
 namespace ESF.Domain
 {
@@ -12,6 +13,8 @@ namespace ESF.Domain
         protected string lastName;
         protected int userId;
         protected string emailAddress;
+        protected DateTime dateOfBirth;
+        protected Gender gender;
 
         public virtual Guid Id 
         {
@@ -40,6 +43,18 @@ namespace ESF.Domain
         {
             get { return lastName; }
             set { lastName = value; }
+        }
+
+        public virtual DateTime DateOfBirth
+        {
+            get{ return dateOfBirth; }
+            set{ dateOfBirth = value;}
+        }
+
+        public virtual Gender Gender
+        {
+            get { return gender; }
+            set { gender = value; }
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentNHibernate.Mapping;
+using ESF.Commons.Utilities;
 
 namespace ESF.Domain.Mappings
 {
@@ -15,7 +16,8 @@ namespace ESF.Domain.Mappings
             Map(x => x.UserId);
             Map(x => x.FirstName);
             Map(x => x.LastName);
-            //Table("TParticipant");
+            Map(x => x.DateOfBirth);
+            Map(x => x.Gender).CustomType(typeof(Gender)); // TODO: Implement GenericEnumMapper
         }
     }
 }

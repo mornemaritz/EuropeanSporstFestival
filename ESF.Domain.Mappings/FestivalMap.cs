@@ -8,5 +8,11 @@ namespace ESF.Domain.Mappings
 {
     public class FestivalMap : ClassMap<Festival>
     {
+        public FestivalMap()
+        {
+            Id(x => x.Id).GeneratedBy.GuidComb();
+            Map(x => x.Name);
+            Map(x => x.StartDate);
+        }
     }
 }

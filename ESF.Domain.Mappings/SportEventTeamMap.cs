@@ -14,7 +14,7 @@ namespace ESF.Domain.Mappings
             Map(x => x.Name);
             References(x => x.SportEvent);
             References(x => x.Captain);
-            References(x => x.TeamMembers);
+            HasMany(x => x.TeamMembers);
         }
     }
 }

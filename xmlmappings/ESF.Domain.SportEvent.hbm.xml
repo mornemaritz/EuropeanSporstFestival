@@ -1,0 +1,20 @@
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" default-access="field.camelcase">
+  <class xmlns="urn:nhibernate-mapping-2.2" name="ESF.Domain.SportEvent, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" table="TSportEvent">
+    <id access="nosetter.lowercase" name="Id" type="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="SportEventId" />
+      <generator class="guid.comb" />
+    </id>
+    <property access="nosetter.lowercase" name="Name" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="Name" />
+    </property>
+    <property access="nosetter.camelcase" name="MinAge" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="MinAge" />
+    </property>
+    <property access="nosetter.camelcase" name="MaxAge" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="MaxAge" />
+    </property>
+    <property access="nosetter.lowercase" name="Gender" type="System.Nullable`1[[ESF.Commons.Utilities.Gender, ESF.Commons, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="Gender" not-null="false" />
+    </property>
+  </class>
+</hibernate-mapping>

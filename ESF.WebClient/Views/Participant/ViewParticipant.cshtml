@@ -23,6 +23,13 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.LastName)
     </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Gender)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Gender)
+    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Edit Details", "EditParticipant", new { id = Model.ParticipantId })

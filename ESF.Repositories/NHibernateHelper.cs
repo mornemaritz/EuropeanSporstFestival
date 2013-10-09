@@ -34,9 +34,17 @@ namespace ESF.Repositories
                               .ConnectionString(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
                               .ShowSql()
                 )
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ParticipantMap>()
-                    .Conventions.Add(PrimaryKey.Name.Is(x => x.EntityType.Name + "Id"))
-                    .Conventions.Add(Table.Is(x => "T" + x.EntityType.Name)))
+                .Mappings(m => 
+                    
+                            m.FluentMappings
+                                .AddFromAssemblyOf<ParticipantMap>()
+                                .Conventions.Add(
+                                    PrimaryKey.Name.Is(x => x.EntityType.Name + "Id"),
+                                    DefaultAccess.CamelCaseField(),
+                                    Table.Is(x => "T" + x.EntityType.Name),
+                                    ForeignKey.Format((x, y) => { return y.Name + "Id"; }))
+                                 //.ExportTo(@"C:\Work\EuropeanSporstFestival\xmlmappings")
+                           )
                 //.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
                 .BuildSessionFactory();
         }

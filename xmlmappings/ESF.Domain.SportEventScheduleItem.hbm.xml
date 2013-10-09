@@ -1,0 +1,23 @@
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" default-access="field.camelcase">
+  <class xmlns="urn:nhibernate-mapping-2.2" name="ESF.Domain.SportEventScheduleItem, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" table="TSportEventScheduleItem">
+    <id access="nosetter.lowercase" name="Id" type="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="SportEventScheduleItemId" />
+      <generator class="guid.comb" />
+    </id>
+    <property access="nosetter.lowercase" name="Date" type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="Date" />
+    </property>
+    <property name="StartTime" type="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="StartTime" sql-type="TIME" />
+    </property>
+    <property name="EndTime" type="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="EndTime" sql-type="TIME" />
+    </property>
+    <many-to-one access="nosetter.lowercase" class="ESF.Domain.Festival, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Festival">
+      <column name="FestivalId" />
+    </many-to-one>
+    <many-to-one access="nosetter.camelcase" class="ESF.Domain.SportEvent, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="SportEvent">
+      <column name="SportEventId" />
+    </many-to-one>
+  </class>
+</hibernate-mapping>

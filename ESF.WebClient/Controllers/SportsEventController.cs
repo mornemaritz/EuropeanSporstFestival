@@ -88,6 +88,8 @@ namespace ESF.WebClient.Controllers
                 return RedirectToAction("CreateParticipant","Participant");
             }
 
+            ViewData.Model = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
+
             ViewBag.Message = "This is where you view the sports events that you are signed up for.";
             ViewBag.ParticipantId = participantModel.ParticipantId;
 

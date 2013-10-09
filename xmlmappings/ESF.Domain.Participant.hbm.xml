@@ -1,0 +1,26 @@
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" default-access="field.camelcase">
+  <class xmlns="urn:nhibernate-mapping-2.2" name="ESF.Domain.Participant, ESF.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" table="TParticipant">
+    <id access="nosetter.lowercase" name="Id" type="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="ParticipantId" />
+      <generator class="guid.comb" />
+    </id>
+    <property name="EmailAddress" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="EmailAddress" />
+    </property>
+    <property name="UserId" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="UserId" />
+    </property>
+    <property name="FirstName" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="FirstName" />
+    </property>
+    <property name="LastName" type="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="LastName" />
+    </property>
+    <property name="DateOfBirth" type="System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <column name="DateOfBirth" />
+    </property>
+    <property name="Gender" type="ESF.Commons.Utilities.Gender, ESF.Commons, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <column name="Gender" />
+    </property>
+  </class>
+</hibernate-mapping>

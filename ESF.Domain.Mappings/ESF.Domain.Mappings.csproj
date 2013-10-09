@@ -61,6 +61,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
+      <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
+      <Name>ESF.Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESF.Domain\ESF.Domain.csproj">
       <Project>{F00A964D-B95E-42B6-A995-89077A12B1B7}</Project>
       <Name>ESF.Domain</Name>

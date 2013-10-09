@@ -1,11 +1,11 @@
 ﻿@model ESF.Core.Services.ParticipantDetailsModel
 
 @{
-    ViewBag.Title = "EditParticipant";
+    ViewBag.Title = "Edit Personal Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EditParticipant</h2>
+<h2>Edit Personal Details</h2>
 
 @using (Html.BeginForm("UpdateParticipant", "Participant"))
 {
@@ -24,7 +24,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.FirstName)
+            @Html.LabelFor(model => model.FirstName, "First Name")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.FirstName)
@@ -32,11 +32,18 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.LastName)
+            @Html.LabelFor(model => model.LastName, "Last Name")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.LastName)
             @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Gender)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Gender", (IEnumerable<SelectListItem>)ViewBag.Genders)
         </div>
 
         <p>
