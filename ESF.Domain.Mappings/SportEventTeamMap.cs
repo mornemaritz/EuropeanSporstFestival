@@ -12,8 +12,8 @@ namespace ESF.Domain.Mappings
         {
             Id(x => x.Id).GeneratedBy.GuidComb();
             Map(x => x.Name);
-            References(x => x.SportEvent);
-            References(x => x.Captain);
+            References(x => x.ScheduledSportEvent, "ScheduledSportEventId");
+            References(x => x.Captain, "CaptainParticipantId");
             HasMany(x => x.TeamMembers);
         }
     }

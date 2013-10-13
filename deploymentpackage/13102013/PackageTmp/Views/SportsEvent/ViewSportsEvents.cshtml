@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ESF.Core.Services.SportEventParticipantModel>
+
+@{
+    ViewBag.Title = "View Sports Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>View Sports Events</h2>
+<p>
+    @ViewBag.Message
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SportName)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SportName)
+        </td>
+    </tr>
+}
+</table>
+
+<p>
+    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+</p>
+<p>
+    @Html.ActionLink("Sign Up for a Sports Event", "SignUp", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
+</p>

@@ -56,5 +56,20 @@ namespace ESF.Domain
             get { return gender; }
             set { gender = value; }
         }
+
+        public virtual int GetParticipantCurrentAge()
+        {
+            return GetParticipantAgeOnDate(DateTime.Today);
+        }
+
+        public virtual int GetParticipantAgeOnDate(DateTime date)
+        {
+            int age = 0;
+            age = date.Year - dateOfBirth.Year;
+            if (date.DayOfYear < dateOfBirth.DayOfYear)
+                age = age - 1;
+
+            return age;
+        }
     }
 }

@@ -49,6 +49,10 @@
     <Compile Include="SportsEventService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons.Repository\ESF.Commons.Repository.csproj">
+      <Project>{6A968567-2A0B-42BC-9694-36430DB11AAC}</Project>
+      <Name>ESF.Commons.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
       <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
       <Name>ESF.Commons</Name>

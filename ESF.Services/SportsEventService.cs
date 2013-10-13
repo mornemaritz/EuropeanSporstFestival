@@ -6,44 +6,38 @@ using ESF.Core.Services;
 using System.Collections.ObjectModel;
 using ESF.Core.Repositories;
 using ESF.Domain;
+using ESF.Commons.Repository;
 
 namespace ESF.Services
 {
     public class SportsEventService : ISportsEventService
     {
-        private readonly ISportEventRepository sportEventRepository;
-        private readonly IParticipantRepository participantRepository;
+        private readonly IRepository<SportEvent> sportEventRepository;
+        private readonly IRepository<Participant> participantRepository;
         private readonly ISportEventParticipantRepository sportEventParticipantRepository;
+        private readonly IScheduledSportEventRepository scheduledSportEventRepository;
 
-        public SportsEventService(ISportEventRepository sportEventRepository, 
-            IParticipantRepository participantRepository,
-            ISportEventParticipantRepository sportEventParticipantRepository)
+        public SportsEventService(IRepository<SportEvent> sportEventRepository,
+            IRepository<Participant> participantRepository,
+            ISportEventParticipantRepository sportEventParticipantRepository,
+            IScheduledSportEventRepository scheduledSportEventRepository)
         {
             this.sportEventRepository = sportEventRepository;
             this.participantRepository = participantRepository;
             this.sportEventParticipantRepository = sportEventParticipantRepository;
+            this.scheduledSportEventRepository = scheduledSportEventRepository;
         }
         public ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId)
         {
-            var participant = participantRepository.RetrieveParticipant(participantId);
-
-            var sportEvents = sportEventRepository.FindSportEventsAvailableToParticipant(participant.Gender);
-            var sportEventItems = new Collection<SportsEventItem>();
-
-            foreach (var sportEvent in sportEvents)
-            {
-                sportEventItems.Add(new SportsEventItem { SportsEventId = sportEvent.Id, SportsEventName = sportEvent.Name });
-            }
-
-            return sportEventItems;
+            return scheduledSportEventRepository.FindSportEventsAvailableToParticipant(participantId);
         }
 
         public SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model)
         {
-            var participant = participantRepository.RetrieveParticipant(model.ParticipantId);
-            var sportEvent = sportEventRepository.RetrieveById(model.SportsEventId);
+            var participant = participantRepository.Load(model.ParticipantId);
+            var scheduledSportEvent = scheduledSportEventRepository.Load(model.ScheduledSportsEventId);
 
-            var sportEventParticipant = new SportEventParticipant(sportEvent, participant);
+            var sportEventParticipant = new ParticipantSportEvent(scheduledSportEvent, participant);
 
             sportEventParticipant = sportEventParticipantRepository.Save(sportEventParticipant);
 
@@ -58,7 +52,7 @@ namespace ESF.Services
 
             foreach (var sportEventParticipant in sportEventParticipants)
             {
-                sportEventParticipantModels.Add(new SportEventParticipantModel{SportName = sportEventParticipant.SportEvent.Name});
+                sportEventParticipantModels.Add(new SportEventParticipantModel{SportName = sportEventParticipant.ScheduledSportEvent.SportEvent.Name});
             }
 
             return sportEventParticipantModels;

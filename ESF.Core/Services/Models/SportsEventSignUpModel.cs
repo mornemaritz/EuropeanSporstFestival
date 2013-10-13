@@ -8,6 +8,6 @@ namespace ESF.Core.Services
     public class SportsEventSignUpModel
     {
         public Guid ParticipantId { get; set; }
-        public Guid SportsEventId { get; set; }
+        public Guid ScheduledSportsEventId { get; set; }
     }
 }

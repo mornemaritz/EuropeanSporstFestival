@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Request Accomodation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Request Accomodation</h2>
+<p>
+    @ViewBag.Message
+</p>
+<p>
+    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+</p>

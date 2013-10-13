@@ -53,8 +53,8 @@
     <Compile Include="ParticipantMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SportEventMap.cs" />
-    <Compile Include="SportEventParticipantMap.cs" />
-    <Compile Include="SportEventScheduleItemMap.cs" />
+    <Compile Include="ParticipantSportEventMap.cs" />
+    <Compile Include="ScheduledSportEventMap.cs" />
     <Compile Include="SportEventTeamMap.cs" />
   </ItemGroup>
   <ItemGroup>

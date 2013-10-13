@@ -9,22 +9,22 @@ namespace ESF.Domain
     {
         private Guid id;
         private string name;
-        private SportEvent sportEvent;
-        private SportEventParticipant captain;
+        private ScheduledSportEvent scheduledSportEvent;
+        private ParticipantSportEvent captain;
         // TO DECIDE: Should the captain be part of the team members collection?
-        private IList<SportEventParticipant> teamMembers = new List<SportEventParticipant>();
+        private IList<ParticipantSportEvent> teamMembers = new List<ParticipantSportEvent>();
 
         protected SportEventTeam() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SportEventTeam"/> class.
         /// </summary>
-        /// <param name="sportEvent">The sport event.</param>
+        /// <param name="scheduledSportEvent">The scheduled sport event.</param>
         /// <param name="teamMember">The team member.</param>
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public SportEventTeam(SportEvent sportEvent, string name, SportEventParticipant teamMember, bool isCaptain)
+        public SportEventTeam(ScheduledSportEvent scheduledSportEvent, string name, ParticipantSportEvent teamMember, bool isCaptain)
         {
-            this.sportEvent = sportEvent;
+            this.scheduledSportEvent = scheduledSportEvent;
             this.name = name;
 
             AddTeamMember(teamMember);
@@ -61,9 +61,9 @@ namespace ESF.Domain
         /// <value>
         /// The sport event.
         /// </value>
-        public virtual SportEvent SportEvent
+        public virtual ScheduledSportEvent ScheduledSportEvent
         {
-            get { return sportEvent; }
+            get { return scheduledSportEvent; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ESF.Domain
         /// <value>
         /// The captain.
         /// </value>
-        public virtual SportEventParticipant Captain
+        public virtual ParticipantSportEvent Captain
         {
             get { return captain; }
         }
@@ -83,9 +83,9 @@ namespace ESF.Domain
         /// <value>
         /// The team members.
         /// </value>
-        public virtual IEnumerable<SportEventParticipant> TeamMembers
+        public virtual IEnumerable<ParticipantSportEvent> TeamMembers
         {
-            get { return teamMembers.Concat(new List<SportEventParticipant> { { captain } }); }
+            get { return teamMembers.Concat(new List<ParticipantSportEvent> { { captain } }); }
         }
 
         /// <summary>
@@ -93,9 +93,9 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <exception cref="System.InvalidOperationException">Team member must be a participant in the same sport as the Team.</exception>
-        public virtual void AddTeamMember(SportEventParticipant teamMember)
+        public virtual void AddTeamMember(ParticipantSportEvent teamMember)
         {
-            if (teamMember.SportEvent.Id != sportEvent.Id)
+            if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
                 throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
 
             teamMembers.Add(teamMember);
@@ -106,7 +106,7 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public virtual void AddTeamMember(SportEventParticipant teamMember, bool isCaptain)
+        public virtual void AddTeamMember(ParticipantSportEvent teamMember, bool isCaptain)
         {
             if (!isCaptain)
                 AddTeamMember(teamMember);
@@ -119,7 +119,7 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMemberToRemove">The team member to remove.</param>
         /// <exception cref="System.InvalidOperationException">Captain cannot be removed from a team. Assign a new Captain first.</exception>
-        public virtual void RemoveTeamMember(SportEventParticipant teamMemberToRemove)
+        public virtual void RemoveTeamMember(ParticipantSportEvent teamMemberToRemove)
         {
             if (teamMemberToRemove.Id == captain.Id)
                 throw new InvalidOperationException("Captain cannot be removed from a team. Assign a new Captain first.");

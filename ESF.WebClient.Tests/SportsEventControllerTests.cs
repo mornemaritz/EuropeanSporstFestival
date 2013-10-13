@@ -32,8 +32,8 @@ namespace ESF.WebClient.Tests
 
             sportsEvents = new Collection<SportsEventItem> 
             {
-                new SportsEventItem{ SportsEventId = Guid.NewGuid(), SportsEventName = "Football"},
-                new SportsEventItem{ SportsEventId = Guid.NewGuid(), SportsEventName = "Tennis"}
+                new SportsEventItem(Guid.NewGuid(), "Football"),
+                new SportsEventItem(Guid.NewGuid(), "Tennis")
             };
         }
 

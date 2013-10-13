@@ -6,24 +6,30 @@ using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Utilities;
 using NHibernate.Linq;
+using ESF.Commons.Repository;
+using NHibernate.Criterion;
 
 namespace ESF.Repositories
 {
     public class ParticipantRepository : IParticipantRepository
     {
+        private readonly IRepository<Participant> entityRepo;
+
+        public ParticipantRepository(IRepository<Participant> entityRepo)
+        {
+            Check.IsNotNull(entityRepo, "entityRepo may not be null");
+
+            this.entityRepo = entityRepo;
+        }
+
         public Participant RetrieveParticipantByUserId(int userId)
         {
             Check.IsTrue(userId > 0, "userId must be a positive integer");
 
-            Participant participant = null;
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .Add(Restrictions.Eq("UserId", userId));
 
-            using (var session = NHibernateHelper.OpenSession())
-            using(var tx = session.BeginTransaction())  
-            {
-                participant = session.Query<Participant>().Where(p => p.UserId == userId).SingleOrDefault();
-            }
-
-            return participant;
+            return entityRepo.FindOne(criteria);
         }
 
         public Participant RetrieveParticipant(Guid participantId)
@@ -31,39 +37,21 @@ namespace ESF.Repositories
             Check.IsNotNull(participantId, "participantId may not be null");
             Check.IsTrue(participantId != Guid.Empty, "participantId may not be an empty guid");
 
-            Participant participant = null;
-
-            using (var session = NHibernateHelper.OpenSession())
-            using (var tx = session.BeginTransaction())
-            {
-                participant = session.Get<Participant>(participantId);
-            }
-
-            return participant;
+            return entityRepo.Get(participantId);
         }
 
         public void Save(Participant participant)
         {
             Check.IsNotNull(participant, "participant may not be null");
 
-            using (var session = NHibernateHelper.OpenSession())
-            using (var tx = session.BeginTransaction())
-            {
-                session.Save(participant);
-                tx.Commit();
-            }
+            entityRepo.Save(participant);
         }
 
         public void Update(Participant participant)
         {
             Check.IsNotNull(participant, "participant may not be null");
 
-            using (var session = NHibernateHelper.OpenSession())
-            using (var tx = session.BeginTransaction())
-            {
-                session.Update(participant);
-                tx.Commit();
-            }
+            entityRepo.Update(participant);
         }
 
         public Guid RetrieveParticipantIdByUserId(int userId)

@@ -6,37 +6,41 @@ using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Utilities;
 using NHibernate.Linq;
-
+using ESF.Commons.Repository;
+using NHibernate.Criterion;
+using NHibernate.SqlCommand;
+using NHibernate;
 
 namespace ESF.Repositories
 {
     public class SportEventParticipantRepository : ISportEventParticipantRepository
     {
-        public SportEventParticipant Save(SportEventParticipant sportEventParticipant)
+        private readonly IRepository<ParticipantSportEvent> entityRepo;
+
+        public SportEventParticipantRepository(IRepository<ParticipantSportEvent> entityRepo)
+        {
+            Check.IsNotNull(entityRepo, "entityRepo may not be null");
+
+            this.entityRepo = entityRepo;
+        }
+
+        public ParticipantSportEvent Save(ParticipantSportEvent sportEventParticipant)
         {
             Check.IsNotNull(sportEventParticipant, "participant may not be null");
 
-            using (var session = NHibernateHelper.OpenSession())
-            using (var tx = session.BeginTransaction())
-            {
-                session.Save(sportEventParticipant);
-                tx.Commit();
-            }
-
-            return sportEventParticipant;
+            return entityRepo.Save(sportEventParticipant);
         }
 
-        public IList<SportEventParticipant> FindSignedUpSportsEvents(Guid participantId)
+        public IList<ParticipantSportEvent> FindSignedUpSportsEvents(Guid participantId)
         {
-            IList<SportEventParticipant> sportEventParticipants = new List<SportEventParticipant>();
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .CreateAlias("ScheduledSportEvent", "ScheduledSportEvent", JoinType.InnerJoin)
+                .SetFetchMode("ScheduledSportEvent", FetchMode.Eager)
+                .CreateAlias("ScheduledSportEvent.SportEvent", "SportEvent", JoinType.InnerJoin)
+                .SetFetchMode("ScheduledSportEvent.SportEvent", FetchMode.Eager)
+                .Add(Restrictions.Eq("Participant.Id", participantId));
 
-            using (var session = NHibernateHelper.OpenSession())
-            using (var tx = session.BeginTransaction())
-            {
-                sportEventParticipants = session.Query<SportEventParticipant>().Where(sep => sep.Participant.Id == participantId).ToList();
-            }
-
-            return sportEventParticipants;
+            return entityRepo.FindAll(criteria).ToList();
         }
     }
 }

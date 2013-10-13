@@ -5,6 +5,7 @@ using System.Text;
 using Module = Autofac.Module;
 using Autofac;
 using System.Reflection;
+using ESF.Commons.Repository;
 
 namespace ESF.Repositories
 {
@@ -17,6 +18,8 @@ namespace ESF.Repositories
             builder.RegisterAssemblyTypes(assembly)
                 .Where(t => t.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces();
+
+            builder.RegisterModule<AutofacCommonsRepositoryModule>();
         }
     }
 }

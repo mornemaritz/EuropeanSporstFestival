@@ -34,7 +34,7 @@ namespace ESF.WebClient.Controllers
             ViewBag.SportsEvents = availableSportsEvents.AsEnumerable()
                 .Select(x => new SelectListItem 
                 { 
-                        Value = x.SportsEventId.ToString(), 
+                        Value = x.ScheduledSportsEventId.ToString(), 
                         Text = x.SportsEventName 
                 });
 
@@ -88,9 +88,10 @@ namespace ESF.WebClient.Controllers
                 return RedirectToAction("CreateParticipant","Participant");
             }
 
-            ViewData.Model = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
+            var sportsEvents = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
 
-            ViewBag.Message = "This is where you view the sports events that you are signed up for.";
+            ViewData.Model = sportsEvents;
+            ViewBag.Message = string.Format("{0}Sport Events that you are signed up for.", sportsEvents.Any() ? string.Empty : "This is where you view the ");
             ViewBag.ParticipantId = participantModel.ParticipantId;
 
             return View();

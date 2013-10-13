@@ -8,8 +8,8 @@ namespace ESF.Core.Repositories
 {
     public interface ISportEventParticipantRepository
     {
-        SportEventParticipant Save(SportEventParticipant sportEventParticipant);
+        ParticipantSportEvent Save(ParticipantSportEvent sportEventParticipant);
 
-        IList<SportEventParticipant> FindSignedUpSportsEvents(Guid participantId);
+        IList<ParticipantSportEvent> FindSignedUpSportsEvents(Guid participantId);
     }
 }

@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\IParticipantRepository.cs" />
+    <Compile Include="Repositories\IScheduledSportEventRepository.cs" />
     <Compile Include="Repositories\ISportEventParticipantRepository.cs" />
-    <Compile Include="Repositories\ISportEventRepository.cs" />
     <Compile Include="Services\IParticipantService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ISportsEventService.cs" />
