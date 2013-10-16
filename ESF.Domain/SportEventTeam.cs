@@ -10,9 +10,9 @@ namespace ESF.Domain
         private Guid id;
         private string name;
         private ScheduledSportEvent scheduledSportEvent;
-        private ParticipantSportEvent captain;
+        private ScheduledSportEventParticipant captain;
         // TO DECIDE: Should the captain be part of the team members collection?
-        private IList<ParticipantSportEvent> teamMembers = new List<ParticipantSportEvent>();
+        private IList<ScheduledSportEventParticipant> teamMembers = new List<ScheduledSportEventParticipant>();
 
         protected SportEventTeam() { }
 
@@ -22,7 +22,7 @@ namespace ESF.Domain
         /// <param name="scheduledSportEvent">The scheduled sport event.</param>
         /// <param name="teamMember">The team member.</param>
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public SportEventTeam(ScheduledSportEvent scheduledSportEvent, string name, ParticipantSportEvent teamMember, bool isCaptain)
+        public SportEventTeam(ScheduledSportEvent scheduledSportEvent, string name, ScheduledSportEventParticipant teamMember, bool isCaptain)
         {
             this.scheduledSportEvent = scheduledSportEvent;
             this.name = name;
@@ -72,7 +72,7 @@ namespace ESF.Domain
         /// <value>
         /// The captain.
         /// </value>
-        public virtual ParticipantSportEvent Captain
+        public virtual ScheduledSportEventParticipant Captain
         {
             get { return captain; }
         }
@@ -83,9 +83,9 @@ namespace ESF.Domain
         /// <value>
         /// The team members.
         /// </value>
-        public virtual IEnumerable<ParticipantSportEvent> TeamMembers
+        public virtual IEnumerable<ScheduledSportEventParticipant> TeamMembers
         {
-            get { return teamMembers.Concat(new List<ParticipantSportEvent> { { captain } }); }
+            get { return teamMembers.Concat(new List<ScheduledSportEventParticipant> { { captain } }); }
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <exception cref="System.InvalidOperationException">Team member must be a participant in the same sport as the Team.</exception>
-        public virtual void AddTeamMember(ParticipantSportEvent teamMember)
+        public virtual void AddTeamMember(ScheduledSportEventParticipant teamMember)
         {
             if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
                 throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
@@ -106,7 +106,7 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public virtual void AddTeamMember(ParticipantSportEvent teamMember, bool isCaptain)
+        public virtual void AddTeamMember(ScheduledSportEventParticipant teamMember, bool isCaptain)
         {
             if (!isCaptain)
                 AddTeamMember(teamMember);
@@ -119,7 +119,7 @@ namespace ESF.Domain
         /// </summary>
         /// <param name="teamMemberToRemove">The team member to remove.</param>
         /// <exception cref="System.InvalidOperationException">Captain cannot be removed from a team. Assign a new Captain first.</exception>
-        public virtual void RemoveTeamMember(ParticipantSportEvent teamMemberToRemove)
+        public virtual void RemoveTeamMember(ScheduledSportEventParticipant teamMemberToRemove)
         {
             if (teamMemberToRemove.Id == captain.Id)
                 throw new InvalidOperationException("Captain cannot be removed from a team. Assign a new Captain first.");

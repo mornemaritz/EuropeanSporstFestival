@@ -12,14 +12,14 @@ namespace ESF.Services
 {
     public class SportsEventService : ISportsEventService
     {
-        private readonly IRepository<SportEvent> sportEventRepository;
+        private readonly IRepository<Sport> sportEventRepository;
         private readonly IRepository<Participant> participantRepository;
-        private readonly ISportEventParticipantRepository sportEventParticipantRepository;
+        private readonly IScheduledSportEventParticipantRepository sportEventParticipantRepository;
         private readonly IScheduledSportEventRepository scheduledSportEventRepository;
 
-        public SportsEventService(IRepository<SportEvent> sportEventRepository,
+        public SportsEventService(IRepository<Sport> sportEventRepository,
             IRepository<Participant> participantRepository,
-            ISportEventParticipantRepository sportEventParticipantRepository,
+            IScheduledSportEventParticipantRepository sportEventParticipantRepository,
             IScheduledSportEventRepository scheduledSportEventRepository)
         {
             this.sportEventRepository = sportEventRepository;
@@ -27,6 +27,7 @@ namespace ESF.Services
             this.sportEventParticipantRepository = sportEventParticipantRepository;
             this.scheduledSportEventRepository = scheduledSportEventRepository;
         }
+
         public ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId)
         {
             return scheduledSportEventRepository.FindSportEventsAvailableToParticipant(participantId);
@@ -34,28 +35,25 @@ namespace ESF.Services
 
         public SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model)
         {
-            var participant = participantRepository.Load(model.ParticipantId);
-            var scheduledSportEvent = scheduledSportEventRepository.Load(model.ScheduledSportsEventId);
+            var participant = participantRepository.Get(model.ParticipantId);
 
-            var sportEventParticipant = new ParticipantSportEvent(scheduledSportEvent, participant);
+            var scheduledSportEvent = scheduledSportEventRepository.RetrieveScheduledSportEventWithSportDetails(model.ScheduledSportsEventId);
 
+            var sportEventParticipant = participant.SignUpToScheduledSportEvent(scheduledSportEvent);
+
+            //var sportEventParticipant = new ParticipantSportEvent(scheduledSportEvent, participant);
+            
             sportEventParticipant = sportEventParticipantRepository.Save(sportEventParticipant);
 
-            return new SportEventParticipantModel { SportEventParticipantId = sportEventParticipant.Id, RequiresTeamAssignment = false };
+            return new SportEventParticipantModel(sportEventParticipant.Id, scheduledSportEvent.Sport.Name) 
+            { 
+                RequiresTeamAssignment = scheduledSportEvent.IsTeamEvent 
+            };
         }
 
         public IList<SportEventParticipantModel> RetrieveSignedUpSportsEvents(Guid participantId)
         {
-            var sportEventParticipants = sportEventParticipantRepository.FindSignedUpSportsEvents(participantId);
-
-            var sportEventParticipantModels = new List<SportEventParticipantModel>();
-
-            foreach (var sportEventParticipant in sportEventParticipants)
-            {
-                sportEventParticipantModels.Add(new SportEventParticipantModel{SportName = sportEventParticipant.ScheduledSportEvent.SportEvent.Name});
-            }
-
-            return sportEventParticipantModels;
+            return sportEventParticipantRepository.FindSignedUpSportsEvents(participantId);
         }
     }
 }

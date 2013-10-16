@@ -12,5 +12,7 @@ namespace ESF.Core.Repositories
         IList<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId);
 
         ScheduledSportEvent Load(Guid scheduledSportEventId);
+
+        ScheduledSportEvent RetrieveScheduledSportEventWithSportDetails(Guid scheduledSportEventId);
     }
 }

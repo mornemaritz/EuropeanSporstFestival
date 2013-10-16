@@ -12,14 +12,15 @@
 <table>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.SportName)
+            Sport Event
         </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.SportName)
+            @Html.DisplayFor(modelItem => item.ScheduledSportEventName)
         </td>
     </tr>
 }

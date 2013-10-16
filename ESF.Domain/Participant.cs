@@ -71,5 +71,28 @@ namespace ESF.Domain
 
             return age;
         }
+
+        public virtual ScheduledSportEventParticipant SignUpToScheduledSportEvent(ScheduledSportEvent scheduledSportEvent)
+        {
+            //TODO: Re-enable once Gender Flags is working
+            //if(!scheduledSportEvent.AllowedGenders.HasFlag(this.Gender))
+            //{
+            //    throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their gender is '{0}' and the allowed gender for the selected event is '{1}'", this.Gender, scheduledSportEvent.AllowedGenders));
+            //}
+
+            var participantAgeOnDateOfSelectedEvent = this.GetParticipantAgeOnDate(scheduledSportEvent.Date);
+
+            if (participantAgeOnDateOfSelectedEvent > scheduledSportEvent.MaxAge)
+            {
+                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the maximum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MaxAge));
+            }
+
+            if (this.GetParticipantAgeOnDate(scheduledSportEvent.Date) < scheduledSportEvent.MinAge)
+            {
+                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the mimimum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MinAge));
+            }
+
+            return new ScheduledSportEventParticipant(scheduledSportEvent, this);
+        }
     }
 }

@@ -43,8 +43,8 @@
     <Compile Include="Festival.cs" />
     <Compile Include="Participant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SportEvent.cs" />
-    <Compile Include="ParticipantSportEvent.cs" />
+    <Compile Include="Sport.cs" />
+    <Compile Include="ScheduledSportEventParticipant.cs" />
     <Compile Include="ScheduledSportEvent.cs" />
     <Compile Include="SportEventTeam.cs" />
   </ItemGroup>

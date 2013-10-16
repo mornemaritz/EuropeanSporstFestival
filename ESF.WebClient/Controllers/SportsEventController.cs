@@ -35,7 +35,7 @@ namespace ESF.WebClient.Controllers
                 .Select(x => new SelectListItem 
                 { 
                         Value = x.ScheduledSportsEventId.ToString(), 
-                        Text = x.SportsEventName 
+                        Text = x.ScheduledSportsEventName 
                 });
 
             ViewData.Model = new SportsEventSignUpModel { ParticipantId = id };
@@ -50,17 +50,19 @@ namespace ESF.WebClient.Controllers
         {
             var sportEventParticipantModel = sportsEventService.SignUpParticipant(model);
 
-            if (sportEventParticipantModel.RequiresTeamAssignment)
-            {
-                return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.SportEventParticipantId });
-            }
+            // TODO: Enable Once Team Assignment has been implemented.
+            //if (sportEventParticipantModel.RequiresTeamAssignment)
+            //{
+            //    return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.SportEventParticipantId });
+            //}
 
             return RedirectToAction("ViewSportsEvents", new { id = model.ParticipantId });
         }
 
         [HttpGet]
-        public ActionResult SportEventTeamSelect()
+        public ActionResult SportEventTeamSelect(Guid id)
         {
+            //ViewData.Model = new TeamSelectionModel()
             return View();
         }
 
@@ -81,8 +83,7 @@ namespace ESF.WebClient.Controllers
             else
                 participantModel = participantService.RetrieveParticipant(id.Value);
 
-            // TODO : handle the scenario where an id is manually entered in the url
-            if (participantModel == null)
+            if (participantModel == null && WebSecurity.IsAuthenticated)
             {
                 TempData["createparticipantmessage"] = "Please complete your registration";
                 return RedirectToAction("CreateParticipant","Participant");

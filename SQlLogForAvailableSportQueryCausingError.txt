@@ -1,0 +1,54 @@
+2013-10-16 19:56:17.05 spid53      ODS Event: Login connection 53
+2013-10-16 19:56:17.05 spid53      Parameter# 0: Name=,Flags=0,Xvt=231,MaxLen=716,Len=716,Pxvar Value=SELECT participan0_.ParticipantId as Particip1_1_0_, participan0_.EmailAddress as EmailAdd2_1_0_, participan0_.UserId as UserId1_0_, participan0_.FirstName as FirstName1_0_, participan0_.LastName as LastName1_0_, participan0_.DateOfBirth as DateOfBi6_1_0_, participan0_.Gender as Gender1_0_ FROM TParticipant participan0_ WHERE participan0_.ParticipantId=@p0
+2013-10-16 19:56:17.05 spid53      Parameter# 1: Name=,Flags=0,Xvt=231,MaxLen=40,Len=40,Pxvar Value=@p0 uniqueidentifier
+2013-10-16 19:56:17.05 spid53      Parameter# 2: Name=@p0,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=AA636C04-0E47-4855-8669-A259013760E1
+2013-10-16 19:56:17.05 spid53          IPC Name: sp_executesql
+2013-10-16 19:56:17.05 spid53      ODS Event: execrpc : Xact 0 ORS#: 1, connId: 0
+2013-10-16 19:56:17.10 spid53      ODS Event: Logout connection 53
+2013-10-16 19:56:17.10 spid53      ODS Event: Login connection 53
+2013-10-16 19:56:17.10 spid53      Parameter# 0: Name=,Flags=0,Xvt=231,MaxLen=1876,Len=1876,Pxvar Value=SELECT this_.ScheduledSportEventParticipantId as Schedule1_3_2_, this_.ScheduledSportEventId as Schedule2_3_2_, this_.ParticipantId as Particip3_3_2_, scheduleds1_.ScheduledSportEventId as Schedule1_2_0_, scheduleds1_.Name as Name2_0_, scheduleds1_.AllowedGenders as AllowedG3_2_0_, scheduleds1_.MinAge as MinAge2_0_, scheduleds1_.MaxAge as MaxAge2_0_, scheduleds1_.MinTeamSize as MinTeamS6_2_0_, scheduleds1_.MaxTeamSize as MaxTeamS7_2_0_, scheduleds1_.Date as Date2_0_, scheduleds1_.StartTime as StartTime2_0_, scheduleds1_.EndTime as EndTime2_0_, scheduleds1_.FestivalId as FestivalId2_0_, scheduleds1_.SportId as SportId2_0_, sport2_.SportId as SportId5_1_, sport2_.Name as Name5_1_ FROM TScheduledSportEventParticipant this_ inner join TScheduledSportEvent scheduleds1_ on this_.ScheduledSportEventId=scheduleds1_.ScheduledSportEventId inner join TSport sport2_ on scheduleds1_.SportId=sport2_.SportId WHERE this_.ParticipantId = @p0
+2013-10-16 19:56:17.10 spid53      Parameter# 1: Name=,Flags=0,Xvt=231,MaxLen=40,Len=40,Pxvar Value=@p0 uniqueidentifier
+2013-10-16 19:56:17.10 spid53      Parameter# 2: Name=@p0,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=AA636C04-0E47-4855-8669-A259013760E1
+2013-10-16 19:56:17.10 spid53          IPC Name: sp_executesql
+2013-10-16 19:56:17.10 spid53      ODS Event: execrpc : Xact 0 ORS#: 1, connId: 0
+2013-10-16 19:56:17.11 spid53      ODS Event: Logout connection 53
+2013-10-16 19:56:17.11 spid53      ODS Event: Login connection 53
+2013-10-16 19:56:17.11 spid53      Parameter# 0: Name=,Flags=0,Xvt=231,MaxLen=2126,Len=2126,Pxvar Value=SELECT this_.ScheduledSportEventId as y0_, this_.Name as y1_ FROM TScheduledSportEvent this_ inner join TSport sport1_ on this_.SportId=sport1_.SportId WHERE (this_.AllowedGenders is null or this_.AllowedGenders = @p0) and (this_.MinAge is null or this_.MinAge < @p1) and (this_.MaxAge is null or this_.MaxAge > @p2) and not (this_.ScheduledSportEventId in (@p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10)) and not ((this_.Date = @p11 and (this_.StartTime < @p12 or this_.EndTime > @p13))) and not ((this_.Date = @p14 and (this_.StartTime < @p15 or this_.EndTime > @p16))) and not ((this_.Date = @p17 and (this_.StartTime < @p18 or this_.EndTime > @p19))) and not ((this_.Date = @p20 and (this_.StartTime < @p21 or this_.EndTime > @p22))) and not ((this_.Date = @p23 and (this_.StartTime < @p24 or this_.EndTime > @p25))) and not ((this_.Date = @p26 and (this_.StartTime < @p27 or this_.EndTime > @p28))) and not ((this_.Date = @p29 and (this_.StartTime < @p30 or this_.EndTime > @p31))) and not ((this_.Date = @p32 and (this_.StartTime < @p33 or this_.EndTime > @p34)))
+2013-10-16 19:56:17.11 spid53      Parameter# 1: Name=,Flags=0,Xvt=231,MaxLen=1056,Len=1056,Pxvar Value=@p0 int,@p1 int,@p2 int,@p3 uniqueidentifier,@p4 uniqueidentifier,@p5 uniqueidentifier,@p6 uniqueidentifier,@p7 uniqueidentifier,@p8 uniqueidentifier,@p9 uniqueidentifier,@p10 uniqueidentifier,@p11 datetime,@p12 datetime,@p13 datetime,@p14 datetime,@p15 datetime,@p16 datetime,@p17 datetime,@p18 datetime,@p19 datetime,@p20 datetime,@p21 datetime,@p22 datetime,@p23 datetime,@p24 datetime,@p25 datetime,@p26 datetime,@p27 datetime,@p28 datetime,@p29 datetime,@p30 datetime,@p31 datetime,@p32 datetime,@p33 datetime,@p34 datetime
+2013-10-16 19:56:17.11 spid53      Parameter# 2: Name=@p0,Flags=0,Xvt=56,MaxLen=4,Len=4,Pxvar Value=2
+2013-10-16 19:56:17.11 spid53      Parameter# 3: Name=@p1,Flags=0,Xvt=56,MaxLen=4,Len=4,Pxvar Value=38
+2013-10-16 19:56:17.11 spid53      Parameter# 4: Name=@p2,Flags=0,Xvt=56,MaxLen=4,Len=4,Pxvar Value=38
+2013-10-16 19:56:17.11 spid53      Parameter# 5: Name=@p3,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=0AC3B9CE-FEE9-4055-97ED-285E721779A3
+2013-10-16 19:56:17.11 spid53      Parameter# 6: Name=@p4,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=ED0EBD25-DCDA-4875-8AF2-7FC201FE4CD3
+2013-10-16 19:56:17.11 spid53      Parameter# 7: Name=@p5,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=7E399469-06E4-4968-ABEB-843A2CC85B0A
+2013-10-16 19:56:17.11 spid53      Parameter# 8: Name=@p6,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=9A4DC086-023C-4F35-A9D8-8A4EAD25665F
+2013-10-16 19:56:17.11 spid53      Parameter# 9: Name=@p7,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=F005C7BC-7118-4D89-A3C5-0041A290936D
+2013-10-16 19:56:17.11 spid53      Parameter# 10: Name=@p8,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=7B5843CD-FC6C-4E39-ABCE-050143481FE1
+2013-10-16 19:56:17.11 spid53      Parameter# 11: Name=@p9,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=759ABC65-3670-44D6-BBAF-145E7835EEBB
+2013-10-16 19:56:17.11 spid53      Parameter# 12: Name=@p10,Flags=0,Xvt=36,MaxLen=16,Len=16,Pxvar Value=D7342420-8C6E-42BD-9D3A-27DA14F48BD4
+2013-10-16 19:56:17.14 spid53      Parameter# 13: Name=@p11,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 18 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 14: Name=@p12,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  5:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 15: Name=@p13,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753 12:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 16: Name=@p14,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 20 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 17: Name=@p15,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  5:45PM
+2013-10-16 19:56:17.14 spid53      Parameter# 18: Name=@p16,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  7:30AM
+2013-10-16 19:56:17.14 spid53      Parameter# 19: Name=@p17,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 18 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 20: Name=@p18,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  6:00PM
+2013-10-16 19:56:17.14 spid53      Parameter# 21: Name=@p19,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753 12:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 22: Name=@p20,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 18 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 23: Name=@p21,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  4:00PM
+2013-10-16 19:56:17.14 spid53      Parameter# 24: Name=@p22,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753 12:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 25: Name=@p23,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 19 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 26: Name=@p24,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  5:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 27: Name=@p25,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  1:00PM
+2013-10-16 19:56:17.14 spid53      Parameter# 28: Name=@p26,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 19 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 29: Name=@p27,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  5:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 30: Name=@p28,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  1:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 31: Name=@p29,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 19 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 32: Name=@p30,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753 12:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 33: Name=@p31,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  8:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 34: Name=@p32,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Apr 19 2014 12:00AM
+2013-10-16 19:56:17.14 spid53      Parameter# 35: Name=@p33,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753 12:30PM
+2013-10-16 19:56:17.14 spid53      Parameter# 36: Name=@p34,Flags=0,Xvt=61,MaxLen=8,Len=8,Pxvar Value=Jan  1 1753  8:00AM
+2013-10-16 19:56:17.14 spid53          IPC Name: sp_executesql
+2013-10-16 19:56:17.14 spid53      ODS Event: execrpc : Xact 0 ORS#: 1, connId: 0

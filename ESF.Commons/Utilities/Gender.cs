@@ -5,9 +5,10 @@ using System.Text;
 
 namespace ESF.Commons.Utilities
 {
+    [Flags]
     public enum Gender
     {
         Male = 1,
-        Female
+        Female = 2
     }
 }

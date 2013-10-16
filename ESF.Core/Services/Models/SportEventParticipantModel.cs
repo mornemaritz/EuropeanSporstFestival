@@ -7,8 +7,13 @@ namespace ESF.Core.Services
 {
     public class SportEventParticipantModel
     {
-        public Guid SportEventParticipantId { get; set; }
-        public string SportName { get; set; }
+        public SportEventParticipantModel(Guid sportEventParticipantId, string scheduledSportEventName)
+        {
+            ScheduledSportEventName = scheduledSportEventName;
+            SportEventParticipantId = sportEventParticipantId;
+        }
+        public Guid SportEventParticipantId { get; private set; }
+        public string ScheduledSportEventName { get; private set; }
         public bool RequiresTeamAssignment { get; set; }
     }
 }

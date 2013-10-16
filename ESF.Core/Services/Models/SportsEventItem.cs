@@ -7,13 +7,13 @@ namespace ESF.Core.Services
 {
     public class SportsEventItem
     {
-        public SportsEventItem(Guid scheduledSportsEventId, string sportsEventName)
+        public SportsEventItem(Guid scheduledSportsEventId, string scheduledsportsEventName)
         {
             ScheduledSportsEventId = scheduledSportsEventId;
-            SportsEventName = sportsEventName;
+            ScheduledSportsEventName = scheduledsportsEventName;
         }
 
         public Guid ScheduledSportsEventId { get; private set; }
-        public string SportsEventName { get; private set; }
+        public string ScheduledSportsEventName { get; private set; }
     }
 }
