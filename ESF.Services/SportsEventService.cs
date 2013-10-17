@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ESF.Core.Services;
-using System.Collections.ObjectModel;
 using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Repository;
@@ -30,7 +28,22 @@ namespace ESF.Services
 
         public ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId)
         {
-            return scheduledSportEventRepository.FindSportEventsAvailableToParticipant(participantId);
+            var participant = participantRepository.Get(participantId);
+            var signedUpSportEvents = sportEventParticipantRepository.RetrieveSignedUpSportsEvents(participantId);
+            var allSportsNotSignedUpFor = scheduledSportEventRepository.RetrieveScheduledSportEventsExcluding(signedUpSportEvents.Select(s => s.ScheduledSportEvent.Id).ToArray());
+
+            var sportEvents = signedUpSportEvents.Select(se => se.ScheduledSportEvent).ToList();
+
+            var scheduleFilteredSports = allSportsNotSignedUpFor.Where(x => !SchedulesOverLap(x, sportEvents));
+
+            return scheduleFilteredSports.Where(x => 
+                participant.IsWithinAgeAndGenderBracket(x.AllowedGenders, x.Date, x.MinAge, x.MaxAge))
+                .Select(s => new SportsEventItem(s.Id, s.Name)).ToList();
+        }
+
+        private static bool SchedulesOverLap(ScheduledSportEvent sportEventToCheck, IEnumerable<ScheduledSportEvent> currentSportEvents)
+        {
+            return currentSportEvents.Any(x => x.OverLapsWith(sportEventToCheck));
         }
 
         public SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model)
@@ -40,9 +53,6 @@ namespace ESF.Services
             var scheduledSportEvent = scheduledSportEventRepository.RetrieveScheduledSportEventWithSportDetails(model.ScheduledSportsEventId);
 
             var sportEventParticipant = participant.SignUpToScheduledSportEvent(scheduledSportEvent);
-
-            //var sportEventParticipant = new ParticipantSportEvent(scheduledSportEvent, participant);
-            
             sportEventParticipant = sportEventParticipantRepository.Save(sportEventParticipant);
 
             return new SportEventParticipantModel(sportEventParticipant.Id, scheduledSportEvent.Sport.Name) 

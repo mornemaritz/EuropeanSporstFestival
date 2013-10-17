@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ESF.Commons.Utilities;
 
 namespace ESF.Domain
@@ -93,6 +90,15 @@ namespace ESF.Domain
             }
 
             return new ScheduledSportEventParticipant(scheduledSportEvent, this);
+        }
+
+        public virtual bool IsWithinAgeAndGenderBracket(Gender allowedGenders, DateTime onDate, int minAge, int maxAge)
+        {
+            if (!allowedGenders.HasFlag(gender)) return false;
+
+            var age = GetParticipantAgeOnDate(onDate);
+
+            return age <= maxAge && age >= minAge;
         }
     }
 }

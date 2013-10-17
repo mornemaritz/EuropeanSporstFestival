@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using System.Reflection;
+using ESF.Commons.Utilities;
 using ESF.Services;
 
 namespace ESF.WebClient
@@ -18,6 +19,8 @@ namespace ESF.WebClient
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             builder.RegisterModule<AutofacServiceConfigurationModule>();
+
+            HibernateProfiler.StartNhibernateProfiler();
 
             var container = builder.Build();
 

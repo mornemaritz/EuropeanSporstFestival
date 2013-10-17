@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ESF.Commons.Utilities;
 
 namespace ESF.Domain
@@ -118,6 +115,27 @@ namespace ESF.Domain
         {
             date = festival.StartDate.AddDays(Convert.ToDouble(dayOffSetFromFestivalStartDate));
             return date;
+        }
+
+        public virtual bool OverLapsWith(ScheduledSportEvent otherScheduledSportEvent)
+        {
+            return Date == otherScheduledSportEvent.Date
+            &&
+            (
+                StartsBefore(otherScheduledSportEvent.EndTime)
+                ||
+                FinishesAfter(otherScheduledSportEvent.EndTime)
+            );
+        }
+
+        private bool FinishesAfter(TimeSpan otherTime)
+        {
+            return EndTime > otherTime;
+        }
+
+        private bool StartsBefore(TimeSpan otherTime)
+        {
+            return StartTime < otherTime;
         }
     }
 }
