@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ESF.Core.Services.Models;
 using ESF.WebClient.Filters;
 using ESF.Core.Services;
 using ESF.Commons.Utilities;
@@ -50,11 +51,10 @@ namespace ESF.WebClient.Controllers
         {
             var sportEventParticipantModel = sportsEventService.SignUpParticipant(model);
 
-            // TODO: Enable Once Team Assignment has been implemented.
-            //if (sportEventParticipantModel.RequiresTeamAssignment)
-            //{
-            //    return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.SportEventParticipantId });
-            //}
+            if (sportEventParticipantModel.RequiresTeamAssignment)
+            {
+                return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.SportEventParticipantId });
+            }
 
             return RedirectToAction("ViewSportsEvents", new { id = model.ParticipantId });
         }
@@ -62,10 +62,26 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult SportEventTeamSelect(Guid id)
         {
-            //ViewData.Model = new TeamSelectionModel()
+            ViewData.Model = new TeamSelectionModel();
+
             return View();
         }
 
+        [HttpPost]
+        public ActionResult SportEventTeamSelect(TeamSelectionModel model)
+        {
+            switch (model.TeamSelectionOption)
+            {
+                case 1: // Create Team
+                    break;
+                case 2: // Join Team
+                    break;
+                case 3: // Available for allocation
+                    break;
+            }
+
+            return View();
+        }
 
         [HttpGet]
         public ActionResult ViewSportsEvents(Guid? id)

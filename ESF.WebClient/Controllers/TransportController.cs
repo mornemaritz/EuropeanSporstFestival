@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ESF.WebClient.Filters;
 using WebMatrix.WebData;
@@ -15,17 +12,22 @@ namespace ESF.WebClient.Controllers
     public class TransportController : Controller
     {
         private readonly IParticipantService participantService;
+        private readonly ITransportService transportService;
 
-        public TransportController(IParticipantService participantService)
+        public TransportController(IParticipantService participantService, 
+            ITransportService transportService)
         {
             Check.IsNotNull(participantService, "participantService may not be null");
+            Check.IsNotNull(transportService, "transportService may not be null");
 
             this.participantService = participantService;
+            this.transportService = transportService;
         }
 
         [HttpGet]
         public ActionResult RequestTransport(Guid id)
         {
+            ViewBag.PickupPoints = transportService.FindPickupPoints();
             ViewBag.Message = "This is where you request Transport.";
             ViewBag.ParticipantId = id;
 

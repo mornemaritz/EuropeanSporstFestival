@@ -47,6 +47,7 @@
     <Compile Include="ScheduledSportEventParticipant.cs" />
     <Compile Include="ScheduledSportEvent.cs" />
     <Compile Include="SportEventTeam.cs" />
+    <Compile Include="TransportPickupPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">

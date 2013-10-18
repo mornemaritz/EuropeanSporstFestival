@@ -1,0 +1,27 @@
+﻿@model ESF.Core.Services.Models.TeamSelectionModel
+
+@{
+    ViewBag.Title = "Team Selection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Team Selection</h2>
+
+<p>The sport you selected is a team event</p>
+<p>What would you like to do?</p>
+
+@using(Html.BeginForm())
+{
+    <fieldset>
+        <legend>Team Selection</legend>
+		@Html.HiddenFor(x => x.ScheduledSportEventParticipantId)
+        <div class="editor-field">
+            <div>@Html.RadioButtonFor(x => x.TeamSelectionOption, 1) Create a Team</div>
+            <div>@Html.RadioButtonFor(x => x.TeamSelectionOption, 2) Join an Existing Team</div>
+            <div>@Html.RadioButtonFor(x => x.TeamSelectionOption, 3) Make myself available to any Team that needs a member</div>
+        </div>
+        <p>
+            <input type="submit" value="Next" />
+        </p>
+    </fieldset>
+}
