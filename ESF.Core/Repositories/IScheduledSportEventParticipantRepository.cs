@@ -14,5 +14,9 @@ namespace ESF.Core.Repositories
         IList<SportEventParticipantModel> FindSignedUpSportsEvents(Guid participantId);
 
         IList<ScheduledSportEventParticipant> RetrieveSignedUpSportsEvents(Guid participantId);
+
+        ScheduledSportEventParticipant Get(Guid sportEventParticpantId);
+
+        void Update(ScheduledSportEventParticipant sportEventParticipant);
     }
 }

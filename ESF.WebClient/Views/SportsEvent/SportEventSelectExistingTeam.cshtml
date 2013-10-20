@@ -1,0 +1,32 @@
+﻿@model ESF.Core.Services.ExistingTeamModel
+
+@{
+    ViewBag.Title = "SportEventSelectExistingTeam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sport Event Select Existing Team</h2>
+
+@ViewBag.TeamAllocationMessage
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Join Existing Team</legend>
+
+        @Html.HiddenFor(model => model.SportEventParticipantId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TeamName, "Team Name")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.TeamName)
+            @Html.ValidationMessageFor(model => model.TeamName)
+        </div>
+
+        <p>
+            <input type="submit" value="Join" />
+        </p>
+    </fieldset>
+}

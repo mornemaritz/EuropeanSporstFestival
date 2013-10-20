@@ -58,6 +58,7 @@
     <Compile Include="ParticipantRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledSportEventParticipantRepository.cs" />
+    <Compile Include="SportEventTeamRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

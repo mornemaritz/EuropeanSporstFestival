@@ -27,7 +27,7 @@ namespace ESF.Domain
             this.scheduledSportEvent = scheduledSportEvent;
             this.name = name;
 
-            AddTeamMember(teamMember);
+            AddConfirmedTeamMember(teamMember);
 
             if (isCaptain)
                 captain = teamMember;
@@ -89,27 +89,45 @@ namespace ESF.Domain
         }
 
         /// <summary>
-        /// Adds the team member.
+        /// Adds the confirmed team member.
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <exception cref="System.InvalidOperationException">Team member must be a participant in the same sport as the Team.</exception>
-        public virtual void AddTeamMember(ScheduledSportEventParticipant teamMember)
+        public virtual void AddConfirmedTeamMember(ScheduledSportEventParticipant teamMember)
         {
             if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
                 throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
 
+            teamMember.MakeConfirmedTeamMember();
+
             teamMembers.Add(teamMember);
         }
+
+        /// <summary>
+        /// Adds an unconfirmed team member.
+        /// </summary>
+        /// <param name="teamMember">The team member.</param>
+        /// <exception cref="System.InvalidOperationException">Team member must be a participant in the same sport as the Team.</exception>
+        public virtual void AddUnconfirmedTeamMember(ScheduledSportEventParticipant teamMember)
+        {
+            if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
+                throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
+
+            teamMember.MakeUnconfirmedTeamMember();
+
+            teamMembers.Add(teamMember);
+        }
+        
 
         /// <summary>
         /// Adds the team member.
         /// </summary>
         /// <param name="teamMember">The team member.</param>
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public virtual void AddTeamMember(ScheduledSportEventParticipant teamMember, bool isCaptain)
+        public virtual void AddConfirmedTeamMember(ScheduledSportEventParticipant teamMember, bool isCaptain)
         {
             if (!isCaptain)
-                AddTeamMember(teamMember);
+                AddConfirmedTeamMember(teamMember);
             else
                 captain = teamMember;
         }
@@ -140,7 +158,7 @@ namespace ESF.Domain
             {
                 var oldCaptain = captain;
                 // Add the current Captain as a member;
-                AddTeamMember(oldCaptain);
+                AddConfirmedTeamMember(oldCaptain);
                 // Set the new Captain
                 captain = newCaptain;
             }

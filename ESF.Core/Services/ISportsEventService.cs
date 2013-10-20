@@ -12,5 +12,9 @@ namespace ESF.Core.Services
         SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model);
 
         IList<SportEventParticipantModel> RetrieveSignedUpSportsEvents(Guid participantId);
+
+        void MakeParticipantAvailableForTeamAllocation(Guid sportEventParticpantId);
+
+        ExistingTeamModel AttemptAllocationToNamedTeam(ExistingTeamModel model);
     }
 }

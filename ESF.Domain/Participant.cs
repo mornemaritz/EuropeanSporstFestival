@@ -71,11 +71,12 @@ namespace ESF.Domain
 
         public virtual ScheduledSportEventParticipant SignUpToScheduledSportEvent(ScheduledSportEvent scheduledSportEvent)
         {
-            //TODO: Re-enable once Gender Flags is working
-            //if(!scheduledSportEvent.AllowedGenders.HasFlag(this.Gender))
-            //{
-            //    throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their gender is '{0}' and the allowed gender for the selected event is '{1}'", this.Gender, scheduledSportEvent.AllowedGenders));
-            //}
+            // TODO: These invariants need to be checked during entity validation
+            //       Move the invariants when validation has been implemented.
+            if (!scheduledSportEvent.AllowedGenders.HasFlag(this.Gender))
+            {
+                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their gender is '{0}' and the allowed gender for the selected event is '{1}'", this.Gender, scheduledSportEvent.AllowedGenders));
+            }
 
             var participantAgeOnDateOfSelectedEvent = this.GetParticipantAgeOnDate(scheduledSportEvent.Date);
 

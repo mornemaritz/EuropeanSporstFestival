@@ -25,11 +25,25 @@ namespace ESF.Repositories
             this.entityRepo = entityRepo;
         }
 
+        public ScheduledSportEventParticipant Get(Guid sportEventParticpantId)
+        {
+            return entityRepo.Get(sportEventParticpantId);
+        }
+
         public ScheduledSportEventParticipant Save(ScheduledSportEventParticipant sportEventParticipant)
         {
             Check.IsNotNull(sportEventParticipant, "participant may not be null");
+            Check.IsTrue(sportEventParticipant.Id == Guid.Empty, "Incorrect persistence operation called for a persistent entity. Call Update.");
 
             return entityRepo.Save(sportEventParticipant);
+        }
+
+        public void Update(ScheduledSportEventParticipant sportEventParticipant)
+        {
+            Check.IsNotNull(sportEventParticipant, "sportEventParticipant may not be null");
+            Check.IsTrue(sportEventParticipant.Id != Guid.Empty, "Incorrect persistence operation called for transient entity. Call Save.");
+
+            entityRepo.Update(sportEventParticipant);
         }
 
         public IList<SportEventParticipantModel> FindSignedUpSportsEvents(Guid participantId)

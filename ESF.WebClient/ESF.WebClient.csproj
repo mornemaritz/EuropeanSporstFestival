@@ -355,6 +355,12 @@
   <ItemGroup>
     <Content Include="Views\SportsEvent\SportEventTeamSelect.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SportsEvent\TeamSelectionConfirmation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SportsEvent\SportEventSelectExistingTeam.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

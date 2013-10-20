@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESF.Core.Services.Models
+namespace ESF.Core.Services
 {
     public class PickupPointItem
     {
