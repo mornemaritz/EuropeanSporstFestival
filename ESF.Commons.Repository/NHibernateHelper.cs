@@ -42,7 +42,7 @@ namespace ESF.Commons.Repository
                                     PrimaryKey.Name.Is(x => x.EntityType.Name + "Id"),
                                     DefaultAccess.CamelCaseField(),
                                     Table.Is(x => "T" + x.EntityType.Name),
-                                    ForeignKey.Format((fluentNHibernateMember, type) => { return type.Name + "Id"; }))
+                                    ForeignKey.Format((fluentNHibernateMember, type) => type.Name + "Id"))
                                  //.ExportTo(@"C:\Work\EuropeanSporstFestival\xmlmappings")
                            )
                 //.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))

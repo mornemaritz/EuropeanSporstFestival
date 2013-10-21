@@ -18,6 +18,9 @@ namespace ESF.WebClient
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Participant", action = "ViewParticipant", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute("TeamManagement", "{controller}/{action}/{sportEventTeamId}");
+            routes.MapRoute("TeamMemberConfirmation", "{controller}/{action}/{sportEventTeamId}/{sportEventParticipantId}");
         }
     }
 }

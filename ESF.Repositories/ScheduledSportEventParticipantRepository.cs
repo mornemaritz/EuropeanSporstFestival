@@ -53,6 +53,8 @@ namespace ESF.Repositories
                 .SetFetchMode("ScheduledSportEvent", FetchMode.Eager)
                 .CreateAlias("ScheduledSportEvent.Sport", "Sport", JoinType.InnerJoin)
                 .SetFetchMode("ScheduledSportEvent.Sport", FetchMode.Eager)
+                .CreateAlias("Team", "Team", JoinType.LeftOuterJoin)
+                .SetFetchMode("Team", FetchMode.Eager)
                 .Add(Restrictions.Eq("Participant.Id", participantId));
 
             return entityRepo.ReportAll<SportEventParticipantModel>(criteria, GetProjectionList()).ToList();
@@ -73,8 +75,12 @@ namespace ESF.Repositories
         private ProjectionList GetProjectionList()
         {
             return Projections.ProjectionList()
-                .Add(Projections.Property("Id"), "ParticipantSportEventId")
-                .Add(Projections.Property("ScheduledSportEvent.Name"), "ScheduledSportEventName");
+                .Add(Projections.Property("Id"), "ScheduledSportEventParticipantId")
+                .Add(Projections.Property("ScheduledSportEvent.Name"), "ScheduledSportEventName")
+                .Add(Projections.Property("TeamAllocationStatus"), "TeamAllocationStatus")
+                .Add(Projections.Property("Team.Id"), "SportEventTeamId")
+                .Add(Projections.Property("Team.Name"), "TeamName")
+                .Add(Projections.Conditional(Restrictions.EqProperty("Team.Captain.Id", "Id"), Projections.Constant(true), Projections.Constant(false)));
         }
     }
 }

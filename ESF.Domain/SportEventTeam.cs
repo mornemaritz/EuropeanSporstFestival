@@ -11,28 +11,25 @@ namespace ESF.Domain
         private string name;
         private ScheduledSportEvent scheduledSportEvent;
         private ScheduledSportEventParticipant captain;
-        // TO DECIDE: Should the captain be part of the team members collection?
-        private IList<ScheduledSportEventParticipant> teamMembers = new List<ScheduledSportEventParticipant>();
+        private readonly IList<ScheduledSportEventParticipant> teamMembers = new List<ScheduledSportEventParticipant>();
 
         protected SportEventTeam() { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SportEventTeam"/> class.
-        /// </summary>
-        /// <param name="scheduledSportEvent">The scheduled sport event.</param>
-        /// <param name="teamMember">The team member.</param>
-        /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
-        public SportEventTeam(ScheduledSportEvent scheduledSportEvent, string name, ScheduledSportEventParticipant teamMember, bool isCaptain)
+        public static SportEventTeam Create(ScheduledSportEventParticipant captain, string name)
         {
-            this.scheduledSportEvent = scheduledSportEvent;
-            this.name = name;
+            var team = new SportEventTeam
+                           {
+                               scheduledSportEvent = captain.ScheduledSportEvent, 
+                               name = name
+                           };
 
-            AddConfirmedTeamMember(teamMember);
+            team.AddConfirmedTeamMember(captain);
 
-            if (isCaptain)
-                captain = teamMember;
+            team.captain = captain;
+
+            return team;
         }
-
+        
         /// <summary>
         /// Gets the identifier.
         /// </summary>
@@ -85,7 +82,10 @@ namespace ESF.Domain
         /// </value>
         public virtual IEnumerable<ScheduledSportEventParticipant> TeamMembers
         {
-            get { return teamMembers.Concat(new List<ScheduledSportEventParticipant> { { captain } }); }
+            get
+            {
+                return teamMembers;
+            }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace ESF.Domain
             if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
                 throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
 
-            teamMember.MakeConfirmedTeamMember();
+            teamMember.AddToTeamAsConfirmedMember(this);
 
             teamMembers.Add(teamMember);
         }
@@ -113,7 +113,7 @@ namespace ESF.Domain
             if (teamMember.ScheduledSportEvent.Id != scheduledSportEvent.Id)
                 throw new InvalidOperationException("Team member must be a participant in the same sport as the Team.");
 
-            teamMember.MakeUnconfirmedTeamMember();
+            teamMember.AddToTeamAsUnconfirmedMember(this);
 
             teamMembers.Add(teamMember);
         }
@@ -126,10 +126,9 @@ namespace ESF.Domain
         /// <param name="isCaptain">if set to <c>true</c> [is captain].</param>
         public virtual void AddConfirmedTeamMember(ScheduledSportEventParticipant teamMember, bool isCaptain)
         {
-            if (!isCaptain)
-                AddConfirmedTeamMember(teamMember);
-            else
-                captain = teamMember;
+            AddConfirmedTeamMember(teamMember);
+
+            if (isCaptain) captain = teamMember;
         }
 
         /// <summary>
@@ -152,14 +151,10 @@ namespace ESF.Domain
         /// <exception cref="System.InvalidOperationException">New Captain must be a member of the team.</exception>
         public virtual void ChangeCaptain(Guid teamMemberIdOfNewCaptain)
         {
-            var newCaptain = teamMembers.Where(x => x.Id == teamMemberIdOfNewCaptain).SingleOrDefault();
+            var newCaptain = teamMembers.SingleOrDefault(x => x.Id == teamMemberIdOfNewCaptain);
 
             if (newCaptain != null)
             {
-                var oldCaptain = captain;
-                // Add the current Captain as a member;
-                AddConfirmedTeamMember(oldCaptain);
-                // Set the new Captain
                 captain = newCaptain;
             }
             else

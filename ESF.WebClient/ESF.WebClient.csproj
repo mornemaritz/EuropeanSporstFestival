@@ -182,6 +182,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HttpModules\NHibernateWebSessionModule.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -306,6 +307,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons.Repository\ESF.Commons.Repository.csproj">
+      <Project>{6A968567-2A0B-42BC-9694-36430DB11AAC}</Project>
+      <Name>ESF.Commons.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
       <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
       <Name>ESF.Commons</Name>
@@ -360,6 +365,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SportsEvent\SportEventSelectExistingTeam.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SportsEvent\SportEventCreateNewTeam.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\SportsEvent\ManageTeam.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

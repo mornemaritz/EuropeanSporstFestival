@@ -12,6 +12,7 @@ namespace ESF.Domain
         private ScheduledSportEvent scheduledSportEvent;
         private Participant participant;
         private TeamAllocationStatus teamAllocationStatus = TeamAllocationStatus.NotApplicable;
+        private SportEventTeam team;
 
         protected ScheduledSportEventParticipant() { }
 
@@ -39,6 +40,11 @@ namespace ESF.Domain
             get { return participant; }
         }
 
+        public virtual SportEventTeam Team
+        {
+            get { return team; }
+        }
+
         public virtual TeamAllocationStatus TeamAllocationStatus
         {
             get { return teamAllocationStatus; }
@@ -49,14 +55,21 @@ namespace ESF.Domain
             teamAllocationStatus = TeamAllocationStatus.AvailableForTeamAllocation;
         }
 
-        public virtual void MakeUnconfirmedTeamMember()
-        {
-            teamAllocationStatus = TeamAllocationStatus.UnconfirmedTeamMember;
-        }
-
-        public virtual void MakeConfirmedTeamMember()
+        public virtual void ConfirmAsTeamMember()
         {
             teamAllocationStatus = TeamAllocationStatus.ConfirmedTeamMember;
+        }
+
+        public virtual void AddToTeamAsUnconfirmedMember(SportEventTeam sportEventTeam)
+        {
+            teamAllocationStatus = TeamAllocationStatus.UnconfirmedTeamMember;
+            team = sportEventTeam;
+        }
+
+        public virtual void AddToTeamAsConfirmedMember(SportEventTeam sportEventTeam)
+        {
+            teamAllocationStatus = TeamAllocationStatus.ConfirmedTeamMember;
+            team = sportEventTeam;
         }
     }
 }

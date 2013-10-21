@@ -54,6 +54,8 @@
     <Compile Include="Services\Models\SportsEventSignUpModel.cs" />
     <Compile Include="Services\Models\SportEventParticipantModel.cs" />
     <Compile Include="Services\Models\SportsEventItem.cs" />
+    <Compile Include="Services\Models\TeamCreateModel.cs" />
+    <Compile Include="Services\Models\TeamMemberDetail.cs" />
     <Compile Include="Services\Models\TeamSelectionModel.cs" />
   </ItemGroup>
   <ItemGroup>

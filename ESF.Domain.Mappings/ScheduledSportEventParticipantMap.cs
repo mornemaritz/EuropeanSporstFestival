@@ -15,6 +15,7 @@ namespace ESF.Domain.Mappings
             References(x => x.ScheduledSportEvent, "ScheduledSportEventId");
             References(x => x.Participant, "ParticipantId");
             Map(x => x.TeamAllocationStatus, "TeamAllocationStatus").CustomType(typeof(GenericEnumMapper<TeamAllocationStatus>));
+            References(x => x.Team, "SportEventTeamId");
         }
     }
 }

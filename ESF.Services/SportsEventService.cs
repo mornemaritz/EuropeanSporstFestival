@@ -65,10 +65,7 @@ namespace ESF.Services
             var sportEventParticipant = participant.SignUpToScheduledSportEvent(scheduledSportEvent);
             sportEventParticipant = sportEventParticipantRepository.Save(sportEventParticipant);
 
-            return new SportEventParticipantModel(sportEventParticipant.Id, scheduledSportEvent.Sport.Name) 
-            { 
-                RequiresTeamAssignment = scheduledSportEvent.IsTeamEvent 
-            };
+            return new SportEventParticipantModel(sportEventParticipant.Id, scheduledSportEvent.Sport.Name, sportEventParticipant.TeamAllocationStatus, Guid.Empty, string.Empty, false);
         }
 
         public IList<SportEventParticipantModel> RetrieveSignedUpSportsEvents(Guid participantId)
@@ -103,6 +100,38 @@ namespace ESF.Services
                 model.TeamExists = false;
 
             return model;
+        }
+
+        public TeamCreateModel CreateNewSportEventTeam(TeamCreateModel teamCreateModel)
+        {
+            var sportEventParticipant = sportEventParticipantRepository.Get(teamCreateModel.CaptainSportEventParticipantId);
+
+            var sportEventTeam = sportEventTeamRepository.FindByName(teamCreateModel.TeamName, sportEventParticipant.ScheduledSportEvent.Id);
+
+            if(sportEventTeam == null)
+            {
+                sportEventTeam = SportEventTeam.Create(sportEventParticipant, teamCreateModel.TeamName);
+                sportEventTeam = sportEventTeamRepository.Save(sportEventTeam);
+
+                teamCreateModel.SportEventTeamId = sportEventTeam.Id;
+            }
+            else
+                teamCreateModel.TeamAlreadyExists = true;
+
+            return teamCreateModel;
+        }
+
+        public IList<TeamMemberDetail> ListTeamMembers(Guid sportEventTeamId)
+        {
+            return sportEventTeamRepository.ListTeamMembers(sportEventTeamId);
+        }
+
+        public void ConfirmTeamMember(Guid sportEventParticipantId)
+        {
+            var teamMember = sportEventParticipantRepository.Get(sportEventParticipantId);
+            teamMember.ConfirmAsTeamMember();
+
+            sportEventParticipantRepository.Update(teamMember);
         }
     }
 }

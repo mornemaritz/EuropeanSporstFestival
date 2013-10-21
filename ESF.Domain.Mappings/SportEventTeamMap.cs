@@ -14,7 +14,7 @@ namespace ESF.Domain.Mappings
             Map(x => x.Name);
             References(x => x.ScheduledSportEvent, "ScheduledSportEventId");
             References(x => x.Captain, "CaptainParticipantId");
-            HasMany(x => x.TeamMembers);
+            HasMany(x => x.TeamMembers).Access.CamelCaseField();
         }
     }
 }

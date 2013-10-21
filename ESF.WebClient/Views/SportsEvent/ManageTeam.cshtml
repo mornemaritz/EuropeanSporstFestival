@@ -1,0 +1,47 @@
+﻿@using ESF.Commons.Utilities
+@model IEnumerable<ESF.Core.Services.TeamMemberDetail>
+
+@{
+    ViewBag.Title = "Manage Team";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage Team</h2>
+
+<table>
+    <tr>
+        <th>
+            Team Member Name
+        </th>
+        <th>
+            Team Member Status
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamMemberName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamMemberAllocationStatusString)
+            </td>
+            <td>
+                @if(item.TeamMemberAllocationStatusString == TeamAllocationStatus.UnconfirmedTeamMember.GetStringValue())
+                {
+                    @Html.ActionLink("Confirm as Team Member", "ConfirmTeamMember", new { sportEventTeamId = item.SportEventTeamId, sportEventParticipantId = item.TeamMemberSportEventParticipantId })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+@*<p>
+    @Html.ActionLink("Add a Team Member", "AddTeamMember", "SportsEvent", new { sportEventTeamId = ViewBag.SportEventTeamId })
+</p>*@
+
+<p>
+    @Html.ActionLink("Back to Signed Up Sport Events", "ViewSportsEvents", "SportsEvent")
+</p>

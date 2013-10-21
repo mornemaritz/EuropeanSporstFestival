@@ -50,9 +50,9 @@ namespace ESF.WebClient.Controllers
         {
             var sportEventParticipantModel = sportsEventService.SignUpParticipant(model);
 
-            if (sportEventParticipantModel.RequiresTeamAssignment)
+            if (sportEventParticipantModel.TeamAllocationStatus == TeamAllocationStatus.AllocationRequired)
             {
-                return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.SportEventParticipantId });
+                return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.ScheduledSportEventParticipantId });
             }
 
             return RedirectToAction("ViewSportsEvents", new { id = model.ParticipantId });
@@ -72,7 +72,7 @@ namespace ESF.WebClient.Controllers
             switch (model.TeamSelectionOption)
             {
                 case 1: // Create Team
-                    break;
+                    return RedirectToAction("SportEventCreateNewTeam", new { Id = model.ScheduledSportEventParticipantId });
                 case 2: // Join Team
                     return RedirectToAction("SportEventSelectExistingTeam", new { Id = model.ScheduledSportEventParticipantId });
                 case 3: // Available for allocation
@@ -84,6 +84,36 @@ namespace ESF.WebClient.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult SportEventCreateNewTeam(Guid id)
+        {
+            ViewData.Model = TempData["TeamCreateModel"] ?? new TeamCreateModel{ CaptainSportEventParticipantId = id };
+
+            ViewBag.TeamCreateMessage = TempData["TeamCreateMessage"];
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SportEventCreateNewTeam(TeamCreateModel model)
+        {
+            model = sportsEventService.CreateNewSportEventTeam(model);
+
+            // TODO: Implement Proper Validation (Basic and Business Rules) and have the "Team Already Exists" message be returned in a BusinessRule Validation Failure message
+            if(model.TeamAlreadyExists)
+            {
+                TempData["TeamCreateModel"] = model;
+                TempData["TeamCreateMessage"] = "A team with the specified name already exists.";
+
+                return RedirectToAction("SportEventCreateNewTeam", new { Id = model.CaptainSportEventParticipantId });
+            }
+
+            TempData["TeamSelectionConfirmationMessage"] = "Your team has been sucessfully created.";
+
+            // TODO: Redirect to Page where team members can be added.
+            return RedirectToAction("TeamSelectionConfirmation");
         }
 
         [HttpGet]
@@ -106,7 +136,7 @@ namespace ESF.WebClient.Controllers
                 TempData["model"] = model;
                 TempData["TeamAllocationMessage"] = "No team currently exists with the name you specified";
 
-                return RedirectToAction("SportEventSelectExistingTeam");
+                return RedirectToAction("SportEventSelectExistingTeam", new { Id = model.SportEventParticipantId });
             }
 
             TempData["TeamSelectionConfirmationMessage"] = "The captain of the team you specified will be notified of your request to join the team.";
@@ -151,6 +181,27 @@ namespace ESF.WebClient.Controllers
             ViewBag.ParticipantId = participantModel.ParticipantId;
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ManageTeam(Guid sportEventTeamId)
+        {
+            ViewBag.SportEventTeamId = sportEventTeamId;
+            ViewData.Model = sportsEventService.ListTeamMembers(sportEventTeamId);
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmTeamMember(Guid sportEventTeamId, Guid sportEventParticipantId)
+        {
+            sportsEventService.ConfirmTeamMember(sportEventParticipantId);
+            return RedirectToAction("ManageTeam", new { sportEventTeamId });
+        }
+
+        [HttpGet]
+        public ActionResult AddTeamMember(Guid sportEventTeamId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
