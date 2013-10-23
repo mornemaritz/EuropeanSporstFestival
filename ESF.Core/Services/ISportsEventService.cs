@@ -13,5 +13,7 @@ namespace ESF.Core.Services
         TeamCreateModel CreateNewSportEventTeam(TeamCreateModel teamCreateModel);
         IList<TeamMemberDetail> ListTeamMembers(Guid sportEventTeamId);
         void ConfirmTeamMember(Guid sportEventParticipantId);
+        void AddNewTeamMember(NewTeamMemberModel model);
+        IList<DateTime> FindScheduledDays();
     }
 }

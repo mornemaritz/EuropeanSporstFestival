@@ -16,5 +16,6 @@ namespace ESF.Core.Services
         public Month BirthMonth { get; set; }
         public int BirthYear { get; set; }
         public Gender Gender { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

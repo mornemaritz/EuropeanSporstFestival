@@ -13,5 +13,6 @@ namespace ESF.Core.Repositories
         void Update(SportEventTeam sportEventTeam);
         SportEventTeam Save(SportEventTeam sportEventTeam);
         IList<TeamMemberDetail> ListTeamMembers(Guid sportEventTeamId);
+        SportEventTeam RetrieveWithSportEventDetails(Guid sportEventTeamId);
     }
 }

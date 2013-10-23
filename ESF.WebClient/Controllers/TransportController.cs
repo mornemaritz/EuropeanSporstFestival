@@ -13,21 +13,29 @@ namespace ESF.WebClient.Controllers
     {
         private readonly IParticipantService participantService;
         private readonly ITransportService transportService;
+        private readonly ISportsEventService sportEventService;
 
         public TransportController(IParticipantService participantService, 
-            ITransportService transportService)
+            ITransportService transportService, 
+            ISportsEventService sportEventService)
         {
             Check.IsNotNull(participantService, "participantService may not be null");
             Check.IsNotNull(transportService, "transportService may not be null");
+            Check.IsNotNull(sportEventService, "sportEventService may not be null");
 
             this.participantService = participantService;
             this.transportService = transportService;
+            this.sportEventService = sportEventService;
         }
 
         [HttpGet]
         public ActionResult RequestTransport(Guid id)
         {
+            var festivalDays = sportEventService.FindScheduledDays();
+
+            ViewData.Model = festivalDays;
             ViewBag.PickupPoints = transportService.FindPickupPoints();
+
             ViewBag.Message = "This is where you request Transport.";
             ViewBag.ParticipantId = id;
 

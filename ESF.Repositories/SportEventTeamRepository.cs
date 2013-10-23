@@ -48,6 +48,16 @@ namespace ESF.Repositories
             return entityRepo.ReportAll<TeamMemberDetail>(criteria, GetTeamMemberProjectionList()).ToList();
         }
 
+        public SportEventTeam RetrieveWithSportEventDetails(Guid sportEventTeamId)
+        {
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .CreateAlias("ScheduledSportEvent", "ScheduledSportEvent", JoinType.InnerJoin)
+                .SetFetchMode("ScheduledSportEvent", FetchMode.Eager)
+                .Add(Restrictions.Eq("Id", sportEventTeamId));
+
+            return entityRepo.FindOne(criteria);
+        }
+
         private ProjectionList GetTeamMemberProjectionList()
         {
             return Projections.ProjectionList()

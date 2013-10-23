@@ -14,5 +14,6 @@ namespace ESF.Core.Repositories
 
         ScheduledSportEvent RetrieveScheduledSportEventWithSportDetails(Guid scheduledSportEventId);
         IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] scheduledSportEventIdsToExclude);
+        IList<DateTime> FindScheduledDays();
     }
 }

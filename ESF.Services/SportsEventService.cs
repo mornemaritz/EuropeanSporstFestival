@@ -12,13 +12,13 @@ namespace ESF.Services
     public class SportsEventService : ISportsEventService
     {
         private readonly IRepository<Sport> sportEventRepository;
-        private readonly IRepository<Participant> participantRepository;
+        private readonly IParticipantRepository participantRepository;
         private readonly IScheduledSportEventParticipantRepository sportEventParticipantRepository;
         private readonly IScheduledSportEventRepository scheduledSportEventRepository;
         private readonly ISportEventTeamRepository sportEventTeamRepository;
 
         public SportsEventService(IRepository<Sport> sportEventRepository,
-            IRepository<Participant> participantRepository,
+            IParticipantRepository participantRepository,
             IScheduledSportEventParticipantRepository sportEventParticipantRepository,
             IScheduledSportEventRepository scheduledSportEventRepository,
             ISportEventTeamRepository sportEventTeamRepository)
@@ -132,6 +132,43 @@ namespace ESF.Services
             teamMember.ConfirmAsTeamMember();
 
             sportEventParticipantRepository.Update(teamMember);
+        }
+
+        public void AddNewTeamMember(NewTeamMemberModel model)
+        {
+            // TODO: Combine Self SignUp and Third Party SignUp (via Adding Members to a Team) into one.
+            var sportEventTeam = sportEventTeamRepository.RetrieveWithSportEventDetails(model.SportEventTeamId);
+
+            var participant = participantRepository.RetrieveByEmailAddress(model.EmailAddress);
+
+            if(participant == null)
+            {
+                participant = new Participant
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    EmailAddress = model.EmailAddress
+                };
+
+                // TODO: Remove HACK when business rules around adding a team member are tightened up.
+                // HACK: As a temp workaround for captain not needing to specify age or gender for a team member and this being needed to determine if the new member qualifies, I'm defaulting the age and gender to that of the captain
+                var captain = sportEventTeam.Captain.Participant;
+                participant.Gender = captain.Gender;
+                participant.DateOfBirth = captain.DateOfBirth;
+
+                participant = participantRepository.Save(participant);
+            }
+
+            var scheduledSportEventParticipant = participant.SignUpToScheduledSportEvent(sportEventTeam.ScheduledSportEvent);
+            sportEventParticipantRepository.Save(scheduledSportEventParticipant);
+
+            sportEventTeam.AddConfirmedTeamMember(scheduledSportEventParticipant);
+            sportEventTeamRepository.Update(sportEventTeam);
+        }
+
+        public IList<DateTime> FindScheduledDays()
+        {
+            return scheduledSportEventRepository.FindScheduledDays();
         }
     }
 }

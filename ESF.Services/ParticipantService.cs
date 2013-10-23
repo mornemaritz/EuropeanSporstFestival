@@ -27,6 +27,7 @@ namespace ESF.Services
                 UserId = model.UserId, 
                 FirstName = model.FirstName, 
                 LastName = model.LastName, 
+                EmailAddress = model.EmailAddress,
                 DateOfBirth = new DateTime(model.BirthYear,(int)model.BirthMonth,model.BirthDay),
                 Gender = model.Gender
             });

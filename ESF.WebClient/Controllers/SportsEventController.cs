@@ -186,8 +186,11 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult ManageTeam(Guid sportEventTeamId)
         {
+            // TODO: Apply Authorisation to manage teams (only captains should be able to)
             ViewBag.SportEventTeamId = sportEventTeamId;
+
             ViewData.Model = sportsEventService.ListTeamMembers(sportEventTeamId);
+
             return View();
         }
 
@@ -201,7 +204,17 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult AddTeamMember(Guid sportEventTeamId)
         {
-            throw new NotImplementedException();
+            ViewData.Model = TempData["TeamMemberModel"] ?? new NewTeamMemberModel{SportEventTeamId = sportEventTeamId};
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddTeamMember(NewTeamMemberModel model)
+        {
+            sportsEventService.AddNewTeamMember(model);
+
+            return RedirectToAction("ManageTeam", new {sportEventTeamId = model.SportEventTeamId});
         }
     }
 }

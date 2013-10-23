@@ -38,9 +38,9 @@
 
 </table>
 
-@*<p>
-    @Html.ActionLink("Add a Team Member", "AddTeamMember", "SportsEvent", new { sportEventTeamId = ViewBag.SportEventTeamId })
-</p>*@
+<p>
+    @Html.ActionLink("Add a Team Member", "AddTeamMember", new { sportEventTeamId = ViewBag.SportEventTeamId })
+</p>
 
 <p>
     @Html.ActionLink("Back to Signed Up Sport Events", "ViewSportsEvents", "SportsEvent")

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Utilities;
-using NHibernate.Linq;
 using ESF.Commons.Repository;
 using NHibernate.Criterion;
 
@@ -40,11 +36,21 @@ namespace ESF.Repositories
             return entityRepo.Get(participantId);
         }
 
-        public void Save(Participant participant)
+        public Participant RetrieveByEmailAddress(string emailAddress)
+        {
+            if (emailAddress == string.Empty) return null;
+
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .Add(Restrictions.Eq("EmailAddress", emailAddress));
+
+            return entityRepo.FindOne(criteria);
+        }
+
+        public Participant Save(Participant participant)
         {
             Check.IsNotNull(participant, "participant may not be null");
 
-            entityRepo.Save(participant);
+            return entityRepo.Save(participant);
         }
 
         public void Update(Participant participant)
@@ -52,6 +58,14 @@ namespace ESF.Repositories
             Check.IsNotNull(participant, "participant may not be null");
 
             entityRepo.Update(participant);
+        }
+
+        public Participant Get(Guid participantId)
+        {
+            Check.IsNotNull(participantId, "participantId may not be null");
+            Check.IsTrue(participantId != Guid.Empty, "participantId may not be an empty guid");
+
+            return entityRepo.Get(participantId);
         }
 
         public Guid RetrieveParticipantIdByUserId(int userId)

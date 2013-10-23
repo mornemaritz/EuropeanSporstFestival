@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ESF.Core.Repositories;
-using ESF.Core.Services;
 using ESF.Commons.Repository;
 using ESF.Domain;
 using ESF.Commons.Utilities;
@@ -55,6 +53,19 @@ namespace ESF.Repositories
                 .Add(Restrictions.Not(Restrictions.In("Id", signedUpScheduledSportEventIds)));
 
             return entityRepo.FindAll(criteria).ToList();
+        }
+
+        public IList<DateTime> FindScheduledDays()
+        {
+            var criteria = entityRepo.CreateDetachedCriteria();
+
+            return entityRepo.ReportAll<DateTime>(criteria, GetScheduleDateProjectionList()).ToList();
+        }
+
+        private static ProjectionList GetScheduleDateProjectionList()
+        {
+            return Projections.ProjectionList()
+                .Add(Projections.Distinct(Projections.Property("Date")), "Date");
         }
 
         // ### Filtering moved to the service due to issues with TimeSpan conversion

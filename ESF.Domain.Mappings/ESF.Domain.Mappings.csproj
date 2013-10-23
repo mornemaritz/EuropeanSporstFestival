@@ -56,6 +56,7 @@
     <Compile Include="ScheduledSportEventParticipantMap.cs" />
     <Compile Include="ScheduledSportEventMap.cs" />
     <Compile Include="SportEventTeamMap.cs" />
+    <Compile Include="TransportPickupPointMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

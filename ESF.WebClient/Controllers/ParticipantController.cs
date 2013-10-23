@@ -73,7 +73,9 @@ namespace ESF.WebClient.Controllers
         [HttpPost]
         public ActionResult SaveParticipant(ParticipantDetailsModel model)
         {
+            // TODO: Authentication rework
             model.UserId = WebSecurity.CurrentUserId;
+            model.EmailAddress = WebSecurity.CurrentUserName;
 
             participantService.SaveParticipant(model);
 
