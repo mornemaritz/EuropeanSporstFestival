@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ParticipantServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransportServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -56,6 +57,10 @@
     <ProjectReference Include="..\ESF.Core\ESF.Core.csproj">
       <Project>{3ED9BEA6-E5FA-482C-A48E-4A218A2C0B70}</Project>
       <Name>ESF.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESF.Domain\ESF.Domain.csproj">
+      <Project>{F00A964D-B95E-42B6-A995-89077A12B1B7}</Project>
+      <Name>ESF.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESF.Services\ESF.Services.csproj">
       <Project>{02F076CE-3A64-4810-B4C0-3F43CCAA578C}</Project>

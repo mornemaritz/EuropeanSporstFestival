@@ -6,6 +6,7 @@ using ESF.Core.Repositories;
 using ESF.Core.Services;
 using ESF.Domain;
 using NHibernate.Criterion;
+using System;
 
 namespace ESF.Repositories
 {
@@ -18,6 +19,11 @@ namespace ESF.Repositories
             Check.IsNotNull(entityRepo, "entityRepo may not be null");
 
             this.entityRepo = entityRepo;
+        }
+
+        public TransportPickupPoint Load(Guid transportPickupPointId)
+        {
+            return entityRepo.Load(transportPickupPointId);
         }
 
         public IList<PickupPointItem> FindAll()

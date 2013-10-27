@@ -18,6 +18,11 @@ namespace ESF.Repositories
             this.entityRepo = entityRepo;
         }
 
+        public Participant Load(Guid participantId)
+        {
+            return entityRepo.Load(participantId);
+        }
+
         public Participant RetrieveParticipantByUserId(int userId)
         {
             Check.IsTrue(userId > 0, "userId must be a positive integer");

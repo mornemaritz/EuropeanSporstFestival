@@ -33,19 +33,15 @@ namespace ESF.Commons.Utilities
 
             return null;
         }
-    }
 
-    /// <summary>
-    /// Holds a string value for an enum can contain characters that are not allowed in the enum values themselves. (spaces and dashes for example)
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field)]
-    public sealed class StringValueAttribute : Attribute
-    {
-        public string StringValue { get; private set; }
-
-        public StringValueAttribute(string stringValue)
+        /// <summary>
+        /// Returns the date in a user friendly format of "DayOfWeek dd/mm/yyyy", i.e., "Friday 18/04/2014".
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <returns></returns>
+        public static string GetUserFriendlyDate(this DateTime date)
         {
-            StringValue = stringValue;
+            return string.Format("{0}, {1} {2} {3}", date.DayOfWeek, date.Day, (Month)date.Month, date.Year);
         }
     }
 }

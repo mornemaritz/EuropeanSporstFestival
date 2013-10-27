@@ -334,16 +334,10 @@
     <Content Include="Views\Participant\EditParticipant.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Transport\RequestTransport.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Accommodation\RequestAccommodation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Entertainment\SignUp.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Transport\ViewTransport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Entertainment\ViewEntertainment.cshtml" />
@@ -374,6 +368,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\SportsEvent\AddTeamMember.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Transport\ViewTransport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Transport\RequestTransport.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

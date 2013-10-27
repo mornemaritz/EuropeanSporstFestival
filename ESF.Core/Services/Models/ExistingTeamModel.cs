@@ -9,6 +9,5 @@ namespace ESF.Core.Services
     {
         public Guid SportEventParticipantId { get; set; }
         public string TeamName { get; set; }
-        public bool TeamExists { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ESF.Core.Services.Models.TransportRequestModel
+
+@{
     ViewBag.Title = "Request Transport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,6 +9,39 @@
 <p>
     @ViewBag.Message
 </p>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Transport Request</legend>
+
+        @Html.HiddenFor(model => model.ParticipantId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FestivalDayId, "Day")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("FestivalDayId", (IEnumerable<SelectListItem>)ViewBag.Days)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.TransportPickupPointId, "Pickup Point")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("TransportPickupPointId", (IEnumerable<SelectListItem>)ViewBag.PickupPoints)
+        </div>
+
+        <p>
+            <input type="submit" value="Sumbmit Request" />
+        </p>
+    </fieldset>
+}
+
 <p>
     @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
 </p>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -7,12 +7,12 @@ namespace ESF.Domain
         private Guid id;
         private string name;
 
-        public Guid Id
+        public virtual Guid Id
         {
             get { return id; }
         }
 
-        public string Name
+        public virtual string Name
         {
             get { return name; }
         }

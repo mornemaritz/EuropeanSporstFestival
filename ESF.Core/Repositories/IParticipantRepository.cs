@@ -12,5 +12,6 @@ namespace ESF.Core.Repositories
         Participant RetrieveByEmailAddress(string emailAddress);
         Participant Save(Participant participant);
         void Update(Participant participant);
+        Participant Load(Guid participantId);
     }
 }

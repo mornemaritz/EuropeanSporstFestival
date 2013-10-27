@@ -7,6 +7,8 @@
 
 <h2>Add Team Member</h2>
 
+@ViewBag.Message
+
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
@@ -14,6 +16,17 @@
         <legend>NewTeamMemberModel</legend>
 
 		@Html.HiddenFor(x => x.SportEventTeamId)
+
+        @if (ViewData.Model.ParticipantAlreadyExists)
+        { 
+            <div class="editor-label">
+                @Html.LabelFor(model => model.AddExistingParticipant, "Add Existing Participant")
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.AddExistingParticipant)
+                @Html.ValidationMessageFor(model => model.AddExistingParticipant)
+            </div>
+        }
 
         <div class="editor-label">
             @Html.LabelFor(model => model.FirstName, "First Name")
@@ -39,9 +52,40 @@
             @Html.ValidationMessageFor(model => model.EmailAddress)
         </div>
 
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BirthDay, "Birth Day")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BirthDay)
+            @Html.ValidationMessageFor(model => model.BirthDay)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BirthMonth, "Birth Month")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("BirthMonth", (IEnumerable<SelectListItem>)ViewBag.Months)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BirthYear, "Birth Year")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BirthYear)
+            @Html.ValidationMessageFor(model => model.BirthYear)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Gender)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("Gender", (IEnumerable<SelectListItem>)ViewBag.Genders)
+        </div>
+
         <p>
             <input type="submit" value="Add New Team Member" />
         </p>
+            
 		@Html.ActionLink("Cancel","ManageTeam",new {sportEventTeamId = Model.SportEventTeamId})
     </fieldset>
 }

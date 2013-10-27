@@ -1,5 +1,6 @@
 ﻿using System;
 using ESF.Commons.Utilities;
+using ESF.Commons.Exceptions;
 
 namespace ESF.Domain
 {
@@ -75,19 +76,19 @@ namespace ESF.Domain
             //       Move the invariants when validation has been implemented.
             if (!scheduledSportEvent.AllowedGenders.HasFlag(this.Gender))
             {
-                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their gender is '{0}' and the allowed gender for the selected event is '{1}'", this.Gender, scheduledSportEvent.AllowedGenders));
+                throw new BusinessException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their gender is '{0}' and the allowed gender for the selected event is '{1}'", this.Gender, scheduledSportEvent.AllowedGenders));
             }
 
             var participantAgeOnDateOfSelectedEvent = this.GetParticipantAgeOnDate(scheduledSportEvent.Date);
 
             if (participantAgeOnDateOfSelectedEvent > scheduledSportEvent.MaxAge)
             {
-                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the maximum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MaxAge));
+                throw new BusinessException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the maximum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MaxAge));
             }
 
-            if (this.GetParticipantAgeOnDate(scheduledSportEvent.Date) < scheduledSportEvent.MinAge)
+            if (participantAgeOnDateOfSelectedEvent < scheduledSportEvent.MinAge)
             {
-                throw new InvalidOperationException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the mimimum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MinAge));
+                throw new BusinessException(string.Format("This partipant cannot sign up for the select scheduled sport event. Their age is '{0}' and the mimimum age for the selected event is '{1}'", participantAgeOnDateOfSelectedEvent, scheduledSportEvent.MinAge));
             }
 
             return new ScheduledSportEventParticipant(scheduledSportEvent, this);
@@ -100,6 +101,11 @@ namespace ESF.Domain
             var age = GetParticipantAgeOnDate(onDate);
 
             return age <= maxAge && age >= minAge;
+        }
+
+        public virtual bool CanParticipateInSportEvent(ScheduledSportEvent scheduledSportEvent)
+        {
+            return IsWithinAgeAndGenderBracket(scheduledSportEvent.AllowedGenders, scheduledSportEvent.Date, scheduledSportEvent.MinAge, scheduledSportEvent.MaxAge);
         }
     }
 }

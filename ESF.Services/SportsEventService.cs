@@ -6,6 +6,7 @@ using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Repository;
 using ESF.Commons.Utilities;
+using ESF.Commons.Exceptions;
 
 namespace ESF.Services
 {
@@ -85,19 +86,16 @@ namespace ESF.Services
         public ExistingTeamModel AttemptAllocationToNamedTeam(ExistingTeamModel model)
         {
             var sportEventParticipant = sportEventParticipantRepository.Get(model.SportEventParticipantId);
+            var scheduledSportEvent = sportEventParticipant.ScheduledSportEvent;
 
-            var sportEventTeam = sportEventTeamRepository.FindByName(model.TeamName, sportEventParticipant.ScheduledSportEvent.Id);
+            var sportEventTeam = sportEventTeamRepository.FindByName(model.TeamName, scheduledSportEvent.Id);
 
-            if (sportEventTeam != null)
-            {
-                sportEventTeam.AddUnconfirmedTeamMember(sportEventParticipant);
-                sportEventParticipantRepository.Update(sportEventParticipant);
-                sportEventTeamRepository.Update(sportEventTeam);
+            if (sportEventTeam == null)
+                throw new BusinessException(string.Format("There is no team registered for {0} with the name that you've specified.", scheduledSportEvent.Name));
 
-                model.TeamExists = true;
-            }
-            else
-                model.TeamExists = false;
+            sportEventTeam.AddUnconfirmedTeamMember(sportEventParticipant);
+            sportEventParticipantRepository.Update(sportEventParticipant);
+            sportEventTeamRepository.Update(sportEventTeam);
 
             return model;
         }
@@ -108,15 +106,13 @@ namespace ESF.Services
 
             var sportEventTeam = sportEventTeamRepository.FindByName(teamCreateModel.TeamName, sportEventParticipant.ScheduledSportEvent.Id);
 
-            if(sportEventTeam == null)
-            {
-                sportEventTeam = SportEventTeam.Create(sportEventParticipant, teamCreateModel.TeamName);
-                sportEventTeam = sportEventTeamRepository.Save(sportEventTeam);
+            if (sportEventTeam != null)
+                throw new BusinessException("A team with the specified name already exists.");
 
-                teamCreateModel.SportEventTeamId = sportEventTeam.Id;
-            }
-            else
-                teamCreateModel.TeamAlreadyExists = true;
+            sportEventTeam = SportEventTeam.Create(sportEventParticipant, teamCreateModel.TeamName);
+            sportEventTeam = sportEventTeamRepository.Save(sportEventTeam);
+
+            teamCreateModel.SportEventTeamId = sportEventTeam.Id;
 
             return teamCreateModel;
         }
@@ -134,27 +130,52 @@ namespace ESF.Services
             sportEventParticipantRepository.Update(teamMember);
         }
 
-        public void AddNewTeamMember(NewTeamMemberModel model)
+        public NewTeamMemberModel AddNewTeamMember(NewTeamMemberModel model)
         {
+            // TODO: This whole use case implementation stinks. Setting booleans on the model to drive functionality stinks.
+            // TODO: Should have a shortcut to add a team member if you knwo they already exist.
             // TODO: Combine Self SignUp and Third Party SignUp (via Adding Members to a Team) into one.
             var sportEventTeam = sportEventTeamRepository.RetrieveWithSportEventDetails(model.SportEventTeamId);
+            var scheduledSportEvent = sportEventTeam.ScheduledSportEvent;
 
             var participant = participantRepository.RetrieveByEmailAddress(model.EmailAddress);
 
-            if(participant == null)
+            if(participant != null)
             {
-                participant = new Participant
+                var availableEvents = FindSportEventsAvailableToParticipant(participant.Id);
+
+                if (!availableEvents.Any(e => e.ScheduledSportsEventId == scheduledSportEvent.Id))
+                {
+                    throw new BusinessException("A participant with the specified email address already exists and is not available due to other sport event committments.");
+                }
+
+                if (!participant.CanParticipateInSportEvent(scheduledSportEvent))
+                {
+                    throw new BusinessException("A participant with the specified email address already exists and cannot join your team due to the Age and Gender limitations of the sport event.");
+                }
+
+                model.ParticipantAlreadyExists = true;
+
+                //TODO: Should disable form elements and pre-check the AddExistingParticipant checkbox
+                // Only if the user unchecks the checkbox, should the form be enabled.
+                if(!model.AddExistingParticipant)
+                    return model;
+            }
+            else
+            {
+                participant = new Participant()
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    EmailAddress = model.EmailAddress
+                    EmailAddress = model.EmailAddress,
+                    DateOfBirth = new DateTime(model.BirthYear, (int)model.BirthMonth,model.BirthDay),
+                    Gender = model.Gender
                 };
 
-                // TODO: Remove HACK when business rules around adding a team member are tightened up.
-                // HACK: As a temp workaround for captain not needing to specify age or gender for a team member and this being needed to determine if the new member qualifies, I'm defaulting the age and gender to that of the captain
-                var captain = sportEventTeam.Captain.Participant;
-                participant.Gender = captain.Gender;
-                participant.DateOfBirth = captain.DateOfBirth;
+                if(!participant.CanParticipateInSportEvent(scheduledSportEvent))
+                {
+                    throw new BusinessException("The person specified cannot join your team due to the Age and Gender limitations of the sport event.");
+                }
 
                 participant = participantRepository.Save(participant);
             }
@@ -164,6 +185,11 @@ namespace ESF.Services
 
             sportEventTeam.AddConfirmedTeamMember(scheduledSportEventParticipant);
             sportEventTeamRepository.Update(sportEventTeam);
+
+            model.ParticipantAlreadyExists = false;
+            model.AddExistingParticipant = false;
+
+            return model;
         }
 
         public IList<DateTime> FindScheduledDays()

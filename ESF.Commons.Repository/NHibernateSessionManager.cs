@@ -95,20 +95,5 @@ namespace ESF.Commons.Repository
                 throw;
             }
         }
-
-
-        ///// <summary>
-        ///// Creates the database from mapping in this assembly
-        ///// </summary>
-        //public static void CreateSchemaFromMappings()
-        //{
-        //    var config = Fluently.Configure()
-        //        .Database(MsSqlConfiguration.MsSql2008
-        //        .ShowSql()
-        //        .ConnectionString(c => c.Is(ConnectionString)))
-        //        .Mappings(m => m.FluentMappings.AddFromAssemblyOf<NHibernateSessionManager>());
-
-        //    new SchemaExport(config.BuildConfiguration()).Create(false, true);
-        //}
     }
 }

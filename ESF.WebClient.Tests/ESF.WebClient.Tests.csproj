@@ -51,6 +51,7 @@
     <Compile Include="ParticipantControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SportsEventControllerTests.cs" />
+    <Compile Include="TransportControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">

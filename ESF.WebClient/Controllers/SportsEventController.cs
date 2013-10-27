@@ -7,6 +7,7 @@ using ESF.WebClient.Filters;
 using ESF.Core.Services;
 using ESF.Commons.Utilities;
 using WebMatrix.WebData;
+using ESF.Commons.Exceptions;
 
 namespace ESF.WebClient.Controllers
 {
@@ -24,6 +25,37 @@ namespace ESF.WebClient.Controllers
 
             this.participantService = participantService;
             this.sportsEventService = sportsEventService;
+        }
+
+        [HttpGet]
+        public ActionResult ViewSportsEvents(Guid? id)
+        {
+            ParticipantDetailsModel participantModel;
+
+            if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty)
+            {
+                var userId = WebSecurity.CurrentUserId;
+
+                Check.IsTrue(userId > 0, "");
+
+                participantModel = participantService.RetrieveParticipantByUserId(userId);
+            }
+            else
+                participantModel = participantService.RetrieveParticipant(id.Value);
+
+            if (participantModel == null && WebSecurity.IsAuthenticated)
+            {
+                TempData["createparticipantmessage"] = "Please complete your registration";
+                return RedirectToAction("CreateParticipant", "Participant");
+            }
+
+            var sportsEvents = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
+
+            ViewData.Model = sportsEvents;
+            ViewBag.Message = string.Format("{0}Sport Events that you are signed up for.", sportsEvents.Any() ? string.Empty : "This is where you view the ");
+            ViewBag.ParticipantId = participantModel.ParticipantId;
+
+            return View();
         }
 
         [HttpGet]
@@ -89,9 +121,9 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult SportEventCreateNewTeam(Guid id)
         {
-            ViewData.Model = TempData["TeamCreateModel"] ?? new TeamCreateModel{ CaptainSportEventParticipantId = id };
+            ModelState.AddModelError(string.Empty, (TempData["TeamCreateErrorMessage"] ?? string.Empty).ToString());
 
-            ViewBag.TeamCreateMessage = TempData["TeamCreateMessage"];
+            ViewData.Model = TempData["TeamCreateModel"] ?? new TeamCreateModel{ CaptainSportEventParticipantId = id };
 
             return View();
         }
@@ -99,29 +131,29 @@ namespace ESF.WebClient.Controllers
         [HttpPost]
         public ActionResult SportEventCreateNewTeam(TeamCreateModel model)
         {
-            model = sportsEventService.CreateNewSportEventTeam(model);
-
-            // TODO: Implement Proper Validation (Basic and Business Rules) and have the "Team Already Exists" message be returned in a BusinessRule Validation Failure message
-            if(model.TeamAlreadyExists)
+            try
             {
+                model = sportsEventService.CreateNewSportEventTeam(model);
+            }
+            catch (BusinessException bex)
+            {
+                TempData["TeamCreateErrorMessage"] = bex.Message;
                 TempData["TeamCreateModel"] = model;
-                TempData["TeamCreateMessage"] = "A team with the specified name already exists.";
 
                 return RedirectToAction("SportEventCreateNewTeam", new { Id = model.CaptainSportEventParticipantId });
             }
 
-            TempData["TeamSelectionConfirmationMessage"] = "Your team has been sucessfully created.";
+            TempData["ManageTeamMessage"] = "Your team has been sucessfully created.";
 
-            // TODO: Redirect to Page where team members can be added.
-            return RedirectToAction("TeamSelectionConfirmation");
+            return RedirectToAction("ManageTeam", new { sportEventTeamId = model.SportEventTeamId });
         }
 
         [HttpGet]
         public ActionResult SportEventSelectExistingTeam(Guid id)
         {
-            ViewData.Model = TempData["model"] ?? new ExistingTeamModel { SportEventParticipantId = id };
+            ModelState.AddModelError(string.Empty, (TempData["TeamAllocationErrorMessage"] ?? string.Empty).ToString());
 
-            ViewBag.TeamAllocationMessage = TempData["TeamAllocationMessage"];
+            ViewData.Model = TempData["ExistingTeamModel"] ?? new ExistingTeamModel { SportEventParticipantId = id };
 
             return View();
         }
@@ -129,12 +161,14 @@ namespace ESF.WebClient.Controllers
         [HttpPost]
         public ActionResult SportEventSelectExistingTeam(ExistingTeamModel model)
         {
-            model = sportsEventService.AttemptAllocationToNamedTeam(model);
-
-            if (!model.TeamExists)
+            try
             {
-                TempData["model"] = model;
-                TempData["TeamAllocationMessage"] = "No team currently exists with the name you specified";
+                model = sportsEventService.AttemptAllocationToNamedTeam(model);
+            }
+            catch (BusinessException bex)
+            {
+                TempData["ExistingTeamModel"] = model;
+                TempData["TeamAllocationErrorMessage"] = bex.Message;
 
                 return RedirectToAction("SportEventSelectExistingTeam", new { Id = model.SportEventParticipantId });
             }
@@ -152,42 +186,13 @@ namespace ESF.WebClient.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult ViewSportsEvents(Guid? id)
-        {
-            ParticipantDetailsModel participantModel;
-
-            if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty)
-            {
-                var userId = WebSecurity.CurrentUserId;
-
-                Check.IsTrue(userId > 0, "");
-
-                participantModel = participantService.RetrieveParticipantByUserId(userId);
-            }
-            else
-                participantModel = participantService.RetrieveParticipant(id.Value);
-
-            if (participantModel == null && WebSecurity.IsAuthenticated)
-            {
-                TempData["createparticipantmessage"] = "Please complete your registration";
-                return RedirectToAction("CreateParticipant","Participant");
-            }
-
-            var sportsEvents = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
-
-            ViewData.Model = sportsEvents;
-            ViewBag.Message = string.Format("{0}Sport Events that you are signed up for.", sportsEvents.Any() ? string.Empty : "This is where you view the ");
-            ViewBag.ParticipantId = participantModel.ParticipantId;
-
-            return View();
-        }
 
         [HttpGet]
         public ActionResult ManageTeam(Guid sportEventTeamId)
         {
             // TODO: Apply Authorisation to manage teams (only captains should be able to)
             ViewBag.SportEventTeamId = sportEventTeamId;
+            ViewBag.TeamMessage = TempData["ManageTeamMessage"];
 
             ViewData.Model = sportsEventService.ListTeamMembers(sportEventTeamId);
 
@@ -204,7 +209,25 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult AddTeamMember(Guid sportEventTeamId)
         {
-            ViewData.Model = TempData["TeamMemberModel"] ?? new NewTeamMemberModel{SportEventTeamId = sportEventTeamId};
+            ModelState.AddModelError(string.Empty, (TempData["AddTeamMemberErrorMessage"] ?? string.Empty).ToString());
+
+            ViewBag.Months = Enum.GetNames(typeof(Month))
+                .AsEnumerable()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+
+            ViewBag.Genders = Enum.GetNames(typeof(Gender))
+                .AsEnumerable()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+
+            NewTeamMemberModel model = TempData["TeamMemberModel"] as NewTeamMemberModel 
+                ?? new NewTeamMemberModel { SportEventTeamId = sportEventTeamId };
+
+            if (model.ParticipantAlreadyExists)
+            {
+                ViewBag.Message = "A participant with the specified email address already exists. You can add this existing participant to your team or change the details you've specified and add a new team member";
+            }
+
+            ViewData.Model = model;
 
             return View();
         }
@@ -212,7 +235,24 @@ namespace ESF.WebClient.Controllers
         [HttpPost]
         public ActionResult AddTeamMember(NewTeamMemberModel model)
         {
-            sportsEventService.AddNewTeamMember(model);
+            try
+            {
+                model = sportsEventService.AddNewTeamMember(model);
+
+                if(model.ParticipantAlreadyExists)
+                {
+                    TempData["TeamMemberModel"] = model;
+
+                    return RedirectToAction("AddTeamMember", new { sportEventTeamId = model.SportEventTeamId });
+                }
+            }
+            catch (BusinessException bex)
+            {
+                TempData["AddTeamMemberErrorMessage"] = bex.Message;
+                TempData["TeamMemberModel"] = model;
+
+                return RedirectToAction("AddTeamMember", new { sportEventTeamId = model.SportEventTeamId });
+            }
 
             return RedirectToAction("ManageTeam", new {sportEventTeamId = model.SportEventTeamId});
         }

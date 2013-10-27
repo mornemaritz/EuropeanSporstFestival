@@ -1,15 +1,47 @@
-﻿@{
-    ViewBag.Title = "View Transport";
+﻿@model IEnumerable<ESF.Core.Services.TransportRequestItem>
+
+@{
+    ViewBag.Title = "View Transport Requests";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>View Transport</h2>
+<h2>View Transport Requests</h2>
+
 <p>
     @ViewBag.Message
 </p>
-<p>
-    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
-</p>
+
 <p>
     @Html.ActionLink("Request Transport", "RequestTransport", "Transport", new { id = ViewBag.ParticipantId }, null)
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayName("Pickup Day")
+        </th>
+        <th>
+            @Html.DisplayName("Pickup Point")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransportPickupDay)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransportPickupPointName)
+        </td>
+        <td>
+@*            @Html.ActionLink("Change Pickup Point", "ChangePickupPoint", new { transportRequestId = item.TransportRequestId }) |
+            @Html.ActionLink("Cancel Transport Request", "CancelTransportRequest", new { transportRequestId = item.TransportRequestId })*@
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
 </p>

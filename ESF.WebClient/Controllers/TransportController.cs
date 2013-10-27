@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using ESF.WebClient.Filters;
 using WebMatrix.WebData;
 using ESF.Commons.Utilities;
 using ESF.Core.Services;
+using ESF.Core.Services.Models;
+using ESF.Commons.Exceptions;
 
 namespace ESF.WebClient.Controllers
 {
@@ -29,20 +32,6 @@ namespace ESF.WebClient.Controllers
         }
 
         [HttpGet]
-        public ActionResult RequestTransport(Guid id)
-        {
-            var festivalDays = sportEventService.FindScheduledDays();
-
-            ViewData.Model = festivalDays;
-            ViewBag.PickupPoints = transportService.FindPickupPoints();
-
-            ViewBag.Message = "This is where you request Transport.";
-            ViewBag.ParticipantId = id;
-
-            return View();
-        }
-
-        [HttpGet]
         public ActionResult ViewTransport(Guid? id)
         {
             ParticipantDetailsModel participantModel;
@@ -64,12 +53,64 @@ namespace ESF.WebClient.Controllers
                 TempData["createparticipantmessage"] = "Please complete your registration";
                 return RedirectToAction("CreateParticipant", "Participant");
             }
-            
-            ViewBag.Message = "This is where you view your Transport details.";
+
+            var transportRequests = transportService.FindParticipantTransportRequests(id.GetValueOrDefault(participantModel.ParticipantId));
+
+            ViewData.Model = transportRequests;
+
+            ViewBag.Message = string.Format("{0}Current Transport Requests.", transportRequests.Any() ? string.Empty : "This is where you view your ");
             ViewBag.ParticipantId = participantModel.ParticipantId;
 
             return View();
         }
 
+        [HttpGet]
+        public ActionResult RequestTransport(Guid id)
+        {
+            ViewData.Model = TempData["TransportRequestModel"] ?? new TransportRequestModel { ParticipantId = id };
+            ModelState.AddModelError(string.Empty, (TempData["RequestTransportErrorMessage"] ?? string.Empty).ToString());
+
+            var daysWithNoTransportRequests = transportService.FindDaysWithNoTransportRequests(id);
+            var pickupPoints = transportService.FindPickupPoints();
+
+            ViewBag.Days = daysWithNoTransportRequests.AsEnumerable()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.FestivalDayId.ToString(),
+                    Text = x.DisplayDate
+                });
+
+            ViewBag.PickupPoints = pickupPoints.AsEnumerable()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.PickupPointId.ToString(),
+                    Text = x.PickupPointName
+                });
+
+
+            //ViewBag.Message = "This is where you request Transport.";
+            ViewBag.ParticipantId = id;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RequestTransport(TransportRequestModel transportRequestModel)
+        {
+            Check.IsNotNull(transportRequestModel, "transportRequestModel may not be null");
+
+            try
+            {
+                transportService.CreateTransportRequest(transportRequestModel);
+            }
+            catch (BusinessException bex)
+            {
+                TempData["RequestTransportErrorMessage"] = bex.Message;
+                TempData["TransportRequestModel"] = transportRequestModel;
+                return RedirectToAction("RequestTransport", new { id = transportRequestModel.ParticipantId });
+            }
+
+            return RedirectToAction("ViewTransport", new { id = transportRequestModel.ParticipantId });
+        }
     }
 }
