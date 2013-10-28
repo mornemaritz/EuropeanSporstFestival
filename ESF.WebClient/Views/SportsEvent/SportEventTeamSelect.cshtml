@@ -7,7 +7,7 @@
 
 <h2>Team Selection</h2>
 
-<p>The sport you selected is a team event</p>
+<p>@ViewBag.SportEventTeamSelectMessage</p>
 <p>What would you like to do?</p>
 
 @using(Html.BeginForm())
@@ -25,3 +25,6 @@
         </p>
     </fieldset>
 }
+<p>
+    @Html.ActionLink("Cancel", "ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
+</p>

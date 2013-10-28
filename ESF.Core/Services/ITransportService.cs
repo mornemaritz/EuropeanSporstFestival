@@ -13,5 +13,6 @@ namespace ESF.Core.Services
         IList<FestivalDayItem> FindDaysWithNoTransportRequests(Guid participantGuid);
 
         void CreateTransportRequest(TransportRequestModel transportRequestModel);
+        void CancelTransportRequest(Guid transportRequestid);
     }
 }

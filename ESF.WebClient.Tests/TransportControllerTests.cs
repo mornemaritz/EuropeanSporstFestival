@@ -202,5 +202,35 @@ namespace ESF.WebClient.Tests
 
             transportService.Verify(s => s.CreateTransportRequest(transportRequestModel), Times.Exactly(1));
         }
+
+        [Test]
+        public void CancelTransportRequest_DeletesTransportRequest()
+        {
+            // Arrange
+            var transportrequestid = new Guid("4118944c-5342-4079-afd4-a2630136d180");
+
+            // Act
+            var redirectToRouteResult = controllerUnderTest.CancelTransportRequest(participantGuid, transportrequestid);
+
+            // Assert
+            Assert.IsNotNull(redirectToRouteResult, "An ActionResult of type RedirectToRouteResult expected. Something else, or nothing was returned.");
+            transportService.Verify(s => s.CancelTransportRequest(transportrequestid), Times.Exactly(1));
+        }
+
+        [Test]
+        public void CancelTransportRequest_OnBusinessException_SetsErrorMessageInTempData()
+        {
+            // Arrange
+            var transportrequestid = new Guid("4118944c-5342-4079-afd4-a2630136d180");
+            transportService.Setup(s => s.CancelTransportRequest(transportrequestid)).Throws(new BusinessException("BusinessException"));
+
+            // Act
+            var redirectToRouteResult = controllerUnderTest.CancelTransportRequest(participantGuid, transportrequestid);
+
+            // Assert
+            Assert.IsNotNull(redirectToRouteResult, "An ActionResult of type RedirectToRouteResult expected. Something else, or nothing was returned.");
+            transportService.Verify(s => s.CancelTransportRequest(transportrequestid), Times.Exactly(1));
+            Assert.AreEqual("BusinessException", (controllerUnderTest.TempData["TransportRequestDeleteErrorMessage"] ?? string.Empty).ToString());
+        }
     }
 }

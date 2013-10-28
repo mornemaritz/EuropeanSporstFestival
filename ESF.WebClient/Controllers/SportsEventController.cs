@@ -84,6 +84,8 @@ namespace ESF.WebClient.Controllers
 
             if (sportEventParticipantModel.TeamAllocationStatus == TeamAllocationStatus.AllocationRequired)
             {
+                TempData["SportEventTeamSelectMessage"] = "The sport you selected is a team event";
+
                 return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.ScheduledSportEventParticipantId });
             }
 
@@ -93,6 +95,8 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult SportEventTeamSelect(Guid id)
         {
+            ViewBag.SportEventTeamSelectMessage = (TempData["SportEventTeamSelectMessage"] ?? string.Empty).ToString();
+
             ViewData.Model = new TeamSelectionModel { ScheduledSportEventParticipantId = id };
 
             return View();

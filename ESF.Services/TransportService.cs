@@ -58,5 +58,12 @@ namespace ESF.Services
                 PickupDay = festivalDayRepository.Load(transportRequestModel.FestivalDayId)
             });
         }
+
+        public void CancelTransportRequest(Guid transportRequestid)
+        {
+            var transportRequestToDelete = transportRequestRepository.Get(transportRequestid);
+
+            transportRequestRepository.Delete(transportRequestToDelete);
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace ESF.Core.Repositories
         IList<TransportRequestItem> FindParticipantTransportRequests(Guid participantId);
 
         TransportRequest Save(TransportRequest transportRequest);
+        TransportRequest Get(Guid transportRequestid);
+        void Delete(TransportRequest transportRequest);
     }
 }

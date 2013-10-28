@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ESF.Core.Services.SportEventParticipantModel>
+﻿@using ESF.Commons.Utilities
+@model IEnumerable<ESF.Core.Services.SportEventParticipantModel>
 
 @{
     ViewBag.Title = "View Sports Events";
@@ -21,7 +22,6 @@
             Team Name
         </th>
         <th>
-            Action
         </th>
     </tr>
 
@@ -42,6 +42,10 @@
             {
 				@Html.ActionLink("Manage Team", "ManageTeam", new { sportEventTeamId = item.SportEventTeamId })
             }
+            else if(item.TeamAllocationStatusString != TeamAllocationStatus.NotApplicable.GetStringValue())
+            {
+				@Html.ActionLink("Change Team Allocation Status", "SportEventTeamSelect", new { id = item.ScheduledSportEventParticipantId })
+			}
         </td>
     </tr>
 }

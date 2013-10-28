@@ -78,5 +78,14 @@ namespace ESF.Commons.Repository
             var exec = criteria.GetExecutableCriteria(session);
             return exec.List<T>();
         }
+
+        public void Delete(T entityToDelete)
+        {
+            using (var tx = session.BeginTransaction())
+            {
+                session.Delete(entityToDelete);
+                tx.Commit();
+            }
+        }
     }
 }

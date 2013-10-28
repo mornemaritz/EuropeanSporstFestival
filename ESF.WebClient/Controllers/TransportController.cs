@@ -112,5 +112,20 @@ namespace ESF.WebClient.Controllers
 
             return RedirectToAction("ViewTransport", new { id = transportRequestModel.ParticipantId });
         }
+
+        [HttpGet]
+        public ActionResult CancelTransportRequest(Guid participantid, Guid transportRequestid)
+        {
+            try
+            {
+                transportService.CancelTransportRequest(transportRequestid);
+            }
+            catch (BusinessException bex)
+            {
+                TempData["TransportRequestDeleteErrorMessage"] = bex.Message;
+            }
+
+            return RedirectToAction("ViewTransport", new {id = participantid});
+        }
     }
 }

@@ -21,5 +21,6 @@ namespace ESF.Commons.Repository
 
         T FindOne(DetachedCriteria criteria);
         ICollection<T> FindAll(DetachedCriteria criteria);
+        void Delete(T entityToDelete);
     }
 }

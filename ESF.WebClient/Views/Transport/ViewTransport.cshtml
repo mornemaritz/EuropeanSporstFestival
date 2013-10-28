@@ -34,8 +34,8 @@
             @Html.DisplayFor(modelItem => item.TransportPickupPointName)
         </td>
         <td>
-@*            @Html.ActionLink("Change Pickup Point", "ChangePickupPoint", new { transportRequestId = item.TransportRequestId }) |
-            @Html.ActionLink("Cancel Transport Request", "CancelTransportRequest", new { transportRequestId = item.TransportRequestId })*@
+@*            @Html.ActionLink("Change Pickup Point", "ChangePickupPoint", new { transportRequestId = item.TransportRequestId }) |*@
+            @Html.ActionLink("Cancel Transport Request", "CancelTransportRequest", new { participantId = item.ParticipantId, transportRequestId = item.TransportRequestId })
         </td>
     </tr>
 }

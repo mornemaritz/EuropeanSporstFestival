@@ -82,5 +82,22 @@ namespace ESF.Services.Tests
             // Assert
             transportRequestRepository.Verify(r => r.Save(It.IsAny<TransportRequest>()), Times.Exactly(1));
         }
+
+        [Test]
+        public void CancelTransportRequest_DeletesTransportRequest()
+        {
+            // Arrange
+            var transportRequestid = new Guid("4338933c-5342-4079-afd4-a2630136d190");
+            var transportRequest = new Mock<TransportRequest>();
+
+            transportRequest.SetupGet(x => x.Id).Returns(transportRequestid);
+
+            // Act
+            serviceUnderTest.CancelTransportRequest(transportRequestid);
+
+            // Assert
+            transportRequestRepository.Verify(r => r.Get(transportRequestid), Times.Exactly(1));
+            transportRequestRepository.Verify(r => r.Delete(It.IsAny<TransportRequest>()), Times.Exactly(1));
+        }
     }
 }

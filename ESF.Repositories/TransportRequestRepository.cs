@@ -31,6 +31,16 @@ namespace ESF.Repositories
             return entityRepo.Save(transportRequest);
         }
 
+        public TransportRequest Get(Guid transportRequestid)
+        {
+            return entityRepo.Get(transportRequestid);
+        }
+
+        public void Delete(TransportRequest transportRequest)
+        {
+            entityRepo.Delete(transportRequest);
+        }
+
         public IList<TransportRequestItem> FindParticipantTransportRequests(Guid participantId)
         {
             var criteria = entityRepo.CreateDetachedCriteria()
