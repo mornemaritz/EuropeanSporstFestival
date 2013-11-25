@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacCommonsRepositoryModule.cs" />
+    <Compile Include="BitwiseRestrictions.cs" />
     <Compile Include="NHibernateSessionManager.cs" />
     <Compile Include="TypedResultTransformer.cs" />
     <Compile Include="RepositoryBase.cs" />

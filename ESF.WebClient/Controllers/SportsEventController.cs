@@ -30,30 +30,26 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult ViewSportsEvents(Guid? id)
         {
-            ParticipantDetailsModel participantModel;
-
             if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty)
             {
                 var userId = WebSecurity.CurrentUserId;
 
                 Check.IsTrue(userId > 0, "");
 
-                participantModel = participantService.RetrieveParticipantByUserId(userId);
+                id = participantService.RetrieveParticipantIdByUserId(userId);
             }
-            else
-                participantModel = participantService.RetrieveParticipant(id.Value);
 
-            if (participantModel == null && WebSecurity.IsAuthenticated)
+            if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty && WebSecurity.IsAuthenticated)
             {
                 TempData["createparticipantmessage"] = "Please complete your registration";
                 return RedirectToAction("CreateParticipant", "Participant");
             }
 
-            var sportsEvents = sportsEventService.RetrieveSignedUpSportsEvents(participantModel.ParticipantId);
+            var sportsEvents = sportsEventService.RetrieveSignedUpSportsEvents(id.Value);
 
             ViewData.Model = sportsEvents;
             ViewBag.Message = string.Format("{0}Sport Events that you are signed up for.", sportsEvents.Any() ? string.Empty : "This is where you view the ");
-            ViewBag.ParticipantId = participantModel.ParticipantId;
+            ViewBag.ParticipantId = id.Value;
 
             return View();
         }
@@ -73,6 +69,14 @@ namespace ESF.WebClient.Controllers
             ViewData.Model = new SportsEventSignUpModel { ParticipantId = id };
 
             ViewBag.Message = "Please select the sports event you would like to sign up for.";
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult SignUpGrid(Guid id)
+        {
+            ViewBag.SportsEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
 
             return View();
         }

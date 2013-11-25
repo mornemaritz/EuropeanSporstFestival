@@ -56,9 +56,11 @@
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\HibernateProfiler.cs" />
     <Compile Include="Utilities\Gender.cs" />
+    <Compile Include="Utilities\JamatkhanaArea.cs" />
     <Compile Include="Utilities\Month.cs" />
     <Compile Include="Utilities\StringValueAttribute.cs" />
     <Compile Include="Utilities\TeamAllocationStatus.cs" />
+    <Compile Include="Utilities\YesNo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

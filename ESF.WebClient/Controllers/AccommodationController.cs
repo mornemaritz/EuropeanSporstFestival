@@ -35,28 +35,30 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult ViewAccommodation(Guid? id)
         {
-            ParticipantDetailsModel participantModel;
-
             if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty)
             {
                 var userId = WebSecurity.CurrentUserId;
 
                 Check.IsTrue(userId > 0, "");
 
-                participantModel = participantService.RetrieveParticipantByUserId(userId);
+                id = participantService.RetrieveParticipantIdByUserId(userId);
             }
-            else
-                participantModel = participantService.RetrieveParticipant(id.Value);
+
+            if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty && WebSecurity.IsAuthenticated)
+            {
+                TempData["createparticipantmessage"] = "Please complete your registration";
+                return RedirectToAction("CreateParticipant", "Participant");
+            }
 
             // TODO : handle the scenario where an id is manually entered in the url
-            if (participantModel == null)
+            if (id.GetValueOrDefault(Guid.Empty) == Guid.Empty && WebSecurity.IsAuthenticated)
             {
                 TempData["createparticipantmessage"] = "Please complete your registration";
                 return RedirectToAction("CreateParticipant", "Participant");
             }
 
             ViewBag.Message = "This is where you view your Accommodation details.";
-            ViewBag.ParticipantId = participantModel.ParticipantId;
+            ViewBag.ParticipantId = id.Value;
 
             return View();
         }

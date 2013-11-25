@@ -14,6 +14,8 @@ namespace ESF.Domain
         private int maxAge;
         private int minTeamSize;
         private int maxTeamSize;
+        private DateTime startDateTime;
+        private DateTime endDateTime;
         private DateTime date;
         private TimeSpan startTime;
         private TimeSpan endTime;
@@ -27,7 +29,9 @@ namespace ESF.Domain
             this.name = name;
             this.festival = festival;
             this.sport = sport;
-            this.date = festival.StartDate.AddDays(Convert.ToDouble(dayOffSetFromFestivalStartDate));
+            date = festival.StartDate.AddDays(Convert.ToDouble(dayOffSetFromFestivalStartDate));
+            startDateTime = new DateTime(date.Year, date.Month, date.Day, startTime.Hours, startTime.Minutes, 0);
+            endDateTime = new DateTime(date.Year, date.Month, date.Day, endTime.Hours, endTime.Minutes, 0);
             this.allowedGenders = allowedGenders;
             this.minAge = minAge;
             this.maxAge = maxAge;
@@ -40,6 +44,7 @@ namespace ESF.Domain
         public virtual Guid Id
         {
             get { return id; }
+            set { id = value; }
         }
 
         public virtual string Name
@@ -89,6 +94,16 @@ namespace ESF.Domain
             get { return minTeamSize > 1; }
         }
 
+        public virtual DateTime StartDateTime
+        {
+            get { return startDateTime; }
+        }
+
+        public virtual DateTime EndDateTime
+        {
+            get { return endDateTime; }
+        }
+
         public virtual DateTime Date
         {
             get { return date; }
@@ -111,31 +126,22 @@ namespace ESF.Domain
             set { endTime = value; }
         }
 
-        public virtual DateTime MoveDate(int dayOffSetFromFestivalStartDate)
-        {
-            date = festival.StartDate.AddDays(Convert.ToDouble(dayOffSetFromFestivalStartDate));
-            return date;
-        }
-
         public virtual bool OverLapsWith(ScheduledSportEvent otherScheduledSportEvent)
         {
-            return Date == otherScheduledSportEvent.Date
-            &&
-            (
-                StartsBefore(otherScheduledSportEvent.EndTime)
+            return 
+                StartsBefore(otherScheduledSportEvent.endDateTime)
                 ||
-                FinishesAfter(otherScheduledSportEvent.EndTime)
-            );
+                FinishesAfter(otherScheduledSportEvent.StartDateTime);
         }
 
-        private bool FinishesAfter(TimeSpan otherTime)
+        public virtual bool FinishesAfter(DateTime otherStartDateTime)
         {
-            return EndTime > otherTime;
+            return EndDateTime > otherStartDateTime;
         }
 
-        private bool StartsBefore(TimeSpan otherTime)
+        public virtual bool StartsBefore(DateTime otherEndDateTime)
         {
-            return StartTime < otherTime;
+            return StartDateTime < otherEndDateTime;
         }
     }
 }

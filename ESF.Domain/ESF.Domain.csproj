@@ -40,10 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Country.cs" />
+    <Compile Include="County.cs" />
     <Compile Include="Festival.cs" />
     <Compile Include="FestivalDay.cs" />
+    <Compile Include="Jamatkhana.cs" />
     <Compile Include="Participant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledSportEventOverLap.cs" />
     <Compile Include="Sport.cs" />
     <Compile Include="ScheduledSportEventParticipant.cs" />
     <Compile Include="ScheduledSportEvent.cs" />

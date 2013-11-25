@@ -48,12 +48,17 @@
   <ItemGroup>
     <Compile Include="ParticipantServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SportEventServiceTest.cs" />
     <Compile Include="TransportServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">
+      <Project>{20EDD318-4A68-4A44-B01C-5267312BF599}</Project>
+      <Name>ESF.Commons</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESF.Core\ESF.Core.csproj">
       <Project>{3ED9BEA6-E5FA-482C-A48E-4A218A2C0B70}</Project>
       <Name>ESF.Core</Name>

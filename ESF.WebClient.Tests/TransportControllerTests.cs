@@ -22,7 +22,6 @@ namespace ESF.WebClient.Tests
         private Mock<ISportsEventService> sportEventService;
 
         private Guid participantGuid = new Guid("4cc8933c-5342-4079-afd4-a2630136d180");
-        private ParticipantDetailsModel participantDetailsModel;
         private IList<TransportRequestItem> transportRequestItems;
 
         private Guid day1Id = new Guid("4dd8933c-5342-4079-afd4-a2630136d180");
@@ -49,7 +48,6 @@ namespace ESF.WebClient.Tests
 
             controllerUnderTest = new TransportController(participantService.Object, transportService.Object, sportEventService.Object);
 
-            participantDetailsModel = new ParticipantDetailsModel { ParticipantId = participantGuid };
             transportRequestItems = new List<TransportRequestItem>
             {
                 new TransportRequestItem(day1TransportRequestId, participantGuid, day1, "Ismali Centre"),
@@ -80,7 +78,6 @@ namespace ESF.WebClient.Tests
         public void ViewTransportShowsExistingTransportRequests()
         {
             // Arrange
-            participantService.Setup(s => s.RetrieveParticipant(participantGuid)).Returns(participantDetailsModel);
             transportService.Setup(s => s.FindParticipantTransportRequests(participantGuid)).Returns(transportRequestItems);
 
             // Act
@@ -92,7 +89,6 @@ namespace ESF.WebClient.Tests
             Assert.IsNotNull(transportRequests, "A collection of TransportRequest items was expected in the ViewBag. Something else, or nothing was found.");
             Assert.AreEqual(2, transportRequests.Count());
 
-            participantService.Verify(s => s.RetrieveParticipant(participantGuid), Times.Exactly(1));
             transportService.Verify(s => s.FindParticipantTransportRequests(participantGuid), Times.Exactly(1));
         }
 

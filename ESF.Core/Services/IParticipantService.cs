@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ESF.Domain;
 
 namespace ESF.Core.Services
 {
     public interface IParticipantService
     {
-        void SaveParticipant(ParticipantDetailsModel model);
+        ParticipantDetailsCreateModel SaveParticipant(ParticipantDetailsCreateModel model);
 
-        ParticipantDetailsModel RetrieveParticipant(Guid id);
-
-        ParticipantDetailsModel RetrieveParticipantByUserId(int userId);
-
-        void UpdateParticipant(ParticipantDetailsModel model);
+        void UpdateParticipant(ParticipantDetailsEditModel model);
 
         Guid RetrieveParticipantIdByUserId(int userId);
+
+        ParticipantDetailsViewModel RetrieveParticipantViewModelByUserId(int userId);
+
+        ParticipantDetailsViewModel RetrieveParticipantViewModel(Guid participantId);
+
+        ParticipantDetailsEditModel RetrieveParticipantEditModel(Guid participantId);
+
+        IList<JamatkhanaItem> ListJamatkhanas();
+
+        IList<CountyItem> ListCounties();
+
+        IList<CountryItem> ListCountries();
     }
 }

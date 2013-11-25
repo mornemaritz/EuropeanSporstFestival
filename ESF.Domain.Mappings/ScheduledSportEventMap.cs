@@ -20,6 +20,8 @@ namespace ESF.Domain.Mappings
             Map(x => x.MaxAge);
             Map(x => x.MinTeamSize);
             Map(x => x.MaxTeamSize);
+            Map(x => x.StartDateTime);
+            Map(x => x.EndDateTime);
             Map(x => x.Date);
             Map(x => x.StartTime).CustomType("TimeAsTimeSpan");
             Map(x => x.EndTime).CustomType("TimeAsTimeSpan");

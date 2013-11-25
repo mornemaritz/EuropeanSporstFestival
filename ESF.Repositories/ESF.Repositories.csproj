@@ -54,7 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacRepositoryConfigurationModule.cs" />
+    <Compile Include="CountryRepository.cs" />
+    <Compile Include="CountyRepository.cs" />
     <Compile Include="FestivalDayRepository.cs" />
+    <Compile Include="JamatkhanaRepository.cs" />
     <Compile Include="ScheduledSportEventRepository.cs" />
     <Compile Include="ParticipantRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

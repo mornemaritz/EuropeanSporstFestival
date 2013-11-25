@@ -1,4 +1,4 @@
-﻿@model ESF.Core.Services.ParticipantDetailsModel
+﻿@model ESF.Core.Services.ParticipantDetailsCreateModel
 
 @{
     ViewBag.Title = "Create Participant";
@@ -29,35 +29,133 @@
             @Html.EditorFor(model => model.LastName)
             @Html.ValidationMessageFor(model => model.LastName)
         </div>
-
+		
         <div class="editor-label">
-            @Html.LabelFor(model => model.BirthDay, "Birth Day")
+            @Html.LabelFor(model => model.DateOfBirth, "Date of Birth")
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.BirthDay)
-            @Html.ValidationMessageFor(model => model.BirthDay)
+            @Html.EditorFor(model => model.DateOfBirth)
+            @Html.ValidationMessageFor(model => model.DateOfBirth)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.BirthMonth, "Birth Month")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("BirthMonth", (IEnumerable<SelectListItem>)ViewBag.Months)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.BirthYear, "Birth Year")
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.BirthYear)
-            @Html.ValidationMessageFor(model => model.BirthYear)
-        </div>
+		<script>
+		    $(function () {
+		        $("#DateOfBirth").datepicker({
+		            changeMonth: true,
+		            changeYear: true,
+		            maxDate: "+0y +0m +0d",
+		            minDate: "-100y -0m -0d",
+		            yearRange: "-100:+0",
+		            dateFormat: "dd/mm/yy"
+		        });
+		    });    
+		</script>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Gender)
         </div>
         <div class="editor-field">
             @Html.DropDownList("Gender", (IEnumerable<SelectListItem>)ViewBag.Genders)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.JamatkhanaId, "Jamatkhana")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("JamatkhanaId", (IEnumerable<SelectListItem>)ViewBag.Jamatkhanas)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MobileNumber, "Mobile Number")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.MobileNumber)
+            @Html.ValidationMessageFor(model => model.MobileNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HomePhoneNumber, "Home Phone Number")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.HomePhoneNumber)
+            @Html.ValidationMessageFor(model => model.HomePhoneNumber)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AddressLine1, "Address Line 1")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AddressLine1)
+            @Html.ValidationMessageFor(model => model.AddressLine1)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AddressLine2, "Address Line 2")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AddressLine2)
+            @Html.ValidationMessageFor(model => model.AddressLine2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AddressLine3, "Address Line 3")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AddressLine3)
+            @Html.ValidationMessageFor(model => model.AddressLine3)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AddressLine4, "Address Line 4")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AddressLine4)
+            @Html.ValidationMessageFor(model => model.AddressLine4)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Town, "Town")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Town)
+            @Html.ValidationMessageFor(model => model.Town)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CountyId, "County")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("CountyId", (IEnumerable<SelectListItem>)ViewBag.Counties)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CountryId, "Country")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("CountryId", (IEnumerable<SelectListItem>)ViewBag.Countries)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Postcode, "Postcode")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Postcode)
+            @Html.ValidationMessageFor(model => model.Postcode)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.HasDisability, "Do you have a disability?")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("HasDisability", (IEnumerable<SelectListItem>)ViewBag.YesNo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsInterestedInVolunteering, "Are you interested in volunteering?")
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsInterestedInVolunteering)
+            @Html.ValidationMessageFor(model => model.IsInterestedInVolunteering)
         </div>
 
         <p>
@@ -69,3 +167,22 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+<script>
+	jQuery(function ($) {
+		$.validator.addMethod('date',
+		function (value, element) {
+    		if (this.optional(element)) {
+    			return true;
+    		}
+
+    		var ok = true;
+    		try {
+    			$.datepicker.parseDate('dd/mm/yy', value);
+    		}
+    		catch (err) {
+    			ok = false;
+    		}
+    		return ok;
+		});
+	});    
+</script>

@@ -12,25 +12,21 @@ namespace ESF.Services
 {
     public class SportsEventService : ISportsEventService
     {
-        private readonly IRepository<Sport> sportEventRepository;
         private readonly IParticipantRepository participantRepository;
         private readonly IScheduledSportEventParticipantRepository sportEventParticipantRepository;
         private readonly IScheduledSportEventRepository scheduledSportEventRepository;
         private readonly ISportEventTeamRepository sportEventTeamRepository;
 
-        public SportsEventService(IRepository<Sport> sportEventRepository,
-            IParticipantRepository participantRepository,
+        public SportsEventService(IParticipantRepository participantRepository,
             IScheduledSportEventParticipantRepository sportEventParticipantRepository,
             IScheduledSportEventRepository scheduledSportEventRepository,
             ISportEventTeamRepository sportEventTeamRepository)
         {
-            Check.IsNotNull(sportEventRepository, "sportEventRepository may not be null");
             Check.IsNotNull(participantRepository, "participantRepository may not be null");
             Check.IsNotNull(sportEventParticipantRepository, "sportEventParticipantRepository may not be null");
             Check.IsNotNull(scheduledSportEventRepository, "scheduledSportEventRepository may not be null");
             Check.IsNotNull(sportEventTeamRepository, "sportEventTeamRepository may not be null");
 
-            this.sportEventRepository = sportEventRepository;
             this.participantRepository = participantRepository;
             this.sportEventParticipantRepository = sportEventParticipantRepository;
             this.scheduledSportEventRepository = scheduledSportEventRepository;
@@ -40,12 +36,10 @@ namespace ESF.Services
         public ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId)
         {
             var participant = participantRepository.Get(participantId);
-            var signedUpSportEvents = sportEventParticipantRepository.RetrieveSignedUpSportsEvents(participantId);
-            var allSportsNotSignedUpFor = scheduledSportEventRepository.RetrieveScheduledSportEventsExcluding(signedUpSportEvents.Select(s => s.ScheduledSportEvent.Id).ToArray());
+            var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
+            var allSportsNotSignedUpFor = scheduledSportEventRepository.RetrieveScheduledSportEventsExcluding(signedUpSportEvents.Select(s => s.Id).ToArray());
 
-            var sportEvents = signedUpSportEvents.Select(se => se.ScheduledSportEvent).ToList();
-
-            var scheduleFilteredSports = allSportsNotSignedUpFor.Where(x => !SchedulesOverLap(x, sportEvents));
+            var scheduleFilteredSports = allSportsNotSignedUpFor.Where(x => !SchedulesOverLap(x, signedUpSportEvents));
 
             return scheduleFilteredSports.Where(x => 
                 participant.IsWithinAgeAndGenderBracket(x.AllowedGenders, x.Date, x.MinAge, x.MaxAge))
@@ -91,7 +85,7 @@ namespace ESF.Services
             var sportEventTeam = sportEventTeamRepository.FindByName(model.TeamName, scheduledSportEvent.Id);
 
             if (sportEventTeam == null)
-                throw new BusinessException(string.Format("There is no team registered for {0} with the name that you've specified.", scheduledSportEvent.Name));
+                throw new BusinessException(string.Format("There is no team  with the name {0} registered for {1}.", model.TeamName, scheduledSportEvent.Name));
 
             sportEventTeam.AddUnconfirmedTeamMember(sportEventParticipant);
             sportEventParticipantRepository.Update(sportEventParticipant);
@@ -133,8 +127,8 @@ namespace ESF.Services
         public NewTeamMemberModel AddNewTeamMember(NewTeamMemberModel model)
         {
             // TODO: This whole use case implementation stinks. Setting booleans on the model to drive functionality stinks.
-            // TODO: Should have a shortcut to add a team member if you knwo they already exist.
-            // TODO: Combine Self SignUp and Third Party SignUp (via Adding Members to a Team) into one.
+            // TODO: Should have a shortcut to add a team member if you know they already exist.
+            // TODO: Combine Self SignUp and Third Party SignUp (via Adding Members to a Team).
             var sportEventTeam = sportEventTeamRepository.RetrieveWithSportEventDetails(model.SportEventTeamId);
             var scheduledSportEvent = sportEventTeam.ScheduledSportEvent;
 
@@ -195,6 +189,15 @@ namespace ESF.Services
         public IList<DateTime> FindScheduledDays()
         {
             return scheduledSportEventRepository.FindScheduledDays();
+        }
+
+        public IList<ScheduledSportEventDetail> FindSportsEventsWithParticipantSelection(Guid participantId)
+        {
+            var participant = participantRepository.Get(participantId);
+            var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
+            var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
+
+            return scheduledSportEvents.Select(x => new ScheduledSportEventDetail {ScheduledSportEventId = x.Id, ScheduledSportEventName = x.Name}).ToList();
         }
     }
 }

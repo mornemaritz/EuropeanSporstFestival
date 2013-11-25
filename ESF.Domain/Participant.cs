@@ -13,6 +13,19 @@ namespace ESF.Domain
         protected string emailAddress;
         protected DateTime dateOfBirth;
         protected Gender gender;
+        protected Jamatkhana jamatkhana;
+        protected string mobileNumber;
+        protected string homePhoneNumber;
+        protected string addressLine1;
+        protected string addressLine2;
+        protected string addressLine3;
+        protected string addressLine4;
+        protected string town;
+        protected County county;
+        protected Country country;
+        protected string postcode;
+        protected YesNo hasDisability;
+        protected bool isInterestedInVolunteering;
 
         public virtual Guid Id 
         {
@@ -53,6 +66,84 @@ namespace ESF.Domain
         {
             get { return gender; }
             set { gender = value; }
+        }
+
+        public virtual Jamatkhana Jamatkhana
+        {
+            get { return jamatkhana; }
+            set { jamatkhana = value; }
+        }
+
+        public virtual string MobileNumber
+        {
+            get { return mobileNumber; }
+            set { mobileNumber = value; }
+        }
+
+        public virtual string HomePhoneNumber
+        {
+            get { return homePhoneNumber; }
+            set { homePhoneNumber = value; }
+        }
+
+        public virtual string AddressLine1
+        {
+            get { return addressLine1; }
+            set { addressLine1 = value; }
+        }
+
+        public virtual string AddressLine2
+        {
+            get { return addressLine2; }
+            set { addressLine2 = value; }
+        }
+
+        public virtual string AddressLine3
+        {
+            get { return addressLine3; }
+            set { addressLine3 = value; }
+        }
+
+        public virtual string AddressLine4
+        {
+            get { return addressLine4; }
+            set { addressLine4 = value; }
+        }
+
+        public virtual string Town
+        {
+            get { return town; }
+            set { town = value; }
+        }
+
+        public virtual County County
+        {
+            get { return county; }
+            set { county = value; }
+        }
+
+        public virtual Country Country
+        {
+            get { return country; }
+            set { country = value; }
+        }
+
+        public virtual string Postcode
+        {
+            get { return postcode; }
+            set { postcode = value; }
+        }
+
+        public virtual YesNo HasDisability
+        {
+            get { return hasDisability; }
+            set { hasDisability = value; }
+        }
+
+        public virtual bool IsInterestedInVolunteering
+        {
+            get { return isInterestedInVolunteering; }
+            set { isInterestedInVolunteering = value; }
         }
 
         public virtual int GetParticipantCurrentAge()

@@ -14,20 +14,12 @@ namespace ESF.Repositories
     public class ScheduledSportEventRepository : IScheduledSportEventRepository
     {
         private readonly IRepository<ScheduledSportEvent> entityRepo;
-        private readonly IRepository<Participant> participantRepository;
-        private readonly IScheduledSportEventParticipantRepository sportEventParticipantRepository;
 
-        public ScheduledSportEventRepository(IRepository<ScheduledSportEvent> entityRepo,
-            IRepository<Participant> participantRepository,
-            IScheduledSportEventParticipantRepository sportEventParticipantRepository)
+        public ScheduledSportEventRepository(IRepository<ScheduledSportEvent> entityRepo)
         {
             Check.IsNotNull(entityRepo, "entityRepo may not be null");
-            Check.IsNotNull(participantRepository, "participantRepository may not be null");
-            Check.IsNotNull(sportEventParticipantRepository, "sportEventParticipantRepository may not be null");
 
             this.entityRepo = entityRepo;
-            this.participantRepository = participantRepository;
-            this.sportEventParticipantRepository = sportEventParticipantRepository;
         }
 
         public ScheduledSportEvent Load(Guid scheduledSportEventId)
@@ -45,12 +37,26 @@ namespace ESF.Repositories
             return entityRepo.FindOne(criteria);
         }
 
-        public IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] signedUpScheduledSportEventIds)
+        public IList<ScheduledSportEvent> RetrieveScheduledSportEventsForAgeAndGender(int age, Gender gender)
         {
             var criteria = entityRepo.CreateDetachedCriteria()
                 .CreateAlias("Sport", "Sport", JoinType.InnerJoin)
                 .SetFetchMode("Sport", FetchMode.Eager)
-                .Add(Restrictions.Not(Restrictions.In("Id", signedUpScheduledSportEventIds)));
+                .Add(BitwiseRestrictions.HasFlag("AllowedGenders", gender))
+                .Add(Restrictions.Le("MinAge", age))
+                .Add(Restrictions.Ge("MaxAge", age));
+
+            return entityRepo.FindAll(criteria).ToList();
+        }
+
+        public IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] scheduledSportEventToExcludeIds)
+        {
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .CreateAlias("Sport", "Sport", JoinType.InnerJoin)
+                .SetFetchMode("Sport", FetchMode.Eager);
+
+            if(scheduledSportEventToExcludeIds != null)
+                criteria.Add(Restrictions.Not(Restrictions.In("Id", scheduledSportEventToExcludeIds)));
 
             return entityRepo.FindAll(criteria).ToList();
         }
@@ -62,52 +68,22 @@ namespace ESF.Repositories
             return entityRepo.ReportAll<DateTime>(criteria, GetScheduleDateProjectionList()).ToList();
         }
 
+        public IList<ScheduledSportEvent> RetrieveSignedUpSportsEvents(Guid participantId)
+        {
+            var criteria = DetachedCriteria.For<ScheduledSportEventParticipant>()
+                .CreateAlias("ScheduledSportEvent", "ScheduledSportEvent", JoinType.InnerJoin)
+                .SetFetchMode("ScheduledSportEvent", FetchMode.Eager)
+                .CreateAlias("ScheduledSportEvent.Sport", "Sport", JoinType.InnerJoin)
+                .SetFetchMode("ScheduledSportEvent.Sport", FetchMode.Eager)
+                .Add(Restrictions.Eq("Participant.Id", participantId));
+
+            return entityRepo.FindAll(criteria).ToList();
+        }
+
         private static ProjectionList GetScheduleDateProjectionList()
         {
             return Projections.ProjectionList()
                 .Add(Projections.Distinct(Projections.Property("Date")), "Date");
         }
-
-        // ### Filtering moved to the service due to issues with TimeSpan conversion
-        //public IList<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId)
-        //{
-        //    // Get the Participant and related SportEventParticipant items.
-        //    var participant = participantRepository.Get(participantId);
-        //    var participantAge = participant.GetParticipantCurrentAge();
-        //    Check.IsNotNull(participant, "Participant not recognised.");
-
-        //    var criteria = entityRepo.CreateDetachedCriteria()
-        //        .CreateAlias("Sport", "Sport", JoinType.InnerJoin)
-        //        .SetFetchMode("Sport", FetchMode.Eager)
-        //        .Add(Restrictions.Or(Restrictions.IsNull("AllowedGenders"), Restrictions.Eq("AllowedGenders", participant.Gender)))
-        //        .Add(Restrictions.Or(Restrictions.IsNull("MinAge"), Restrictions.Lt("MinAge", participantAge)))
-        //        .Add(Restrictions.Or(Restrictions.IsNull("MaxAge"), Restrictions.Gt("MaxAge", participantAge)));
-
-        //    var signedUpSportEvents = sportEventParticipantRepository.RetrieveSignedUpSportsEvents(participantId);
-
-        //    if (signedUpSportEvents != null && signedUpSportEvents.Any())
-        //    {
-        //        criteria.Add(Restrictions.Not(Restrictions.In("Id", signedUpSportEvents.Select(se => se.ScheduledSportEvent.Id).ToArray())));
-
-        //        foreach (var signedUpSportEvent in signedUpSportEvents)
-        //        {
-        //            criteria.Add(Restrictions.Not(
-        //                Restrictions.And(
-        //                    Restrictions.Eq("Date", signedUpSportEvent.ScheduledSportEvent.Date)
-        //                    , Restrictions.Or(
-        //                           Restrictions.Lt("StartTime", signedUpSportEvent.ScheduledSportEvent.EndTime)
-        //                           , Restrictions.Gt("EndTime", signedUpSportEvent.ScheduledSportEvent.StartTime)))));
-        //        }
-        //    }
-
-        //    return entityRepo.ReportAll<SportsEventItem>(criteria, GetSportsEventItemProjectionList()).ToList();
-        //}
-
-        //private static ProjectionList GetSportsEventItemProjectionList()
-        //{
-        //    return Projections.ProjectionList()
-        //        .Add(Projections.Property("Id"), "scheduledSportEventId")
-        //        .Add(Projections.Property("Name"), "scheduledsportsEventName");
-        //}
     }
 }

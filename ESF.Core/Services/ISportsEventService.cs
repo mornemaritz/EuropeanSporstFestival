@@ -15,5 +15,6 @@ namespace ESF.Core.Services
         void ConfirmTeamMember(Guid sportEventParticipantId);
         NewTeamMemberModel AddNewTeamMember(NewTeamMemberModel model);
         IList<DateTime> FindScheduledDays();
+        IList<ScheduledSportEventDetail> FindSportsEventsWithParticipantSelection(Guid participantId);
     }
 }

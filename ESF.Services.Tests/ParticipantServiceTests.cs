@@ -14,13 +14,19 @@ namespace ESF.Services.Tests
         private ParticipantService serviceUnderTest;
 
         private Mock<IParticipantRepository> participantRepository;
+        private Mock<ICountryRepository> countryRepository;
+        private Mock<IJamatkhanaRepository> jamatkhanaRepository;
+        private Mock<ICountyRepository> countyRepository;
 
         [SetUp]
         public void SetUp()
         {
             participantRepository = new Mock<IParticipantRepository>();
+            countryRepository = new Mock<ICountryRepository>();
+            countyRepository = new Mock<ICountyRepository>();
+            jamatkhanaRepository = new Mock<IJamatkhanaRepository>();
 
-            serviceUnderTest = new ParticipantService(participantRepository.Object);
+            serviceUnderTest = new ParticipantService(participantRepository.Object,jamatkhanaRepository.Object, countyRepository.Object, countryRepository.Object);
         }
     }
 }

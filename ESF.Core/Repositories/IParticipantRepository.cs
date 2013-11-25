@@ -1,4 +1,5 @@
 ﻿using System;
+using ESF.Core.Services;
 using ESF.Domain;
 
 namespace ESF.Core.Repositories
@@ -13,5 +14,9 @@ namespace ESF.Core.Repositories
         Participant Save(Participant participant);
         void Update(Participant participant);
         Participant Load(Guid participantId);
+
+        ParticipantDetailsViewModel RetrieveParticipantViewModelByUserId(int userId);
+        ParticipantDetailsViewModel RetrieveParticipantViewModel(Guid participantId);
+        ParticipantDetailsEditModel RetrieveParticipantEditModel(Guid participantId);
     }
 }

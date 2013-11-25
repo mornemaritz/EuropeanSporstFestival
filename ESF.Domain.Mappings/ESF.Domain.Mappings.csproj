@@ -49,10 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CountyMap.cs" />
+    <Compile Include="CountryMap.cs" />
     <Compile Include="FestivalDayMap.cs" />
     <Compile Include="FestivalMap.cs" />
+    <Compile Include="JamatkhanaMap.cs" />
     <Compile Include="ParticipantMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledSportEventOverLapMap.cs" />
     <Compile Include="SportMap.cs" />
     <Compile Include="ScheduledSportEventParticipantMap.cs" />
     <Compile Include="ScheduledSportEventMap.cs" />

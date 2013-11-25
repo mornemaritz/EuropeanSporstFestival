@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using ESF.WebClient.Controllers;
 using System.Web.Mvc;
-using ESF.WebClient.Models;
 using Moq;
 using ESF.Core.Services;
 using ESF.Commons.Exceptions;
@@ -21,7 +17,7 @@ namespace ESF.WebClient.Tests
 
         private Guid participantId = new Guid("399864D2-2D89-47A6-B875-EFE948BBED6E");
 
-        private ParticipantDetailsModel participantDetailsModel;
+        private ParticipantDetailsViewModel participantDetailsViewModel;
 
         [SetUp]
         public void SetUp()
@@ -30,23 +26,23 @@ namespace ESF.WebClient.Tests
 
             controllerUnderTest = new ParticipantController(participantService.Object);
 
-            participantDetailsModel = new ParticipantDetailsModel();
+            participantDetailsViewModel = new ParticipantDetailsViewModel();
         }
 
         [Test]
         public void ViewPersonalDetails_Get_ShowsPersonalDetails()
         { 
             // Arrange
-            participantService.Setup(s => s.RetrieveParticipant(It.IsAny<Guid>()))
-                .Returns(participantDetailsModel);
+            participantService.Setup(s => s.RetrieveParticipantViewModel(It.IsAny<Guid>()))
+                .Returns(participantDetailsViewModel);
 
             // Act
             var viewResult = controllerUnderTest.ViewParticipant(participantId) as ViewResult;
 
             // Assert
             Assert.IsNotNull(viewResult, "ActionResult of type ViewResult expected. Something else, or nothign was returned.");
-            Assert.IsInstanceOf(typeof(ParticipantDetailsModel), viewResult.Model, "Model of type PersonalDetailsModel expected.");
-            participantService.Verify(s => s.RetrieveParticipant(It.IsAny<Guid>()), Times.Exactly(1));
+            Assert.IsInstanceOf(typeof(ParticipantDetailsViewModel), viewResult.Model, "Model of type PersonalDetailsModel expected.");
+            participantService.Verify(s => s.RetrieveParticipantViewModel(It.IsAny<Guid>()), Times.Exactly(1));
         }
 
         [Test, ExpectedException(typeof(AssertionFailedException)), Ignore("Until WebSecurity has been mocked.")]
