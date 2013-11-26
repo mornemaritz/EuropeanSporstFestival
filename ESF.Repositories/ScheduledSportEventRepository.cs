@@ -70,12 +70,14 @@ namespace ESF.Repositories
 
         public IList<ScheduledSportEvent> RetrieveSignedUpSportsEvents(Guid participantId)
         {
-            var criteria = DetachedCriteria.For<ScheduledSportEventParticipant>()
-                .CreateAlias("ScheduledSportEvent", "ScheduledSportEvent", JoinType.InnerJoin)
-                .SetFetchMode("ScheduledSportEvent", FetchMode.Eager)
-                .CreateAlias("ScheduledSportEvent.Sport", "Sport", JoinType.InnerJoin)
-                .SetFetchMode("ScheduledSportEvent.Sport", FetchMode.Eager)
-                .Add(Restrictions.Eq("Participant.Id", participantId));
+            var participationCriteria = DetachedCriteria.For<ScheduledSportEventParticipant>()
+                .Add(Restrictions.Eq("Participant.Id", participantId))
+                .SetProjection(Projections.Property("ScheduledSportEvent.Id"));
+
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .CreateAlias("Sport", "Sport", JoinType.InnerJoin)
+                .SetFetchMode("Sport", FetchMode.Eager)
+                .Add(Subqueries.PropertyIn("Id", participationCriteria));
 
             return entityRepo.FindAll(criteria).ToList();
         }
