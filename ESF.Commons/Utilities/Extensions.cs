@@ -35,13 +35,25 @@ namespace ESF.Commons.Utilities
         }
 
         /// <summary>
-        /// Returns the date in a user friendly format of "DayOfWeek dd/mm/yyyy", i.e., "Friday 18/04/2014".
+        /// Returns the date in a user friendly format of "DayOfWeek, dd month yyyy", i.e., "Friday, 18 April 2014".
         /// </summary>
         /// <param name="date">The date.</param>
         /// <returns></returns>
         public static string GetUserFriendlyDate(this DateTime date)
         {
             return string.Format("{0}, {1} {2} {3}", date.DayOfWeek, date.Day, (Month)date.Month, date.Year);
+        }
+
+        /// <summary>
+        /// Determines if the current date and time falls between the specified min and max date and time
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <param name="minDate">The min date.</param>
+        /// <param name="maxDate">The max date.</param>
+        /// <returns></returns>
+        public static bool FallsBetween(this DateTime date, DateTime minDate, DateTime maxDate)
+        {
+            return date >= minDate && date <= maxDate;
         }
     }
 }

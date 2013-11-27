@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ESF.Core.Repositories;
 using ESF.Commons.Repository;
+using ESF.Core.Services;
 using ESF.Domain;
 using ESF.Commons.Utilities;
 using NHibernate.Criterion;
@@ -47,6 +48,20 @@ namespace ESF.Repositories
                 .Add(Restrictions.Ge("MaxAge", age));
 
             return entityRepo.FindAll(criteria).ToList();
+        }
+
+        public IList<ScheduleOverLapDetail> FindAllScheduleOverLapDetails()
+        {
+            var criteria = DetachedCriteria.For<ScheduledSportEventOverLap>();
+
+            return entityRepo.ReportAll<ScheduleOverLapDetail>(criteria, GetScheduleOverLapProjectionList()).ToList();
+        }
+
+        private static ProjectionList GetScheduleOverLapProjectionList()
+        {
+            return Projections.ProjectionList()
+                .Add(Projections.Property("ScheduledSportEvent.Id"))
+                .Add(Projections.Property("OverLappingScheduledSportEvent.Id"));
         }
 
         public IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] scheduledSportEventToExcludeIds)

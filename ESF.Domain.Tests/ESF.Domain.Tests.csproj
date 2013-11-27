@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3ED9BEA6-E5FA-482C-A48E-4A218A2C0B70}</ProjectGuid>
+    <ProjectGuid>{7A9F81C2-83C0-4D28-A5B4-AA8D7A05478B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ESF.Core</RootNamespace>
-    <AssemblyName>ESF.Core</AssemblyName>
+    <RootNamespace>ESF.Domain.Tests</RootNamespace>
+    <AssemblyName>ESF.Domain.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,38 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Repositories\ICountryRepository.cs" />
-    <Compile Include="Repositories\ICountyRepositorycs.cs" />
-    <Compile Include="Repositories\IFestivalDayRepository.cs" />
-    <Compile Include="Repositories\IJamatkhanaRepository.cs" />
-    <Compile Include="Repositories\IParticipantRepository.cs" />
-    <Compile Include="Repositories\IScheduledSportEventRepository.cs" />
-    <Compile Include="Repositories\IScheduledSportEventParticipantRepository.cs" />
-    <Compile Include="Repositories\ISportEventTeamRepository.cs" />
-    <Compile Include="Repositories\ITransportPickupPointRepository.cs" />
-    <Compile Include="Repositories\ITransportRequestRepository.cs" />
-    <Compile Include="Services\ITransportService.cs" />
-    <Compile Include="Services\IParticipantService.cs" />
+    <Compile Include="ScheduledSportEventTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ISportsEventService.cs" />
-    <Compile Include="Services\Models\CountryItem.cs" />
-    <Compile Include="Services\Models\CountyItem.cs" />
-    <Compile Include="Services\Models\ExistingTeamModel.cs" />
-    <Compile Include="Services\Models\FestivalDayItem.cs" />
-    <Compile Include="Services\Models\JamatkhanaItem.cs" />
-    <Compile Include="Services\Models\NewTeamMemberModel.cs" />
-    <Compile Include="Services\Models\PickupPointItem.cs" />
-    <Compile Include="Services\Models\ParticipantModels.cs" />
-    <Compile Include="Services\Models\ScheduledSportEventDetail.cs" />
-    <Compile Include="Services\Models\ScheduleOverLapDetail.cs" />
-    <Compile Include="Services\Models\SportsEventSignUpModel.cs" />
-    <Compile Include="Services\Models\SportEventParticipantModel.cs" />
-    <Compile Include="Services\Models\SportsEventItem.cs" />
-    <Compile Include="Services\Models\TeamCreateModel.cs" />
-    <Compile Include="Services\Models\TeamMemberDetail.cs" />
-    <Compile Include="Services\Models\TeamSelectionModel.cs" />
-    <Compile Include="Services\Models\TransportRequestItem.cs" />
-    <Compile Include="Services\Models\TransportRequestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESF.Commons\ESF.Commons.csproj">

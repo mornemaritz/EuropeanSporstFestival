@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESF.Commons.Utilities;
+using ESF.Core.Services;
 using ESF.Domain;
 
 namespace ESF.Core.Repositories
@@ -13,5 +14,6 @@ namespace ESF.Core.Repositories
         IList<DateTime> FindScheduledDays();
         IList<ScheduledSportEvent> RetrieveSignedUpSportsEvents(Guid participantId);
         IList<ScheduledSportEvent> RetrieveScheduledSportEventsForAgeAndGender(int age, Gender gender);
+        IList<ScheduleOverLapDetail> FindAllScheduleOverLapDetails();
     }
 }

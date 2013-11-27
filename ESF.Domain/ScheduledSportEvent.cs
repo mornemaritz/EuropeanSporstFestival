@@ -128,11 +128,16 @@ namespace ESF.Domain
 
         public virtual bool OverLapsWith(ScheduledSportEvent otherScheduledSportEvent)
         {
-            return otherScheduledSportEvent.Date == Date && 
+            return
                 (
-                    StartsBefore(otherScheduledSportEvent.endDateTime)
+                    startDateTime.FallsBetween(otherScheduledSportEvent.StartDateTime, otherScheduledSportEvent.EndDateTime)
                     ||
-                    FinishesAfter(otherScheduledSportEvent.StartDateTime)
+                    endDateTime.FallsBetween(otherScheduledSportEvent.StartDateTime, otherScheduledSportEvent.EndDateTime)
+                    ||
+                    otherScheduledSportEvent.StartDateTime.FallsBetween(startDateTime, endDateTime)
+                //StartsBefore(otherScheduledSportEvent.endDateTime)
+                //||
+                //FinishesAfter(otherScheduledSportEvent.StartDateTime)
                 );
         }
 

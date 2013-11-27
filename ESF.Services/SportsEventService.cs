@@ -196,8 +196,36 @@ namespace ESF.Services
             var participant = participantRepository.Get(participantId);
             var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
             var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
+            var scheduleOverLapDetails = scheduledSportEventRepository.FindAllScheduleOverLapDetails();
 
-            return scheduledSportEvents.Select(x => new ScheduledSportEventDetail {ScheduledSportEventId = x.Id, ScheduledSportEventName = x.Name}).ToList();
+            return scheduledSportEvents.Select(x => 
+                new ScheduledSportEventDetail
+                    {
+                        ScheduledSportEventId = x.Id, 
+                        ScheduledSportEventName = x.Name, 
+                        OverLappingEventIds = GetOverLappingIds(x.Id, scheduleOverLapDetails),
+                        CurrentParticipantAlreadySignedUp = SignedUpEventsContainsCurrent(x, signedUpSportEvents),
+                        IsSelectable = GetSelectability(x, scheduleOverLapDetails, signedUpSportEvents)
+                    }).ToList();
+        }
+
+        private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IList<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
+        {
+            return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) == null // Not Signed Up
+                && scheduleOverLapDetails.SingleOrDefault(o => o.OverLappingScheduledSportEventId == currentScheduledSportEvent.Id // Is not an overlapping event
+                    && signedUpSportEvents.SingleOrDefault(s => s.Id == o.ScheduledSportEventId) != null) == null; // of a signed up event
+        }
+
+        private static bool SignedUpEventsContainsCurrent(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduledSportEvent> signedUpSportEvents)
+        {
+            return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) != null;
+        }
+
+        private IList<Guid> GetOverLappingIds(Guid id, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails)
+        {
+            return scheduleOverLapDetails
+                .Where(s => s.ScheduledSportEventId == id)
+                .Select(o => o.OverLappingScheduledSportEventId).ToList();
         }
     }
 }
