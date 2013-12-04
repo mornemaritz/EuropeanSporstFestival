@@ -52,7 +52,15 @@ namespace ESF.Repositories
 
         public IList<ScheduleOverLapDetail> FindAllScheduleOverLapDetails()
         {
+            return FindScheduleOverLapDetails(null);
+        }
+
+        public IList<ScheduleOverLapDetail> FindScheduleOverLapDetails(Guid[] scheduledSportEventIds)
+        {
             var criteria = DetachedCriteria.For<ScheduledSportEventOverLap>();
+
+            if (scheduledSportEventIds != null)
+                criteria.Add(Restrictions.In("ScheduledSportEvent.Id", scheduledSportEventIds));
 
             return entityRepo.ReportAll<ScheduleOverLapDetail>(criteria, GetScheduleOverLapProjectionList()).ToList();
         }

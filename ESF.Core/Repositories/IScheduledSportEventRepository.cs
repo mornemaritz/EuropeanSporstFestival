@@ -15,5 +15,6 @@ namespace ESF.Core.Repositories
         IList<ScheduledSportEvent> RetrieveSignedUpSportsEvents(Guid participantId);
         IList<ScheduledSportEvent> RetrieveScheduledSportEventsForAgeAndGender(int age, Gender gender);
         IList<ScheduleOverLapDetail> FindAllScheduleOverLapDetails();
+        IList<ScheduleOverLapDetail> FindScheduleOverLapDetails(Guid[] scheduledSportEventIds);
     }
 }

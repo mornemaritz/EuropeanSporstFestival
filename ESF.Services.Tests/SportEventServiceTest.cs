@@ -130,8 +130,7 @@ namespace ESF.Services.Tests
             Assert.IsNotNull(actualGolf);
             Assert.IsTrue(actualGolf.CurrentParticipantAlreadySignedUp);
             Assert.IsFalse(actualGolf.IsSelectable);
-            Assert.AreEqual(1, actualGolf.OverLappingEventIds.Count);
-            Assert.AreEqual(scheduledAthletics.Id, actualGolf.OverLappingEventIds.First());
+            Assert.AreEqual(scheduledAthleticsId.ToString(), actualGolf.OverLappingEventIds);
         }
 
         [Test]
@@ -153,8 +152,7 @@ namespace ESF.Services.Tests
             Assert.IsNotNull(actualAthletics);
             Assert.IsFalse(actualAthletics.CurrentParticipantAlreadySignedUp);
             Assert.IsFalse(actualAthletics.IsSelectable);
-            Assert.AreEqual(1, actualAthletics.OverLappingEventIds.Count);
-            Assert.AreEqual(scheduledGolf.Id, actualAthletics.OverLappingEventIds.First());
+            Assert.AreEqual(scheduledGolfId.ToString(), actualAthletics.OverLappingEventIds);
         }
 
         [Test]
@@ -176,15 +174,13 @@ namespace ESF.Services.Tests
             Assert.IsNotNull(actualMensOver35sFootBall);
             Assert.IsFalse(actualMensOver35sFootBall.CurrentParticipantAlreadySignedUp);
             Assert.IsTrue(actualMensOver35sFootBall.IsSelectable);
-            Assert.AreEqual(1, actualMensOver35sFootBall.OverLappingEventIds.Count);
-            Assert.AreEqual(scheduledRounders.Id, actualMensOver35sFootBall.OverLappingEventIds.First());
+            Assert.AreEqual(scheduledRoundersId.ToString(), actualMensOver35sFootBall.OverLappingEventIds);
 
             var actualRounders = actualEvents.SingleOrDefault(e => e.ScheduledSportEventName == scheduledRounders.Name);
             Assert.IsNotNull(actualRounders);
             Assert.IsFalse(actualRounders.CurrentParticipantAlreadySignedUp);
             Assert.IsTrue(actualRounders.IsSelectable);
-            Assert.AreEqual(1, actualRounders.OverLappingEventIds.Count);
-            Assert.AreEqual(scheduledMensOver35sFootball.Id, actualRounders.OverLappingEventIds.First());
+            Assert.AreEqual(scheduledMensOver35sFootballId.ToString(), actualRounders.OverLappingEventIds);
         }
     }
 }

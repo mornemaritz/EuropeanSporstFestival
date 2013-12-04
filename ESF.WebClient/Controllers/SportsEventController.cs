@@ -76,7 +76,11 @@ namespace ESF.WebClient.Controllers
         [HttpGet]
         public ActionResult SignUpGrid(Guid id)
         {
-            ViewBag.SportsEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
+            var sportEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
+            var periods = sportEvents.Select(s => s.DayAndTimePeriod).Distinct().OrderBy(x => x).ToArray();
+
+            ViewData.Model = sportEvents;
+            ViewBag.Periods = periods;
 
             return View();
         }

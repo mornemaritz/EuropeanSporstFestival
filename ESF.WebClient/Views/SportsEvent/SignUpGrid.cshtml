@@ -1,4 +1,4 @@
-﻿@model ESF.Core.Services.ScheduledSportEventDetail
+﻿@model IList<ESF.Core.Services.ScheduledSportEventDetail>
 
 @{
     ViewBag.Title = "SignUpGrid";
@@ -7,55 +7,39 @@
 
 <h2>Sign Up Grid</h2>
 
-<ul>
-    <li style="width: 20%;float: left">
-        <span>Friday Morning</span>
-        <ul>
-            <li><input type="checkbox"/><label>Sport 1</label></li>
-            <li><input type="checkbox"/><label>Sport 2</label></li>
-            <li><input type="checkbox"/><label>Sport 3</label></li>
-            <li><input type="checkbox"/><label>Sport 4</label></li>
-        </ul>
-    </li>
-    <li>
-        <span>Saturday Morning</span>
-        <ul>
-            <li><input type="checkbox"/><label>Sport 5 (All Day)</label></li>
-            <li><input type="checkbox"/><label>Sport 6</label></li>
-            <li><input type="checkbox"/><label>Sport 7</label></li>
-            <li><input type="checkbox"/><label>Sport 8</label></li>
-            <li><input type="checkbox"/><label>Sport 9</label></li>
-            <li><input type="checkbox"/><label>Sport 10</label></li>
-        </ul>
-    </li>
-    <li>
-        <span>Saturday Afternoon</span>
-        <ul>
-            <li><input type="checkbox"/><label>Sport 10</label></li>
-            <li><input type="checkbox"/><label>Sport 11</label></li>
-            <li><input type="checkbox"/><label>Sport 12</label></li>
-        </ul>
-    </li>
-    <li>
-        <span>Sunday Morning</span>
-        <ul>
-            <li><input type="checkbox"/><label>Sport 13</label></li>
-            <li><input type="checkbox"/><label>Sport 14</label></li>
-            <li><input type="checkbox"/><label>Sport 15</label></li>
-            <li><input type="checkbox"/><label>Sport 16</label></li>
-            <li><input type="checkbox"/><label>Sport 17</label></li>
-            <li><input type="checkbox"/><label>Sport 18</label></li>
-        </ul>
-    </li>
-    <li>
-        <span>Sunday Afternoon</span>
-        <ul>
-            <li><input type="checkbox"/><label>Sport 5</label></li>
-            <li><input type="checkbox"/><label>Sport 6</label></li>
-            <li><input type="checkbox"/><label>Sport 7</label></li>
-            <li><input type="checkbox"/><label>Sport 8</label></li>
-            <li><input type="checkbox"/><label>Sport 9</label></li>
-            <li><input type="checkbox"/><label>Sport 10</label></li>
-        </ul>
-    </li>
+<script type="text/javascript">
+
+	$.fn.ToggleEnabledStates = function (src, idstring) {
+		$.each(idstring.split(","), function (index, item) {
+			var target = $(item);
+			if (src.is(":checked")) {
+				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
+				target.attr("disabled", true);
+				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
+			} else {
+				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
+				target.removeAttr("disabled");
+				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
+			}
+		});
+	};
+
+</script>
+
+<ul style="list-style-type: none; padding:0; margin:0;">
+    @foreach (var period in ViewBag.Periods)
+	{
+			<li style="width: 20%;">
+                <span>@period</span>
+                <ul style="list-style-type: none; padding:0; margin:0;">
+                    @foreach(var sportEvent in Model.Where(s => s.DayAndTimePeriod == period))
+                    {
+
+                        var disabled = !sportEvent.IsSelectable ? "disabled" : null;
+						
+                        <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this),'@sportEvent.OverLappingEventIds')"/><label>@sportEvent.ScheduledSportEventName</label></li>
+                    }	
+                </ul>
+            </li>
+	}
 </ul>

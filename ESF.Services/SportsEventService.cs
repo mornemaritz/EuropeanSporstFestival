@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ESF.Core.Services;
 using ESF.Core.Repositories;
 using ESF.Domain;
 using ESF.Commons.Repository;
 using ESF.Commons.Utilities;
 using ESF.Commons.Exceptions;
+using NHibernate.Linq;
 
 namespace ESF.Services
 {
@@ -196,24 +198,40 @@ namespace ESF.Services
             var participant = participantRepository.Get(participantId);
             var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
             var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
-            var scheduleOverLapDetails = scheduledSportEventRepository.FindAllScheduleOverLapDetails();
+            var scheduleOverLapDetails = scheduledSportEventRepository.FindScheduleOverLapDetails(scheduledSportEvents.Select(s => s.Id).ToArray());
 
             return scheduledSportEvents.Select(x => 
                 new ScheduledSportEventDetail
                     {
                         ScheduledSportEventId = x.Id, 
-                        ScheduledSportEventName = x.Name, 
-                        OverLappingEventIds = GetOverLappingIds(x.Id, scheduleOverLapDetails),
+                        ScheduledSportEventName = x.Name,
+                        DayAndTimePeriod = GetDayAndTimePeriod(x),
+                        OverLappingEventIds = GetOverLappingIds(x.Id, scheduleOverLapDetails, signedUpSportEvents),
                         CurrentParticipantAlreadySignedUp = SignedUpEventsContainsCurrent(x, signedUpSportEvents),
                         IsSelectable = GetSelectability(x, scheduleOverLapDetails, signedUpSportEvents)
                     }).ToList();
         }
 
-        private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IList<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
+        private static string GetDayAndTimePeriod(ScheduledSportEvent scheduledSportEvent)
+        {
+            var dayOfWeek = scheduledSportEvent.StartDateTime.DayOfWeek;
+            var timeOfDay = scheduledSportEvent.StartDateTime.TimeOfDay;
+
+            if (timeOfDay >= scheduledSportEvent.Festival.MorningStartTime && timeOfDay < scheduledSportEvent.Festival.AfternoonStartTime)
+                return dayOfWeek + " Morning";
+            if (timeOfDay >= scheduledSportEvent.Festival.AfternoonStartTime && timeOfDay < scheduledSportEvent.Festival.EveningStartTime)
+                return dayOfWeek + " Afternoon";
+            if (timeOfDay >= scheduledSportEvent.Festival.EveningStartTime)
+                return dayOfWeek + " Evening";
+
+            return timeOfDay.ToString();
+        }
+
+        private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
         {
             return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) == null // Not Signed Up
-                && scheduleOverLapDetails.SingleOrDefault(o => o.OverLappingScheduledSportEventId == currentScheduledSportEvent.Id // Is not an overlapping event
-                    && signedUpSportEvents.SingleOrDefault(s => s.Id == o.ScheduledSportEventId) != null) == null; // of a signed up event
+                && scheduleOverLapDetails.SingleOrDefault(o => o.OverLappingScheduledSportEventId == currentScheduledSportEvent.Id // Does not overlap with...
+                    && signedUpSportEvents.SingleOrDefault(s => s.Id == o.ScheduledSportEventId) != null) == null; // ...a signed up event
         }
 
         private static bool SignedUpEventsContainsCurrent(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduledSportEvent> signedUpSportEvents)
@@ -221,11 +239,16 @@ namespace ESF.Services
             return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) != null;
         }
 
-        private IList<Guid> GetOverLappingIds(Guid id, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails)
+        private static string GetOverLappingIds(Guid id, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
         {
-            return scheduleOverLapDetails
+            var guidString = new StringBuilder();
+
+            scheduleOverLapDetails
                 .Where(s => s.ScheduledSportEventId == id)
-                .Select(o => o.OverLappingScheduledSportEventId).ToList();
+                .Select(o => o.OverLappingScheduledSportEventId)
+                .ForEach(g => guidString.Append(g.ToString() + ","));
+
+            return guidString.ToString(0, guidString.Length - 1);
         }
     }
 }

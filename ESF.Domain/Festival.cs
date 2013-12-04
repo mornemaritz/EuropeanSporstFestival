@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ESF.Domain
 {
@@ -10,6 +7,9 @@ namespace ESF.Domain
         private Guid id;
         private string name;
         private DateTime startDate;
+        private TimeSpan morningStartTime;
+        private TimeSpan afternoonStartTime;
+        private TimeSpan eveningStartTime;
 
         protected Festival() { }
 
@@ -33,6 +33,21 @@ namespace ESF.Domain
         public virtual  DateTime StartDate
         {
             get { return startDate; }
+        }
+
+        public virtual TimeSpan MorningStartTime
+        {
+            get { return morningStartTime; }
+        }
+
+        public virtual TimeSpan AfternoonStartTime
+        {
+            get { return afternoonStartTime; }
+        }
+
+        public virtual TimeSpan EveningStartTime
+        {
+            get { return eveningStartTime; }
         }
     }
 }
