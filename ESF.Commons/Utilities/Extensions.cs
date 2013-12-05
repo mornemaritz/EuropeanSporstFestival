@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESF.Commons.Utilities
 {
@@ -54,6 +56,18 @@ namespace ESF.Commons.Utilities
         public static bool FallsBetween(this DateTime date, DateTime minDate, DateTime maxDate)
         {
             return date >= minDate && date <= maxDate;
+        }
+
+        /// <summary>
+        /// Determines whether no elements of a sequence satisfy a condition
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns></returns>
+        public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return !source.Any(predicate);
         }
     }
 }

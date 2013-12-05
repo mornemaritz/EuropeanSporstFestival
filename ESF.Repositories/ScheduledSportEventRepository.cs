@@ -50,28 +50,6 @@ namespace ESF.Repositories
             return entityRepo.FindAll(criteria).ToList();
         }
 
-        public IList<ScheduleOverLapDetail> FindAllScheduleOverLapDetails()
-        {
-            return FindScheduleOverLapDetails(null);
-        }
-
-        public IList<ScheduleOverLapDetail> FindScheduleOverLapDetails(Guid[] scheduledSportEventIds)
-        {
-            var criteria = DetachedCriteria.For<ScheduledSportEventOverLap>();
-
-            if (scheduledSportEventIds != null)
-                criteria.Add(Restrictions.In("ScheduledSportEvent.Id", scheduledSportEventIds));
-
-            return entityRepo.ReportAll<ScheduleOverLapDetail>(criteria, GetScheduleOverLapProjectionList()).ToList();
-        }
-
-        private static ProjectionList GetScheduleOverLapProjectionList()
-        {
-            return Projections.ProjectionList()
-                .Add(Projections.Property("ScheduledSportEvent.Id"))
-                .Add(Projections.Property("OverLappingScheduledSportEvent.Id"));
-        }
-
         public IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] scheduledSportEventToExcludeIds)
         {
             var criteria = entityRepo.CreateDetachedCriteria()

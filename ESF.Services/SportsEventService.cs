@@ -198,7 +198,7 @@ namespace ESF.Services
             var participant = participantRepository.Get(participantId);
             var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
             var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
-            var scheduleOverLapDetails = scheduledSportEventRepository.FindScheduleOverLapDetails(scheduledSportEvents.Select(s => s.Id).ToArray());
+            //var scheduleOverLapDetails = scheduledSportEventRepository.FindScheduleOverLapDetails(scheduledSportEvents.Select(s => s.Id).ToArray(), participant.GetParticipantCurrentAge(), participant.Gender);
 
             return scheduledSportEvents.Select(x => 
                 new ScheduledSportEventDetail
@@ -206,9 +206,9 @@ namespace ESF.Services
                         ScheduledSportEventId = x.Id, 
                         ScheduledSportEventName = x.Name,
                         DayAndTimePeriod = GetDayAndTimePeriod(x),
-                        OverLappingEventIds = GetOverLappingIds(x.Id, scheduleOverLapDetails, signedUpSportEvents),
+                        OverLappingEventIds = GetOverLappingIds(x, scheduledSportEvents, signedUpSportEvents),
                         CurrentParticipantAlreadySignedUp = SignedUpEventsContainsCurrent(x, signedUpSportEvents),
-                        IsSelectable = GetSelectability(x, scheduleOverLapDetails, signedUpSportEvents)
+                        IsSelectable = GetSelectability(x, signedUpSportEvents)
                     }).ToList();
         }
 
@@ -227,26 +227,28 @@ namespace ESF.Services
             return timeOfDay.ToString();
         }
 
-        private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
+        private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IList<ScheduledSportEvent> signedUpSportEvents)
         {
-            return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) == null // Not Signed Up
-                && scheduleOverLapDetails.SingleOrDefault(o => o.OverLappingScheduledSportEventId == currentScheduledSportEvent.Id // Does not overlap with...
-                    && signedUpSportEvents.SingleOrDefault(s => s.Id == o.ScheduledSportEventId) != null) == null; // ...a signed up event
+            return signedUpSportEvents.None(s => s.Id == currentScheduledSportEvent.Id) // Not Signed Up
+                   && signedUpSportEvents.None(s => s.OverLapsWith(currentScheduledSportEvent)); // Does not overlap with a signed up sport event
         }
 
         private static bool SignedUpEventsContainsCurrent(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduledSportEvent> signedUpSportEvents)
         {
-            return signedUpSportEvents.SingleOrDefault(s => s.Id == currentScheduledSportEvent.Id) != null;
+            return signedUpSportEvents.Any(s => s.Id == currentScheduledSportEvent.Id);
         }
 
-        private static string GetOverLappingIds(Guid id, IEnumerable<ScheduleOverLapDetail> scheduleOverLapDetails, IList<ScheduledSportEvent> signedUpSportEvents)
+        private static string GetOverLappingIds(ScheduledSportEvent currentScheduledSportEvent, IEnumerable<ScheduledSportEvent> scheduledSportEvents, IEnumerable<ScheduledSportEvent> signedUpSportEvents)
         {
             var guidString = new StringBuilder();
 
-            scheduleOverLapDetails
-                .Where(s => s.ScheduledSportEventId == id)
-                .Select(o => o.OverLappingScheduledSportEventId)
-                .ForEach(g => guidString.Append(g.ToString() + ","));
+            scheduledSportEvents
+                .Where(s => s.Id != currentScheduledSportEvent.Id)
+                .Where(s => signedUpSportEvents.None(su => su.OverLapsWith(s))) // Use Except? Need to Implement IEqualityComparer?
+                .Where(s => s.OverLapsWith(currentScheduledSportEvent))
+                .ForEach(g => guidString.Append(g.Id.ToString() + ","));
+
+            if (guidString.Length <= 0) return string.Empty;
 
             return guidString.ToString(0, guidString.Length - 1);
         }

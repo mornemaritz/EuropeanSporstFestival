@@ -33,23 +33,21 @@ namespace ESF.Services.Tests
 
         private readonly Guid scheduledGolfId = new Guid("193CE32C-F0A5-4050-A53E-A27C013522EE");
         private ScheduledSportEvent scheduledGolf;
-        private ScheduleOverLapDetail scheduledGolfOverLaps;
 
         private readonly Guid scheduledMensOver35sFootballId = new Guid("193CE32C-F0A5-4050-A53E-A27C013522FF");
         private ScheduledSportEvent scheduledMensOver35sFootball;
-        private ScheduleOverLapDetail scheduledMensOver35sFootballOverLaps;
 
         private readonly Guid scheduledAthleticsId = new Guid("193CE32C-F0A5-4050-A53E-A27C01352211");
         private ScheduledSportEvent scheduledAthletics;
-        private ScheduleOverLapDetail scheduledAthleticsOverLaps;
+
+        private readonly Guid scheduledMixedNetballId = new Guid("193CE32C-F0A5-4050-A53E-A27C01352233");
+        private ScheduledSportEvent scheduledMixedNetball;
 
         private readonly Guid scheduledRoundersId = new Guid("193CE32C-F0A5-4050-A53E-A27C01352222");
         private ScheduledSportEvent scheduledRounders;
-        private ScheduleOverLapDetail scheduledRoundersOverLaps;
 
         private IList<ScheduledSportEvent> scheduledSportEvents;
         private IList<ScheduledSportEvent> signedUpSportEvents;
-        private IList<ScheduleOverLapDetail> eventOverLaps;
 
         [TestFixtureSetUp]
         public void SetUpFixture()
@@ -65,19 +63,18 @@ namespace ESF.Services.Tests
 
             scheduledGolf = new ScheduledSportEvent("Golf", festival, golf, 0, Gender.Male, 0, 150, 1, 1, new TimeSpan(08, 00, 00), new TimeSpan(22, 00, 00));
             scheduledGolf.Id = scheduledGolfId;
-            scheduledGolfOverLaps = new ScheduleOverLapDetail(scheduledGolfId, scheduledAthleticsId);
-
-            scheduledMensOver35sFootball = new ScheduledSportEvent("MensOver35sFootball", festival, football, 1, Gender.Male, 35, 150, 5, 10, new TimeSpan(14, 00, 00), new TimeSpan(16, 30, 00));
-            scheduledMensOver35sFootball.Id = scheduledMensOver35sFootballId;
-            scheduledMensOver35sFootballOverLaps = new ScheduleOverLapDetail (scheduledMensOver35sFootballId, scheduledRoundersId);
 
             scheduledAthletics = new ScheduledSportEvent("Athletics", festival, athletics, 0, Gender.Male | Gender.Female, 0, 150, 1, 1, new TimeSpan(12, 30, 00), new TimeSpan(16, 00, 00));
             scheduledAthletics.Id = scheduledAthleticsId;
-            scheduledAthleticsOverLaps = new ScheduleOverLapDetail(scheduledAthleticsId, scheduledGolfId);
 
             scheduledRounders = new ScheduledSportEvent("Rounders", festival, rounders, 1, Gender.Male | Gender.Female, 0, 150, 7, 12, new TimeSpan(13, 30, 00), new TimeSpan(17, 30, 00));
             scheduledRounders.Id = scheduledRoundersId;
-            scheduledRoundersOverLaps = new ScheduleOverLapDetail(scheduledRoundersId, scheduledMensOver35sFootballId);
+
+            scheduledMensOver35sFootball = new ScheduledSportEvent("MensOver35sFootball", festival, football, 1, Gender.Male, 35, 150, 5, 10, new TimeSpan(14, 00, 00), new TimeSpan(16, 30, 00));
+            scheduledMensOver35sFootball.Id = scheduledMensOver35sFootballId;
+
+            scheduledMixedNetball = new ScheduledSportEvent("MixedNetball", festival, football, 1, Gender.Male, 35, 150, 5, 10, new TimeSpan(08, 00, 00), new TimeSpan(12, 30, 00));
+            scheduledMixedNetball.Id = scheduledMixedNetballId;
 
             signedUpSportEvents = new List<ScheduledSportEvent>
                                       {
@@ -88,14 +85,6 @@ namespace ESF.Services.Tests
                                        {
                                            scheduledMensOver35sFootball, scheduledAthletics, scheduledRounders
                                        };
-
-            eventOverLaps = new List<ScheduleOverLapDetail>
-                                {
-                                    scheduledGolfOverLaps,
-                                    scheduledMensOver35sFootballOverLaps,
-                                    scheduledAthleticsOverLaps,
-                                    scheduledRoundersOverLaps
-                                };
         }
 
         [SetUp]
@@ -118,7 +107,6 @@ namespace ESF.Services.Tests
                 .Returns(signedUpSportEvents);
             scheduledSportEventRepository.Setup(r => r.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender))
                 .Returns(scheduledSportEvents);
-            scheduledSportEventRepository.Setup(r => r.FindAllScheduleOverLapDetails()).Returns(eventOverLaps);
 
             // Act
             var actualEvents = serviceUnderTest.FindSportsEventsWithParticipantSelection(participantId);
@@ -142,7 +130,6 @@ namespace ESF.Services.Tests
                 .Returns(signedUpSportEvents);
             scheduledSportEventRepository.Setup(r => r.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender))
                 .Returns(scheduledSportEvents);
-            scheduledSportEventRepository.Setup(r => r.FindAllScheduleOverLapDetails()).Returns(eventOverLaps);
 
             // Act
             var actualEvents = serviceUnderTest.FindSportsEventsWithParticipantSelection(participantId);
@@ -164,7 +151,6 @@ namespace ESF.Services.Tests
                 .Returns(signedUpSportEvents);
             scheduledSportEventRepository.Setup(r => r.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender))
                 .Returns(scheduledSportEvents);
-            scheduledSportEventRepository.Setup(r => r.FindAllScheduleOverLapDetails()).Returns(eventOverLaps);
 
             // Act
             var actualEvents = serviceUnderTest.FindSportsEventsWithParticipantSelection(participantId);

@@ -11,15 +11,11 @@
 
 	$.fn.ToggleEnabledStates = function (src, idstring) {
 		$.each(idstring.split(","), function (index, item) {
-			var target = $(item);
+			var target = $("#"+item);
 			if (src.is(":checked")) {
-				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
-				target.attr("disabled", true);
-				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
+				target.attr("disabled", "disabled");
 			} else {
-				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
 				target.removeAttr("disabled");
-				//alert("presence of disabled attribute is " + (typeof target.attr("disabled") != "undefined"));
 			}
 		});
 	};
@@ -38,7 +34,7 @@
                         var disabled = !sportEvent.IsSelectable ? "disabled" : null;
 						
                         <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this),'@sportEvent.OverLappingEventIds')"/><label>@sportEvent.ScheduledSportEventName</label></li>
-                    }	
+					}	
                 </ul>
             </li>
 	}
