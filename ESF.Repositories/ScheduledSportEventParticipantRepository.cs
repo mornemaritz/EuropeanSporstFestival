@@ -46,6 +46,11 @@ namespace ESF.Repositories
             entityRepo.Update(sportEventParticipant);
         }
 
+        public void Delete(ScheduledSportEventParticipant scheduledSportEventParticipant)
+        {
+            entityRepo.Delete(scheduledSportEventParticipant);
+        }
+
         public IList<SportEventParticipantModel> FindSignedUpSportsEvents(Guid participantId)
         {
             var criteria = entityRepo.CreateDetachedCriteria()

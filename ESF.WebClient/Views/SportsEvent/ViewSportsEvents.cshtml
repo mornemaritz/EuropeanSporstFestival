@@ -23,6 +23,8 @@
         </th>
         <th>
         </th>
+        <th>
+        </th>
     </tr>
 
 @foreach (var item in Model)
@@ -40,12 +42,18 @@
         <td>
             @if(item.IsTeamCaptain)
             {
-				@Html.ActionLink("Manage Team", "ManageTeam", new { sportEventTeamId = item.SportEventTeamId })
+                @Html.ActionLink("Manage Team", "ManageTeam", new { sportEventTeamId = item.SportEventTeamId })
             }
             else if(item.TeamAllocationStatusString != TeamAllocationStatus.NotApplicable.GetStringValue())
             {
-				@Html.ActionLink("Change Team Allocation Status", "SportEventTeamSelect", new { id = item.ScheduledSportEventParticipantId })
-			}
+                @Html.ActionLink("Change Team Allocation Status", "SportEventTeamSelect", new { id = item.ScheduledSportEventParticipantId })
+            }
+        </td>
+        <td>
+            @if(item.CanBeDeleted)
+            {
+				@Html.ActionLink("Delete Sport", "DeleteSportEventParticipation", new { participantId = ViewBag.ParticipantId, scheduledSportEventParticipantId = item.ScheduledSportEventParticipantId })
+            }
         </td>
     </tr>
 }

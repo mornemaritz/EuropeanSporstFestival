@@ -14,5 +14,6 @@ namespace ESF.Core.Repositories
         IList<DateTime> FindScheduledDays();
         IList<ScheduledSportEvent> RetrieveSignedUpSportsEvents(Guid participantId);
         IList<ScheduledSportEvent> RetrieveScheduledSportEventsForAgeAndGender(int age, Gender gender);
+        IList<ScheduledSportEvent> RetrieveScheduledSportEvents(List<Guid> selectedSportEventIds);
     }
 }

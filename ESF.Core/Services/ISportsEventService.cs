@@ -6,7 +6,6 @@ namespace ESF.Core.Services
     public interface ISportsEventService
     {
         ICollection<SportsEventItem> FindSportEventsAvailableToParticipant(Guid participantId);
-        SportEventParticipantModel SignUpParticipant(SportsEventSignUpModel model);
         IList<SportEventParticipantModel> RetrieveSignedUpSportsEvents(Guid participantId);
         void MakeParticipantAvailableForTeamAllocation(Guid sportEventParticpantId);
         ExistingTeamModel AttemptAllocationToNamedTeam(ExistingTeamModel model);
@@ -16,5 +15,7 @@ namespace ESF.Core.Services
         NewTeamMemberModel AddNewTeamMember(NewTeamMemberModel model);
         IList<DateTime> FindScheduledDays();
         IList<ScheduledSportEventDetail> FindSportsEventsWithParticipantSelection(Guid participantId);
+        void SignUpParticipant(Guid participantId, List<Guid> selectedSportEventIds);
+        void CancelParticipation(Guid scheduledSportEventParticipantId);
     }
 }

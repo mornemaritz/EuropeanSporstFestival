@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ESF.Domain;
 using ESF.Core.Services;
 
@@ -18,5 +16,6 @@ namespace ESF.Core.Repositories
         ScheduledSportEventParticipant Get(Guid sportEventParticpantId);
 
         void Update(ScheduledSportEventParticipant sportEventParticipant);
+        void Delete(ScheduledSportEventParticipant scheduledSportEventParticipant);
     }
 }

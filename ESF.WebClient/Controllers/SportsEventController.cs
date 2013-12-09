@@ -55,49 +55,53 @@ namespace ESF.WebClient.Controllers
         }
 
         [HttpGet]
-        public ActionResult SignUp(Guid id)
-        {
-            var availableSportsEvents = sportsEventService.FindSportEventsAvailableToParticipant(id);
-
-            ViewBag.SportsEvents = availableSportsEvents.AsEnumerable()
-                .Select(x => new SelectListItem 
-                { 
-                        Value = x.ScheduledSportsEventId.ToString(), 
-                        Text = x.ScheduledSportsEventName 
-                });
-
-            ViewData.Model = new SportsEventSignUpModel { ParticipantId = id };
-
-            ViewBag.Message = "Please select the sports event you would like to sign up for.";
-
-            return View();
-        }
-
-        [HttpGet]
         public ActionResult SignUpGrid(Guid id)
         {
+            ViewBag.SportEventSignUpMessage = TempData["SportEventSignUpMessage"];
+
             var sportEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
             var periods = sportEvents.Select(s => s.DayAndTimePeriod).Distinct().OrderBy(x => x).ToArray();
 
             ViewData.Model = sportEvents;
+
             ViewBag.Periods = periods;
+            ViewBag.ParticipantId = id;
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult SignUp(SportsEventSignUpModel model)
+        public ActionResult SignUpGrid(Guid participantId, Guid[] sportEventIds)
         {
-            var sportEventParticipantModel = sportsEventService.SignUpParticipant(model);
+            var selectedSportEventIds = new List<Guid>();
 
-            if (sportEventParticipantModel.TeamAllocationStatus == TeamAllocationStatus.AllocationRequired)
+            foreach (var key in Request.Form.AllKeys.Where(x => x != "participantId"))
             {
-                TempData["SportEventTeamSelectMessage"] = "The sport you selected is a team event";
-
-                return RedirectToAction("SportEventTeamSelect", new { id = sportEventParticipantModel.ScheduledSportEventParticipantId });
+                var sportEventGuid = Guid.Empty;
+                if(Guid.TryParse(key, out sportEventGuid))
+                {
+                    if(Request.Form[key] == "on")
+                        selectedSportEventIds.Add(sportEventGuid);
+                }
             }
 
-            return RedirectToAction("ViewSportsEvents", new { id = model.ParticipantId });
+            if(selectedSportEventIds.Any())
+            {
+                try
+                {
+                    sportsEventService.SignUpParticipant(participantId, selectedSportEventIds);
+                    return RedirectToAction("ViewSportsEvents", new {id = participantId});
+                }
+                catch (BusinessException bex)
+                {
+                    TempData["SportEventSignUpMessage"] = bex.Message;
+                    RedirectToAction("SignUpGrid", new {id = participantId});
+                }
+            }
+
+            TempData["SportEventSignUpMessage"] = "Please select one or more sport events.";
+
+            return RedirectToAction("SignUpGrid", new { id = participantId });
         }
 
         [HttpGet]
@@ -267,6 +271,23 @@ namespace ESF.WebClient.Controllers
             }
 
             return RedirectToAction("ManageTeam", new {sportEventTeamId = model.SportEventTeamId});
+        }
+
+        // TODO: This should actually be a POST action.
+        public ActionResult DeleteSportEventParticipation(Guid participantId, Guid scheduledSportEventParticipantId)
+        {
+            try
+            {
+                sportsEventService.CancelParticipation(scheduledSportEventParticipantId);
+
+                TempData["Message"] = "Sport Event successfully deleted";
+            }
+            catch (BusinessException bex)
+            {
+                TempData["Message"] = bex.Message;
+            }
+
+            return RedirectToAction("ViewSportsEvents", new {id = participantId});
         }
     }
 }

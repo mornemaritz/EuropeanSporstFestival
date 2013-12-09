@@ -212,6 +212,26 @@ namespace ESF.Services
                     }).ToList();
         }
 
+        public void SignUpParticipant(Guid participantId, List<Guid> selectedSportEventIds)
+        {
+            var participant = participantRepository.Get(participantId);
+
+            var selectedSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEvents(selectedSportEventIds);
+
+            foreach (var scheduledSportEvent in selectedSportEvents)
+            {
+                var sportEventParticipant = participant.SignUpToScheduledSportEvent(scheduledSportEvent);
+                sportEventParticipantRepository.Save(sportEventParticipant);
+            }
+        }
+
+        public void CancelParticipation(Guid scheduledSportEventParticipantId)
+        {
+            var scheduledSportEventParticipant = sportEventParticipantRepository.Get(scheduledSportEventParticipantId);
+
+            sportEventParticipantRepository.Delete(scheduledSportEventParticipant);
+        }
+
         private static string GetDayAndTimePeriod(ScheduledSportEvent scheduledSportEvent)
         {
             var dayOfWeek = scheduledSportEvent.StartDateTime.DayOfWeek;

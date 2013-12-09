@@ -9,33 +9,44 @@
 
 <script type="text/javascript">
 
-	$.fn.ToggleEnabledStates = function (src, idstring) {
-		$.each(idstring.split(","), function (index, item) {
-			var target = $("#"+item);
-			if (src.is(":checked")) {
-				target.attr("disabled", "disabled");
-			} else {
-				target.removeAttr("disabled");
-			}
-		});
-	};
+    $.fn.ToggleEnabledStates = function (src, idstring) {
+        $.each(idstring.split(","), function (index, item) {
+            var target = $("#"+item);
+            if (src.is(":checked")) {
+                target.attr("disabled", "disabled");
+            } else {
+                target.removeAttr("disabled");
+            }
+        });
+    };
 
 </script>
 
-<ul style="list-style-type: none; padding:0; margin:0;">
-    @foreach (var period in ViewBag.Periods)
-	{
-			<li style="width: 20%;">
+@ViewBag.SportEventSignUpMessage
+
+@using (Html.BeginForm()) {
+	@Html.Hidden("participantId", (Guid)ViewBag.ParticipantId)
+    <ul style="list-style-type: none; padding:0; margin:0;">
+        @foreach (var period in ViewBag.Periods)
+        {
+            <li style="width: 20%;">
                 <span>@period</span>
                 <ul style="list-style-type: none; padding:0; margin:0;">
-                    @foreach(var sportEvent in Model.Where(s => s.DayAndTimePeriod == period))
+                    @foreach (var sportEvent in Model.Where(s => s.DayAndTimePeriod == period))
                     {
 
                         var disabled = !sportEvent.IsSelectable ? "disabled" : null;
 						
                         <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this),'@sportEvent.OverLappingEventIds')"/><label>@sportEvent.ScheduledSportEventName</label></li>
-					}	
+                    }	
                 </ul>
             </li>
-	}
-</ul>
+        }
+    </ul>
+    <p>
+        <input type="submit" value="Sign Up" />
+    </p>
+	<p>
+		@Html.ActionLink("Cancel", "ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
+	</p>	
+}

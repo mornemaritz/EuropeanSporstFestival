@@ -346,9 +346,6 @@
     <Content Include="Views\Accommodation\ViewAccommodation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\SportsEvent\SignUp.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\SportsEvent\ViewSportsEvents.cshtml" />
   </ItemGroup>
   <ItemGroup>

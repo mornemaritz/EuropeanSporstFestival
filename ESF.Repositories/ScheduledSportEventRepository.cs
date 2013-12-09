@@ -50,6 +50,14 @@ namespace ESF.Repositories
             return entityRepo.FindAll(criteria).ToList();
         }
 
+        public IList<ScheduledSportEvent> RetrieveScheduledSportEvents(List<Guid> selectedSportEventIds)
+        {
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .Add(Restrictions.In("Id", selectedSportEventIds.ToArray()));
+
+            return entityRepo.FindAll(criteria).ToList();
+        }
+
         public IList<ScheduledSportEvent> RetrieveScheduledSportEventsExcluding(Guid[] scheduledSportEventToExcludeIds)
         {
             var criteria = entityRepo.CreateDetachedCriteria()

@@ -63,6 +63,7 @@
     <Compile Include="Services\Models\PickupPointItem.cs" />
     <Compile Include="Services\Models\ParticipantModels.cs" />
     <Compile Include="Services\Models\ScheduledSportEventDetail.cs" />
+    <Compile Include="Services\Models\SportEventSelectionModel.cs" />
     <Compile Include="Services\Models\SportsEventSignUpModel.cs" />
     <Compile Include="Services\Models\SportEventParticipantModel.cs" />
     <Compile Include="Services\Models\SportsEventItem.cs" />
