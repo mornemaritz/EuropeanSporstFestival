@@ -8,8 +8,8 @@
     @ViewBag.Message
 </p>
 <p>
-    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+    @Html.ActionLink("Sign Up for Entertainment", "SignUp", "Entertainment", new { id = ViewBag.ParticipantId }, null)
 </p>
 <p>
-    @Html.ActionLink("Sign Up for Entertainment", "SignUp", "Entertainment", new { id = ViewBag.ParticipantId }, null)
+    @Html.ActionLink("Next", "ViewTransport", "Transport", new { id = ViewBag.ParticipantId }, null)
 </p>

@@ -140,14 +140,6 @@
     @Html.ActionLink("Edit Details", "EditParticipant", new { id = Model.ParticipantId })
 </p>
 <p>
-    @Html.ActionLink("Sign Up for a Sports Event", "SignUpGrid", "SportsEvent", new { id = Model.ParticipantId }, null)
+    @Html.ActionLink("Next", "ViewSportsEvents", "SportsEvent", new { id = Model.ParticipantId }, null)
 </p>
-<p>
-    @Html.ActionLink("Sign Up for Entertainment", "SignUp", "Entertainment", new { id = Model.ParticipantId }, null)
-</p>
-<p>
-    @Html.ActionLink("Request Accommodation", "RequestAccommodation", "Accommodation", new { id = Model.ParticipantId }, null)
-</p>
-<p>
-    @Html.ActionLink("Request Transport", "RequestTransport", "Transport", new { id = Model.ParticipantId }, null)
-</p>
+

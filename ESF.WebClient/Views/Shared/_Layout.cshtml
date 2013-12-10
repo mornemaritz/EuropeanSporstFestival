@@ -15,21 +15,12 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "ViewParticipant", "Participant")</p>
+                    <p class="site-title">@Html.ActionLink("European Sports Festival 2014 Logo", "ViewParticipant", "Participant")</p>
                 </div>
                 <div class="float-right">
                     <section id="login">
                         @Html.Partial("_LoginPartial")
                     </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Personal Details", "ViewParticipant", "Participant")</li>
-                            <li>@Html.ActionLink("Sports Events", "ViewSportsEvents", "SportsEvent")</li>
-                            <li>@Html.ActionLink("Entertainment", "ViewEntertainment", "Entertainment")</li>
-                            <li>@Html.ActionLink("Accommodation", "ViewAccommodation", "Accommodation")</li>
-                            <li>@Html.ActionLink("Transport", "ViewTransport", "Transport")</li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </header>
@@ -38,6 +29,12 @@
             <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
             </section>
+			@if (Request.IsAuthenticated)
+            {
+                <section class="content-wrapper main-content clear-fix">
+                    <h3>Summary</h3>
+                </section>
+            }
         </div>
         <footer>
             <div class="content-wrapper">

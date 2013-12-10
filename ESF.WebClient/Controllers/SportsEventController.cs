@@ -60,7 +60,7 @@ namespace ESF.WebClient.Controllers
             ViewBag.SportEventSignUpMessage = TempData["SportEventSignUpMessage"];
 
             var sportEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
-            var periods = sportEvents.Select(s => s.DayAndTimePeriod).Distinct().OrderBy(x => x).ToArray();
+            var periods = sportEvents.Select(s => s.DayAndTimePeriod).Distinct().ToArray();
 
             ViewData.Model = sportEvents;
 
@@ -71,6 +71,7 @@ namespace ESF.WebClient.Controllers
         }
 
         [HttpPost]
+        // TODO: Get MVC Framework to Populate sportEventIds parameter.
         public ActionResult SignUpGrid(Guid participantId, Guid[] sportEventIds)
         {
             var selectedSportEventIds = new List<Guid>();

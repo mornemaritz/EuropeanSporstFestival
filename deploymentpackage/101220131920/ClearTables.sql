@@ -1,0 +1,15 @@
+
+
+DELETE SportHolding
+DELETE TCountry
+DELETE TCounty
+DELETE TFestivalDay
+DELETE TFestival
+DELETE TJamatkhana
+DELETE TParticipant
+DELETE TScheduledSportEvent
+DELETE TScheduledSportEventParticipant
+DELETE TSportEventTeam
+DELETE TSport
+DELETE TTransportPickupPoint
+DELETE TTransportRequest

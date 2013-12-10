@@ -1,0 +1,1 @@
+SELECT 'ALTER TABLE '+ so.name +' DROP CONSTRAINT ' + fk.name FROM sys.foreign_keys fk JOIN sys.objects so on so.object_id = fk.parent_object_id where fk.name not in ('fk_RoleId','fk_UserId')

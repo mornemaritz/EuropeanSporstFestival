@@ -11,9 +11,6 @@
     @ViewBag.Message
 </p>
 
-<p>
-    @Html.ActionLink("Request Transport", "RequestTransport", "Transport", new { id = ViewBag.ParticipantId }, null)
-</p>
 <table>
     <tr>
         <th>
@@ -43,5 +40,8 @@
 </table>
 
 <p>
-    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+    @Html.ActionLink("Request Transport", "RequestTransport", "Transport", new { id = ViewBag.ParticipantId }, null)
+</p>
+<p>
+    @Html.ActionLink("Next", "ViewAccommodation", "Accommodation", new { id = ViewBag.ParticipantId }, null)
 </p>

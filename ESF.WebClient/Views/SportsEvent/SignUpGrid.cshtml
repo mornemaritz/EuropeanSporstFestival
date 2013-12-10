@@ -9,16 +9,35 @@
 
 <script type="text/javascript">
 
-    $.fn.ToggleEnabledStates = function (src, idstring) {
-        $.each(idstring.split(","), function (index, item) {
-            var target = $("#"+item);
-            if (src.is(":checked")) {
-                target.attr("disabled", "disabled");
-            } else {
-                target.removeAttr("disabled");
-            }
-        });
-    };
+	$.fn.ToggleEnabledStates = function (src) {
+
+		var idString = src.attr("overlappingeventids");
+
+		$.each(idString.split(","), function (targetIndex, targetItem) {
+
+			var target = $("#" + targetItem);
+
+			if (src.is(":checked")) {
+				target.attr("disabled", "disabled");
+			} else {
+
+				var enableTarget = true;
+				var targetOverLappingEventIds = target.attr("overlappingeventids");
+
+				$.each(targetOverLappingEventIds.split(","), function (overlappingIndex, overlappingItem) {
+					var overlappingEvent = $("#" + overlappingItem);
+					if (overlappingEvent.is(":checked")) {
+						enableTarget = false;
+						return false;
+					}
+				});
+
+				if (enableTarget) {
+					target.removeAttr("disabled");
+				}
+			}
+		});
+	};
 
 </script>
 
@@ -37,7 +56,7 @@
 
                         var disabled = !sportEvent.IsSelectable ? "disabled" : null;
 						
-                        <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this),'@sportEvent.OverLappingEventIds')"/><label>@sportEvent.ScheduledSportEventName</label></li>
+                        <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this))" overlappingeventids="@sportEvent.OverLappingEventIds"/><label>@sportEvent.ScheduledSportEventName</label></li>
                     }	
                 </ul>
             </li>

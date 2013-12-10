@@ -43,7 +43,9 @@ namespace ESF.Commons.Repository
 
                     )
                 .CurrentSessionContext<T>()
+#if DEBUG
                 //.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
+#endif
                 .BuildSessionFactory();
         }
 

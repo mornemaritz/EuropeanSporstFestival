@@ -60,8 +60,9 @@
 </table>
 
 <p>
-    @Html.ActionLink("Back to Details", "ViewParticipant", "Participant", new { id = ViewBag.ParticipantId }, null)
+    @Html.ActionLink("Sign Up for a Sports Event", "SignUpGrid", new { id = ViewBag.ParticipantId })
 </p>
+
 <p>
-    @Html.ActionLink("Sign Up for a Sports Event", "SignUpGrid", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
+    @Html.ActionLink("Next", "ViewEntertainment", "Entertainment", new { id = ViewBag.ParticipantId }, null)
 </p>

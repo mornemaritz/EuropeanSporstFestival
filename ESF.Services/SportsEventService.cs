@@ -198,9 +198,10 @@ namespace ESF.Services
             var participant = participantRepository.Get(participantId);
             var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
             var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
-            //var scheduleOverLapDetails = scheduledSportEventRepository.FindScheduleOverLapDetails(scheduledSportEvents.Select(s => s.Id).ToArray(), participant.GetParticipantCurrentAge(), participant.Gender);
 
-            return scheduledSportEvents.Select(x => 
+            return scheduledSportEvents
+                .OrderBy(x => x.StartDateTime)
+                .Select(x => 
                 new ScheduledSportEventDetail
                     {
                         ScheduledSportEventId = x.Id, 
