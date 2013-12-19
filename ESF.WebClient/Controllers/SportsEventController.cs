@@ -60,11 +60,9 @@ namespace ESF.WebClient.Controllers
             ViewBag.SportEventSignUpMessage = TempData["SportEventSignUpMessage"];
 
             var sportEvents = sportsEventService.FindSportsEventsWithParticipantSelection(id);
-            var periods = sportEvents.Select(s => s.DayAndTimePeriod).Distinct().ToArray();
 
             ViewData.Model = sportEvents;
 
-            ViewBag.Periods = periods;
             ViewBag.ParticipantId = id;
 
             return View();

@@ -6,7 +6,9 @@ namespace ESF.Core.Services
     {
         public Guid ScheduledSportEventId { get; set; }
         public string ScheduledSportEventName { get; set; }
-        public string DayAndTimePeriod { get; set; }
+        public int FestivalDay { get; set; }
+        public string Day { get; set; }
+        public string Period { get; set; }
         public bool CurrentParticipantAlreadySignedUp { get; set; }
         public bool IsSelectable { get; set; }
 

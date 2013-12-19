@@ -104,6 +104,11 @@ namespace ESF.Domain
             get { return endDateTime; }
         }
 
+        public virtual int FestivalDay
+        {
+            get { return (StartDateTime.DayOfYear - Festival.StartDate.DayOfYear) + 1; }
+        }
+
         public virtual DateTime Date
         {
             get { return date; }
@@ -112,6 +117,20 @@ namespace ESF.Domain
         public virtual string DayOfWeek
         {
             get { return date.DayOfWeek.ToString(); }
+        }
+
+        public virtual string GetPeriod()
+        {
+            var timeOfDay = StartDateTime.TimeOfDay;
+
+            if (timeOfDay >= Festival.MorningStartTime && timeOfDay < Festival.AfternoonStartTime)
+                return "Morning";
+            if (timeOfDay >= Festival.AfternoonStartTime && timeOfDay < Festival.EveningStartTime)
+                return "Afternoon";
+            if (timeOfDay >= Festival.EveningStartTime)
+                return "Evening";
+
+            return "Unknown";
         }
 
         public virtual TimeSpan StartTime

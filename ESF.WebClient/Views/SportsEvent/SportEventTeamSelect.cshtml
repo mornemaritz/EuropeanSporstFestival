@@ -22,9 +22,7 @@
         </div>
         <p>
             <input type="submit" value="Next" />
+			<input type="button" onclick="window.location.href='@Url.Action("ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId })'" value="Cancel" />
         </p>
     </fieldset>
 }
-<p>
-    @Html.ActionLink("Cancel", "ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
-</p>

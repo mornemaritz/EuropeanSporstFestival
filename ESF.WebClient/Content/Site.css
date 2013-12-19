@@ -4,15 +4,48 @@
     padding: 0;
 }
 
+/* ESFed */
 body {
-    background-color: #fff;
-    border-top: solid 10px #000;
-    color: #333;
-    font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    margin: 0;
-    padding: 0;
+	background-color: #EFEFEF;
+	font-family: "Open Sans", "Myriad Pro", "Gill Sans MT", Arial, sans-serif;
+	font-size: 14px;
+	font-weight: 300;
 }
+
+/* ESF start */
+.one_third_first { 
+	width: 30.66%;
+	position: relative;
+	clear: left;
+    margin-left: 0;
+	float: left; 
+	}
+	
+.one_third {
+	width: 30%; 
+	position: relative;
+	margin-left: 4%;
+	float: left;
+	}
+	
+.container {
+	width: 980px;
+	margin: auto;
+	background-color: #FFFFFF;
+	padding: 20px;
+	border: 1px dotted #CCCCCC;
+	font-size: 14px;
+}
+
+	.title, .title a {
+	font-family: 'Open Sans', sans-serif;
+	font-size:22px;
+	line-height:1.2em;
+	color: #1F267F;
+	margin-bottom:20px;
+	}
+	
+/* ESF end */
 
 a {
     color: #333;
@@ -414,12 +447,6 @@ fieldset {
             padding-bottom: 5px;
         }
 
-label {
-    display: block;
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
 label.checkbox {
     display: inline;
 }
@@ -442,7 +469,8 @@ textarea {
     input:focus, textarea:focus {
         border: 1px solid #7ac0da;
     }
-
+    
+/*
     input[type="checkbox"] {
         background: transparent;
         border: inherit;
@@ -469,6 +497,58 @@ textarea {
         padding: 4px;
         margin-right: 4px;
     }
+*/
+
+/* ESF Start */
+
+	input[type=checkbox] {
+	background-color:#ffffff;
+	color: #656565;
+	margin-right: 10px;
+	margin-top: 12px;
+	border:1px solid #EFEFEF;
+	}
+	
+	input[type=submit] {
+	margin-bottom: 0;
+	text-decoration: none;
+	float: left;
+	display: block;
+	color: #ffffff;
+	font-size: 14px;
+	font-family: 'Open Sans',sans-serif;
+	border: none;
+	padding: 10px 30px 10px 30px;
+	background-color: #F3801C;
+	text-transform:uppercase;
+	border-radius: 0;
+	margin-right: 15px;
+	}
+	
+	input[type=button] {
+	margin-bottom: 0;
+	text-decoration: none;
+	float: left;
+	display: block;
+	color: #ffffff;
+	font-size: 14px;
+	font-family: 'Open Sans',sans-serif;
+	border: none;
+	padding: 10px 30px 10px 30px;
+	background-color: #1F267F;
+	text-transform:uppercase;
+	border-radius: 0;
+	}
+	
+	button,
+input[type="button"],
+input[type="submit"] {
+	cursor: pointer;
+	-webkit-appearance: button;
+}
+
+
+/* ESF End */
 
 /* info and errors */
 .message-info {

@@ -193,24 +193,67 @@ namespace ESF.Services
             return scheduledSportEventRepository.FindScheduledDays();
         }
 
-        public IList<ScheduledSportEventDetail> FindSportsEventsWithParticipantSelection(Guid participantId)
+        public IList<SportEventGroup> FindSportsEventsWithParticipantSelection(Guid participantId)
         {
             var participant = participantRepository.Get(participantId);
             var signedUpSportEvents = scheduledSportEventRepository.RetrieveSignedUpSportsEvents(participantId);
             var scheduledSportEvents = scheduledSportEventRepository.RetrieveScheduledSportEventsForAgeAndGender(participant.GetParticipantCurrentAge(), participant.Gender);
 
-            return scheduledSportEvents
-                .OrderBy(x => x.StartDateTime)
-                .Select(x => 
-                new ScheduledSportEventDetail
+            var sportEventsToProcess = scheduledSportEvents;
+            var list = new List<SportEventGroup>();
+            var festivalDays = scheduledSportEvents.Select(x => x.FestivalDay).Distinct().OrderBy(x => x);
+
+            for (var row = 1; row <= 3; row++)
+            {
+                if(!sportEventsToProcess.Any()) break;
+
+                foreach (var festivalDay in festivalDays)
+                {
+                    var sportEvents = FindEventsForFirstRemainingPeriod(sportEventsToProcess, festivalDay);
+
+                    if (sportEvents == null || !sportEvents.Any()) continue;
+
+                    var firstEvent = sportEvents.First();
+
+                    var sportEventGroup = new SportEventGroup(firstEvent.DayOfWeek, firstEvent.GetPeriod(), firstEvent.FestivalDay);
+
+                    list.Add(sportEventGroup);
+
+                    foreach (var sportEvent in sportEvents)
                     {
-                        ScheduledSportEventId = x.Id, 
-                        ScheduledSportEventName = x.Name,
-                        DayAndTimePeriod = GetDayAndTimePeriod(x),
-                        OverLappingEventIds = GetOverLappingIds(x, scheduledSportEvents, signedUpSportEvents),
-                        CurrentParticipantAlreadySignedUp = SignedUpEventsContainsCurrent(x, signedUpSportEvents),
-                        IsSelectable = GetSelectability(x, signedUpSportEvents)
-                    }).ToList();
+                        sportEventGroup.SportEvents.Add(new ScheduledSportEventDetail
+                        {
+                            ScheduledSportEventId = sportEvent.Id,
+                            ScheduledSportEventName = sportEvent.Name,
+                            FestivalDay = sportEvent.FestivalDay,
+                            Day = sportEvent.DayOfWeek,
+                            Period = sportEvent.GetPeriod(),
+                            OverLappingEventIds = GetOverLappingIds(sportEvent, scheduledSportEvents, signedUpSportEvents),
+                            CurrentParticipantAlreadySignedUp = SignedUpEventsContainsCurrent(sportEvent, signedUpSportEvents),
+                            IsSelectable = GetSelectability(sportEvent, signedUpSportEvents)
+                        });
+
+                        sportEventsToProcess = sportEventsToProcess.Where(x => x.Id != sportEvent.Id).ToList();
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        private IList<ScheduledSportEvent> FindEventsForFirstRemainingPeriod(IList<ScheduledSportEvent> scheduledSportEvents, int day)
+        {
+            var periods = new List<string> {"Morning", "Afternoon", "Evening"};
+
+            foreach (var period in periods)
+            {
+                var localPeriod = period;
+                var sportEvents = scheduledSportEvents.Where(x => x.FestivalDay == day && x.GetPeriod() == localPeriod).ToList();
+
+                if (sportEvents.Any()) return sportEvents;
+            }
+
+            return null;
         }
 
         public void SignUpParticipant(Guid participantId, List<Guid> selectedSportEventIds)
@@ -230,22 +273,17 @@ namespace ESF.Services
         {
             var scheduledSportEventParticipant = sportEventParticipantRepository.Get(scheduledSportEventParticipantId);
 
+            if(scheduledSportEventParticipant.ScheduledSportEvent.IsTeamEvent)
+            {
+                var captainedTeams = sportEventTeamRepository.RetrieveForCaptain(scheduledSportEventParticipantId);
+
+                foreach (var captainedTeam in captainedTeams)
+                {
+                    sportEventTeamRepository.Delete(captainedTeam);
+                }
+            }
+
             sportEventParticipantRepository.Delete(scheduledSportEventParticipant);
-        }
-
-        private static string GetDayAndTimePeriod(ScheduledSportEvent scheduledSportEvent)
-        {
-            var dayOfWeek = scheduledSportEvent.StartDateTime.DayOfWeek;
-            var timeOfDay = scheduledSportEvent.StartDateTime.TimeOfDay;
-
-            if (timeOfDay >= scheduledSportEvent.Festival.MorningStartTime && timeOfDay < scheduledSportEvent.Festival.AfternoonStartTime)
-                return dayOfWeek + " Morning";
-            if (timeOfDay >= scheduledSportEvent.Festival.AfternoonStartTime && timeOfDay < scheduledSportEvent.Festival.EveningStartTime)
-                return dayOfWeek + " Afternoon";
-            if (timeOfDay >= scheduledSportEvent.Festival.EveningStartTime)
-                return dayOfWeek + " Evening";
-
-            return timeOfDay.ToString();
         }
 
         private static bool GetSelectability(ScheduledSportEvent currentScheduledSportEvent, IList<ScheduledSportEvent> signedUpSportEvents)

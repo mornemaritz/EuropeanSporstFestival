@@ -27,6 +27,7 @@
 
         <p>
             <input type="submit" value="Create" />
+			<input type="button" onclick="window.location.href='@Url.Action("ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId })'" value="Cancel" />
         </p>
     </fieldset>
 }

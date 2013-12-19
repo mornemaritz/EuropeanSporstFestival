@@ -149,9 +149,7 @@
 
         <p>
             <input type="submit" value="Save" />
-        </p>
-        <p>
-            @Html.ActionLink("Cancel", "ViewParticipant", new { id = Model.ParticipantId })
+			<input type="button" onclick="window.location.href='@Url.Action("ViewParticipant", new { id = Model.ParticipantId })'" value="Cancel"/>
         </p>
     </fieldset>
 }

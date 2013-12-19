@@ -1,8 +1,8 @@
-﻿@model IList<ESF.Core.Services.ScheduledSportEventDetail>
+﻿@model IList<ESF.Core.Services.SportEventGroup>
 
 @{
-    ViewBag.Title = "SignUpGrid";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "SignUpGrid";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Sign Up Grid</h2>
@@ -43,29 +43,38 @@
 
 @ViewBag.SportEventSignUpMessage
 
-@using (Html.BeginForm()) {
-	@Html.Hidden("participantId", (Guid)ViewBag.ParticipantId)
-    <ul style="list-style-type: none; padding:0; margin:0;">
-        @foreach (var period in ViewBag.Periods)
-        {
-            <li style="width: 20%;">
-                <span>@period</span>
-                <ul style="list-style-type: none; padding:0; margin:0;">
-                    @foreach (var sportEvent in Model.Where(s => s.DayAndTimePeriod == period))
-                    {
+<div class="container">
 
-                        var disabled = !sportEvent.IsSelectable ? "disabled" : null;
-						
-                        <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this))" overlappingeventids="@sportEvent.OverLappingEventIds"/><label>@sportEvent.ScheduledSportEventName</label></li>
-                    }	
-                </ul>
-            </li>
-        }
-    </ul>
+@using (Html.BeginForm())
+{
+	@Html.Hidden("participantId", (Guid)ViewBag.ParticipantId)
+
+	foreach (var sportEventGroup in Model)
+	{
+		var divStyle = sportEventGroup.FestivalDay == 1 ? "one_third_first" : "one_third";
+			
+		if (sportEventGroup.FestivalDay == 1)
+		{
+			<br clear="all"/>
+		}
+	
+        <div class="@divStyle">
+            <p class="title">@sportEventGroup.ToString()</p>
+            <ul style="list-style-type: none; padding:0; margin:0;">
+                @foreach (var sportEvent in sportEventGroup.SportEvents)
+				{
+					var disabled = !sportEvent.IsSelectable ? "disabled" : null;
+					
+                    <li><input type="checkbox" id="@sportEvent.ScheduledSportEventId" name="@sportEvent.ScheduledSportEventId" checked="@sportEvent.CurrentParticipantAlreadySignedUp" disabled="@disabled" onclick="$(this).ToggleEnabledStates($(this))" overlappingeventids="@sportEvent.OverLappingEventIds"/><label>@sportEvent.ScheduledSportEventName</label></li>
+				}
+            </ul>
+        </div>
+	}
+    <br clear="all"/>
+    <hr/>
     <p>
         <input type="submit" value="Sign Up" />
-    </p>
-	<p>
-		@Html.ActionLink("Cancel", "ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId }, null)
+		<input type="button" onclick="window.location.href='@Url.Action("ViewSportsEvents", "SportsEvent", new { id = ViewBag.ParticipantId })'" value="Cancel" />
 	</p>	
 }
+</div>

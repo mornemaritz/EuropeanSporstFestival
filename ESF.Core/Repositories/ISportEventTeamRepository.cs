@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,7 @@ namespace ESF.Core.Repositories
         SportEventTeam Save(SportEventTeam sportEventTeam);
         IList<TeamMemberDetail> ListTeamMembers(Guid sportEventTeamId);
         SportEventTeam RetrieveWithSportEventDetails(Guid sportEventTeamId);
+        IList<SportEventTeam> RetrieveForCaptain(Guid captainSportEventParticipantId);
+        void Delete(SportEventTeam sportEventTeam);
     }
 }

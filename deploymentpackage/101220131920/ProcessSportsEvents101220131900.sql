@@ -1,3 +1,6 @@
+USE EuropeanSportsFestival
+GO
+
 DECLARE @FestivalId UNIQUEIDENTIFIER = NEWID()
 DECLARE @FestivalStartDate DATETIME = '2014-04-18 00:00:00.000'
 

@@ -160,5 +160,10 @@ namespace ESF.Domain
             else
                 throw new InvalidOperationException("New Captain must be a member of the team.");
         }
+
+        public virtual void ClearTeamMembers()
+        {
+            teamMembers.Clear();
+        }
     }
 }

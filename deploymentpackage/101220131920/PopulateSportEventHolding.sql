@@ -1,3 +1,6 @@
+USE EuropeanSportsFestival
+GO
+
 SELECT * INTO SportEventHolding FROM
 (
 SELECT 'Mixed Doubles badminton (all day)' AS [Sport Display Name], 'Badminton' AS [Sport], 1 AS [Day], '12:30:00' AS [Start time], '17:30:00' AS [End time], 'B' AS [Gender], 2 AS [Team size min], 2 AS [Team size max], 12 AS [Min age], 150 AS [Max age]

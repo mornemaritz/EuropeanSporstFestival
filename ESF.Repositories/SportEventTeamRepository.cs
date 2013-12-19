@@ -58,6 +58,19 @@ namespace ESF.Repositories
             return entityRepo.FindOne(criteria);
         }
 
+        public IList<SportEventTeam> RetrieveForCaptain(Guid captainSportEventParticipantId)
+        {
+            var criteria = entityRepo.CreateDetachedCriteria()
+                .Add(Restrictions.Eq("Captain.Id", captainSportEventParticipantId));
+
+            return entityRepo.FindAll(criteria).ToList();
+        }
+
+        public void Delete(SportEventTeam sportEventTeam)
+        {
+            entityRepo.Delete(sportEventTeam);
+        }
+
         private ProjectionList GetTeamMemberProjectionList()
         {
             return Projections.ProjectionList()

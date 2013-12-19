@@ -97,7 +97,7 @@ namespace ESF.Services.Tests
 
             serviceUnderTest = new SportsEventService(participantRepository.Object, sportEventParticipantRepository.Object, scheduledSportEventRepository.Object, sportEventTeamRepository.Object);
         }
-
+/*
         [Test]
         public void FindSportsEventsWithParticipantSelection_WhenAlreadySignedUp_ReturnsSignedUpSportAsSignedUpAndUnSelectable()
         {
@@ -168,5 +168,7 @@ namespace ESF.Services.Tests
             Assert.IsTrue(actualRounders.IsSelectable);
             Assert.AreEqual(scheduledMensOver35sFootballId.ToString(), actualRounders.OverLappingEventIds);
         }
+ * 
+ */
     }
 }
